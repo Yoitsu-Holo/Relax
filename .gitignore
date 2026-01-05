@@ -45,3 +45,6 @@
 
 # build
 **/build
+
+# claude
+**/.claude
