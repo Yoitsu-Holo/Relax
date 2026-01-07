@@ -1,8 +1,8 @@
 #include <iostream>
-#include <unordered_map>
 #include <chrono>
 #include <cstdint>
 #include <utility>
+#include "../../lib/ankerl_unordered_dense/unordered_dense.h"
 
 int main()
 {
@@ -10,8 +10,8 @@ int main()
     const uint64_t PRELOAD_COUNT = 500000;         // 预加载数据量：50万
     const uint64_t TEST_ITERATIONS = 100000000ULL; // 测试操作数：1亿次
 
-    // 使用 unordered_map<uint64_t, uint64_t>
-    std::unordered_map<uint64_t, uint64_t> test_map;
+    // 使用 ankerl::unordered_dense::map<uint64_t, uint64_t>
+    ankerl::unordered_dense::map<uint64_t, uint64_t> test_map;
 
     // ==================== 预加载阶段 ====================
 
@@ -46,7 +46,7 @@ int main()
         if (i % 2 == 0)
         {
             // set 操作
-            test_map[key] = key; // value 使用 key 的低64位
+            test_map[key] = key; // value 使用 key 值
         }
         else
         {
@@ -68,14 +68,15 @@ int main()
     double total_time_seconds = test_duration.count();
     double ops = TEST_ITERATIONS / total_time_seconds;
 
-    std::cout << "\n========== Test Results ==========" << std::endl;
-    std::cout << "Preload count: " << PRELOAD_COUNT << " entries" << std::endl;
-    std::cout << "Total test operations: " << TEST_ITERATIONS << " operations" << std::endl;
-    std::cout << "Preload time: " << preload_duration.count() << " seconds" << std::endl;
-    std::cout << "Performance test total time: " << total_time_seconds << " seconds" << std::endl;
-    std::cout << "Average performance: " << static_cast<uint64_t>(ops) << " ops" << std::endl;
-    std::cout << "Final map size: " << test_map.size() << std::endl;
-    std::cout << "================================" << std::endl;
+    std::cout << "\n========== Test Results ==========\n";
+    std::cout << "Library: ankerl::unordered_dense::map\n";
+    std::cout << "Preload count: " << PRELOAD_COUNT << " entries\n";
+    std::cout << "Total test operations: " << TEST_ITERATIONS << " operations\n";
+    std::cout << "Preload time: " << preload_duration.count() << " seconds\n";
+    std::cout << "Performance test total time: " << total_time_seconds << " seconds\n";
+    std::cout << "Average performance: " << static_cast<uint64_t>(ops) << " ops/s\n";
+    std::cout << "Final map size: " << test_map.size() << "\n";
+    std::cout << "==================================\n";
 
     return 0;
 }
