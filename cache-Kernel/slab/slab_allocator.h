@@ -35,7 +35,7 @@ private:
     alignas(64) slab *slab_ptr; // 对齐cacheline
 
 public:
-    // 支持的块大小枚举
+    // 建议的块大小枚举
     enum BlockSize
     {
         BLOCK_16 = 16,

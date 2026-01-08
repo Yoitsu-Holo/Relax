@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 
+# 加载代码覆盖率模块
+include(CodeCoverage)
+
 # 查找 Google Test
 find_package(GTest REQUIRED)
 
@@ -27,6 +30,9 @@ target_include_directories(test_time_wheel PRIVATE
     ${CMAKE_SOURCE_DIR}/lib/time_wheel
 )
 
+# 启用代码覆盖率
+setup_target_for_coverage(test_time_wheel)
+
 # 添加测试
 include(GoogleTest)
 gtest_discover_tests(test_time_wheel)
@@ -51,6 +57,9 @@ if(benchmark_FOUND)
     target_include_directories(bench_time_wheel PRIVATE
         ${CMAKE_SOURCE_DIR}/lib/time_wheel
     )
+
+    # 启用代码覆盖率（benchmark也可以进行覆盖率测试）
+    setup_target_for_coverage(bench_time_wheel)
 
     message(STATUS "Google Benchmark found, time wheel benchmark executable will be built")
 else()

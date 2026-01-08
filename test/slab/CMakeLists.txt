@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 
+# 加载代码覆盖率模块
+include(CodeCoverage)
+
 # 查找 Google Test
 find_package(GTest REQUIRED)
 
@@ -20,6 +23,9 @@ target_link_libraries(test_slab_allocator
 target_include_directories(test_slab_allocator PRIVATE
     ${CMAKE_SOURCE_DIR}/cache-Kernel/slab
 )
+
+# 启用代码覆盖率
+setup_target_for_coverage(test_slab_allocator)
 
 # 添加测试
 include(GoogleTest)
@@ -45,6 +51,9 @@ if(benchmark_FOUND)
     target_include_directories(bench_slab_allocator PRIVATE
         ${CMAKE_SOURCE_DIR}/cache-Kernel/slab
     )
+
+    # 启用代码覆盖率（benchmark也可以进行覆盖率测试）
+    setup_target_for_coverage(bench_slab_allocator)
 
     message(STATUS "Google Benchmark found, benchmark executable will be built")
 else()
