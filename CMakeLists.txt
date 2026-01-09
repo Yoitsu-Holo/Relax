@@ -67,7 +67,21 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/test)
     endif()
 endif()
 
-# 添加原始的benchmark（如果需要）
+# 添加benchmark
+option(BUILD_BENCHMARKS "Build benchmarks" OFF)
+if(BUILD_BENCHMARKS)
+    # 添加 slab benchmark
+    if(EXISTS ${CMAKE_SOURCE_DIR}/bench/slab)
+        add_subdirectory(bench/slab)
+    endif()
+
+    # 添加 simple_slab benchmark
+    if(EXISTS ${CMAKE_SOURCE_DIR}/bench/simple_slab)
+        add_subdirectory(bench/simple_slab)
+    endif()
+endif()
+
+# 添加原始的benchmark（如果需要）- 保留向后兼容性
 option(BUILD_ORIGINAL_BENCH "Build original benchmark" OFF)
 if(BUILD_ORIGINAL_BENCH AND EXISTS ${CMAKE_SOURCE_DIR}/bench/slab/bench_slab_allocator.cpp)
     add_executable(original_bench bench/slab/bench_slab_allocator.cpp)

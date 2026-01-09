@@ -5,24 +5,46 @@
 #include <random>
 #include <chrono>
 #include <thread>
+#include <cstdlib>
 
-// Test fixture for SlabAllocator tests
+// Helper function to allocate aligned memory for SlabAllocator
+SlabAllocator* allocate_slab(int block_size, uint64_t manager = 0)
+{
+    void* ptr = nullptr;
+    size_t alignment = 65536; // 64 KiB alignment
+    int result = posix_memalign(&ptr, alignment, sizeof(SlabAllocator));
+    if (result != 0 || !ptr)
+        return nullptr;
+
+    // Use placement new with constructor parameters
+    return new (ptr) SlabAllocator(block_size, manager);
+}
+
+void free_slab(SlabAllocator* allocator)
+{
+    if (allocator)
+    {
+        allocator->~SlabAllocator(); // Call destructor
+        ::free(allocator); // Free the aligned memory
+    }
+}
+
+// Test fixture for SlabAllocator tests - single block size
 class SlabAllocatorTest : public ::testing::Test
 {
 protected:
-    slab *test_slab;
     SlabAllocator *allocator;
 
     void SetUp() override
     {
-        test_slab = new slab;
-        allocator = new SlabAllocator(test_slab);
+        // Initialize with default block size 64
+        allocator = allocate_slab(64);
+        ASSERT_NE(allocator, nullptr) << "Failed to allocate SlabAllocator";
     }
 
     void TearDown() override
     {
-        delete allocator;
-        delete test_slab;
+        free_slab(allocator);
     }
 };
 
@@ -30,19 +52,18 @@ protected:
 class SlabAllocatorParamTest : public ::testing::TestWithParam<int>
 {
 protected:
-    slab *test_slab;
     SlabAllocator *allocator;
 
     void SetUp() override
     {
-        test_slab = new slab;
-        allocator = new SlabAllocator(test_slab);
+        int block_size = GetParam();
+        allocator = allocate_slab(block_size);
+        ASSERT_NE(allocator, nullptr) << "Failed to allocate SlabAllocator with block size " << block_size;
     }
 
     void TearDown() override
     {
-        delete allocator;
-        delete test_slab;
+        free_slab(allocator);
     }
 };
 
@@ -55,12 +76,14 @@ TEST_F(SlabAllocatorTest, InitializationWithValidSizes)
 
     for (int size : valid_sizes)
     {
-        EXPECT_EQ(allocator->init(size), 0) << "Failed to initialize with block size: " << size;
-        EXPECT_EQ(allocator->get_block_size(), size);
-        EXPECT_GT(allocator->get_total_blocks(), 0);
-        EXPECT_EQ(allocator->get_free_blocks(), allocator->get_total_blocks());
-        EXPECT_TRUE(allocator->is_empty());
-        EXPECT_FALSE(allocator->is_full());
+        SlabAllocator *test_allocator = allocate_slab(size);
+        ASSERT_NE(test_allocator, nullptr) << "Failed to create allocator with block size: " << size;
+        EXPECT_EQ(test_allocator->get_block_size(), size);
+        EXPECT_GT(test_allocator->get_total_blocks(), 0);
+        EXPECT_EQ(test_allocator->get_free_blocks(), test_allocator->get_total_blocks());
+        EXPECT_TRUE(test_allocator->is_empty());
+        EXPECT_FALSE(test_allocator->is_full());
+        free_slab(test_allocator);
     }
 }
 
@@ -71,7 +94,15 @@ TEST_F(SlabAllocatorTest, InitializationWithInvalidSizes)
 
     for (int size : invalid_sizes)
     {
-        EXPECT_EQ(allocator->init(size), -1) << "Should have failed with invalid block size: " << size;
+        SlabAllocator *test_allocator = allocate_slab(size);
+        // Should still allocate memory, but allocator should indicate invalid size
+        // by having block_size of 0
+        if (test_allocator)
+        {
+            EXPECT_EQ(test_allocator->get_block_size(), 0)
+                << "Should have invalid block size for: " << size;
+            free_slab(test_allocator);
+        }
     }
 }
 
@@ -107,9 +138,6 @@ TEST_F(SlabAllocatorTest, StaticValidBlockSizeCheck)
 
 TEST_P(SlabAllocatorParamTest, BasicAllocationAndDeallocation)
 {
-    int block_size = GetParam();
-    ASSERT_EQ(allocator->init(block_size), 0);
-
     size_t total_blocks = allocator->get_total_blocks();
 
     // 分配一个块
@@ -126,9 +154,6 @@ TEST_P(SlabAllocatorParamTest, BasicAllocationAndDeallocation)
 
 TEST_P(SlabAllocatorParamTest, AllocateUntilFull)
 {
-    int block_size = GetParam();
-    ASSERT_EQ(allocator->init(block_size), 0);
-
     size_t total_blocks = allocator->get_total_blocks();
     std::vector<void *> ptrs;
 
@@ -162,8 +187,6 @@ TEST_P(SlabAllocatorParamTest, AllocateUntilFull)
 TEST_P(SlabAllocatorParamTest, DataIntegrity)
 {
     int block_size = GetParam();
-    ASSERT_EQ(allocator->init(block_size), 0);
-
     std::vector<void *> ptrs;
     std::vector<int> values;
 
@@ -201,9 +224,6 @@ TEST_P(SlabAllocatorParamTest, DataIntegrity)
 
 TEST_P(SlabAllocatorParamTest, AddressUniqueness)
 {
-    int block_size = GetParam();
-    ASSERT_EQ(allocator->init(block_size), 0);
-
     std::set<void *> addresses;
     std::vector<void *> ptrs;
 
@@ -229,16 +249,12 @@ TEST_P(SlabAllocatorParamTest, AddressUniqueness)
 
 TEST_F(SlabAllocatorTest, DeallocateNullPointer)
 {
-    ASSERT_EQ(allocator->init(64), 0);
-
     // 释放空指针应该安全返回
     EXPECT_NO_THROW(allocator->deallocate(nullptr));
 }
 
 TEST_F(SlabAllocatorTest, DoubleFree)
 {
-    ASSERT_EQ(allocator->init(64), 0);
-
     void *ptr = allocator->allocate();
     ASSERT_NE(ptr, nullptr);
 
@@ -251,8 +267,6 @@ TEST_F(SlabAllocatorTest, DoubleFree)
 
 TEST_F(SlabAllocatorTest, FragmentationAndReuse)
 {
-    ASSERT_EQ(allocator->init(128), 0);
-
     std::vector<void *> ptrs;
     size_t alloc_count = std::min(size_t(50), allocator->get_total_blocks());
 
@@ -290,8 +304,6 @@ TEST_F(SlabAllocatorTest, FragmentationAndReuse)
 TEST_P(SlabAllocatorParamTest, AllocationPerformance)
 {
     int block_size = GetParam();
-    ASSERT_EQ(allocator->init(block_size), 0);
-
     const int iterations = 10000;
     const int batch_size = std::min(100, static_cast<int>(allocator->get_total_blocks()));
     std::vector<void *> ptrs(batch_size);
@@ -330,8 +342,6 @@ TEST_P(SlabAllocatorParamTest, AllocationPerformance)
 
 TEST_F(SlabAllocatorTest, UsageCalculation)
 {
-    ASSERT_EQ(allocator->init(256), 0);
-
     size_t total_blocks = allocator->get_total_blocks();
     EXPECT_DOUBLE_EQ(allocator->get_usage(), 0.0);
 
@@ -370,8 +380,6 @@ TEST_F(SlabAllocatorTest, UsageCalculation)
 
 TEST_F(SlabAllocatorTest, RandomOperations)
 {
-    ASSERT_EQ(allocator->init(64), 0);
-
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(0, 1);
@@ -407,6 +415,25 @@ TEST_F(SlabAllocatorTest, RandomOperations)
     }
 
     EXPECT_TRUE(allocator->is_empty());
+}
+
+// ============= Metadata 测试 =============
+
+TEST_F(SlabAllocatorTest, MetadataRetrieval)
+{
+    // 创建具有特定 manager ID 的分配器
+    SlabAllocator *test_allocator = allocate_slab(64, 12345);
+    ASSERT_NE(test_allocator, nullptr);
+
+    // 分配一个块
+    void *ptr = test_allocator->allocate();
+    ASSERT_NE(ptr, nullptr);
+
+    // 验证可以通过指针获取 metadata
+    uint64_t metadata = SlabAllocator::get_metadata(ptr);
+    EXPECT_EQ(metadata, 12345);
+
+    free_slab(test_allocator);
 }
 
 // 实例化参数化测试

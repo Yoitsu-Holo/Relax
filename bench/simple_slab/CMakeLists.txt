@@ -9,8 +9,17 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # 设置优化级别
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 
+# 设置 slab 库的源文件路径
+set(SLAB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../cache-Kernel/slab)
+
 # 添加可执行文件
-add_executable(bench_slab_allocator bench_slab_allocator.cpp)
+add_executable(bench_slab_allocator
+    bench_slab_allocator.cpp
+    ${SLAB_DIR}/slab_allocator.cpp
+)
+
+# 添加头文件搜索路径
+target_include_directories(bench_slab_allocator PRIVATE ${SLAB_DIR})
 
 # 设置 Release 模式为默认
 if(NOT CMAKE_BUILD_TYPE)
@@ -26,3 +35,4 @@ endif()
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "C++ compiler: ${CMAKE_CXX_COMPILER}")
 message(STATUS "C++ flags: ${CMAKE_CXX_FLAGS}")
+message(STATUS "Slab source directory: ${SLAB_DIR}")

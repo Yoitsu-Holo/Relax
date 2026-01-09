@@ -6,7 +6,7 @@
 #include <functional>
 #include <memory>
 #include <chrono>
-#include <list>
+#include <queue>
 #include <algorithm>
 
 namespace time_wheel {
@@ -57,7 +57,7 @@ template<typename T>
 class TimeWheelLevel {
 private:
     using EntryPtr = std::shared_ptr<TimerEntry<T>>;
-    using Bucket = std::list<EntryPtr>;
+    using Bucket = std::queue<EntryPtr>;
 
     std::vector<Bucket> buckets_;
     LevelConfig config_;
@@ -84,7 +84,7 @@ public:
         }
 
         size_t bucket_index = (current_index_ + bucket_offset) % config_.bucket_count;
-        buckets_[bucket_index].push_back(entry);
+        buckets_[bucket_index].push(entry);
     }
 
     // Advance time and return expired entries
@@ -99,10 +99,10 @@ public:
             // Collect all entries from current bucket
             // They need to be cascaded to lower level or triggered
             Bucket& bucket = buckets_[current_index_];
-            for (auto& entry : bucket) {
-                expired.push_back(entry);
+            while (!bucket.empty()) {
+                expired.push_back(bucket.front());
+                bucket.pop();
             }
-            bucket.clear();
         }
 
         return expired;

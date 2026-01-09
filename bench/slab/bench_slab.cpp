@@ -1,49 +1,38 @@
+#include "../../cache-Kernel/slab/slab.h"
 #include "../../cache-Kernel/slab/slab_allocator.h"
 #include <iostream>
 #include <chrono>
+#include <vector>
 #include <cstdlib>
 
 int main()
 {
-    constexpr int WORD_LEN = 27;                        // 分配字长
-    constexpr int BATCH_SIZE = 1000;                    // 每批次 BATCH_SIZE 个对象
-    constexpr int TOTAL_OPS = 500000000;                // 总共 5亿 次操作
+    constexpr int WORD_LEN = 120;                       // 分配字长
+    constexpr int BATCH_SIZE = 100000;                  // 每批次 BATCH_SIZE 个对象
+    constexpr int TOTAL_OPS = 100000000;                // 总共 1亿 次操作
     constexpr int NUM_BATCHES = TOTAL_OPS / BATCH_SIZE; // 批次数
 
     void *batch_ptrs[BATCH_SIZE]; // 用于保存每批次的指针
 
-    std::cout << "=== Slab Allocator Performance Benchmark ===" << std::endl;
+    std::cout << "=== Slab Manager Performance Benchmark ===" << std::endl;
     std::cout << "Total operations: " << TOTAL_OPS << std::endl;
     std::cout << "Batch size: " << BATCH_SIZE << std::endl;
     std::cout << "Number of batches: " << NUM_BATCHES << std::endl;
     std::cout << "Block size: " << WORD_LEN << " bytes" << std::endl;
     std::cout << std::endl;
 
-    // ========== Slab Allocator测试 ==========
-    std::cout << "=== Testing Slab Allocator ===" << std::endl;
+    // ========== Slab Manager测试 ==========
+    std::cout << "=== Testing Slab Manager (with auto-expansion) ===" << std::endl;
 
-    // 分配64KiB对齐的内存
-    void *mem = nullptr;
-    size_t alignment = 65536; // 64 KiB
-    int result = posix_memalign(&mem, alignment, sizeof(SlabAllocator));
-    if (result != 0 || !mem)
+    Slab slab_mgr;
+    if (slab_mgr.init(128) != 0)
     {
-        std::cerr << "Failed to allocate slab memory" << std::endl;
+        std::cerr << "Failed to initialize Slab manager" << std::endl;
         return 1;
     }
 
-    // 使用 placement new 构造 SlabAllocator，块大小为32
-    SlabAllocator *allocator = new (mem) SlabAllocator(32);
-    if (allocator->get_block_size() == 0)
-    {
-        std::cerr << "Failed to initialize slab allocator with block size 32" << std::endl;
-        ::free(mem);
-        return 1;
-    }
-
-    std::cout << "Initialized with block size: 32 bytes" << std::endl;
-    std::cout << "Total blocks available: " << allocator->get_total_blocks() << std::endl;
-    // 32字节块时总共有2032个块，而BATCH_SIZE是1000，不会超出容量
+    std::cout << "Initialized Slab manager with block size: " << WORD_LEN << " bytes " << std::endl;
+    std::cout << "Auto-expansion enabled" << std::endl;
     std::cout << std::endl;
 
     auto slab_start = std::chrono::high_resolution_clock::now();
@@ -53,22 +42,22 @@ int main()
     {
         // 分配对象
         for (int i = 0; i < BATCH_SIZE; i++)
-            batch_ptrs[i] = allocator->allocate();
+            batch_ptrs[i] = slab_mgr.allocate();
 
         // 释放对象
         for (int i = 0; i < BATCH_SIZE; i++)
-            allocator->deallocate(batch_ptrs[i]);
+            slab_mgr.deallocate(batch_ptrs[i]);
     }
 
     auto slab_end = std::chrono::high_resolution_clock::now();
     auto slab_time = std::chrono::duration_cast<std::chrono::microseconds>(slab_end - slab_start).count();
 
-    // 清理：调用析构函数并释放内存
-    allocator->~SlabAllocator();
-    ::free(mem);
+    std::cout << "Slab Manager completed!" << std::endl;
+    std::cout << "Total allocators created: " << slab_mgr.get_initialized_count() << std::endl;
+    std::cout << std::endl;
 
     // ========== 标准库malloc/free测试 ==========
-    std::cout << "\n=== Testing Standard Library (malloc/free) ===" << std::endl;
+    std::cout << "=== Testing Standard Library (malloc/free) ===" << std::endl;
 
     auto std_start = std::chrono::high_resolution_clock::now();
 
@@ -88,7 +77,7 @@ int main()
     auto std_time = std::chrono::duration_cast<std::chrono::microseconds>(std_end - std_start).count();
 
     // ========== 标准库new/delete测试 ==========
-    std::cout << "\n=== Testing Standard Library (new/delete) ===" << std::endl;
+    std::cout << "=== Testing Standard Library (new/delete) ===" << std::endl;
 
     auto new_start = std::chrono::high_resolution_clock::now();
 
@@ -118,7 +107,7 @@ int main()
     std::cout << "\n=== Performance Summary ===" << std::endl;
     std::cout << "----------------------------------------" << std::endl;
 
-    std::cout << "Slab Allocator:" << std::endl;
+    std::cout << "Slab Manager:" << std::endl;
     std::cout << "  Total time: " << slab_time << " μs" << std::endl;
     std::cout << "  Average per operation: " << (slab_time * 1000.0) / (TOTAL_OPS * 2) << " ns" << std::endl;
     std::cout << "  Operations per second: " << (TOTAL_OPS * 2 * 1000000.0) / slab_time << std::endl;
@@ -139,7 +128,7 @@ int main()
     double speedup_vs_malloc = (double)std_time / slab_time;
     double speedup_vs_new = (double)new_time / slab_time;
 
-    std::cout << "Slab vs malloc/free: " << speedup_vs_malloc << "x ";
+    std::cout << "Slab Manager vs malloc/free: " << speedup_vs_malloc << "x ";
     if (speedup_vs_malloc > 1.0)
     {
         std::cout << "faster" << std::endl;
@@ -149,7 +138,7 @@ int main()
         std::cout << "slower" << std::endl;
     }
 
-    std::cout << "Slab vs new/delete: " << speedup_vs_new << "x ";
+    std::cout << "Slab Manager vs new/delete: " << speedup_vs_new << "x ";
     if (speedup_vs_new > 1.0)
     {
         std::cout << "faster" << std::endl;
