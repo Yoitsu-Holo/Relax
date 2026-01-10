@@ -32,6 +32,8 @@ include(CodeCoverage)
 
 # 添加子目录
 add_subdirectory(cache-Kernel/slab)
+add_subdirectory(cache-Kernel/buddySystem)
+add_subdirectory(cache-Kernel/ralloc)
 
 # 如果测试目录存在，添加测试
 if(EXISTS ${CMAKE_SOURCE_DIR}/test)
@@ -42,6 +44,10 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/test)
         # 添加各个测试子目录
         if(EXISTS ${CMAKE_SOURCE_DIR}/test/slab)
             add_subdirectory(test/slab)
+        endif()
+
+        if(EXISTS ${CMAKE_SOURCE_DIR}/test/ralloc)
+            add_subdirectory(test/ralloc)
         endif()
 
         if(EXISTS ${CMAKE_SOURCE_DIR}/test/time_wheel)
@@ -73,6 +79,11 @@ if(BUILD_BENCHMARKS)
     # 添加 slab benchmark
     if(EXISTS ${CMAKE_SOURCE_DIR}/bench/slab)
         add_subdirectory(bench/slab)
+    endif()
+
+    # 添加 ralloc benchmark
+    if(EXISTS ${CMAKE_SOURCE_DIR}/bench/ralloc)
+        add_subdirectory(bench/ralloc)
     endif()
 
     # 添加 simple_slab benchmark
