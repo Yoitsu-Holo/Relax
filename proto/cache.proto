@@ -1,0 +1,427 @@
+syntax = "proto3";
+
+package cache;
+
+option go_package = "github.com/yoitsuholo/relax/proto;cache";
+
+import "google/api/annotations.proto";
+
+// CacheService provides Redis-like cache operations
+service CacheService {
+  // KV operations
+  rpc Set(SetRequest) returns (SetResponse) {
+    option (google.api.http) = {
+      post: "/v1/kv/set"
+      body: "*"
+    };
+  }
+
+  rpc Get(GetRequest) returns (GetResponse) {
+    option (google.api.http) = {
+      get: "/v1/kv/get/{key}"
+    };
+  }
+
+  rpc Del(DelRequest) returns (DelResponse) {
+    option (google.api.http) = {
+      delete: "/v1/kv/del/{key}"
+    };
+  }
+
+  rpc Exists(ExistsRequest) returns (ExistsResponse) {
+    option (google.api.http) = {
+      get: "/v1/kv/exists/{key}"
+    };
+  }
+
+  // Hash operations
+  rpc HSet(HSetRequest) returns (HSetResponse) {
+    option (google.api.http) = {
+      post: "/v1/hash/set"
+      body: "*"
+    };
+  }
+
+  rpc HGet(HGetRequest) returns (HGetResponse) {
+    option (google.api.http) = {
+      get: "/v1/hash/get/{key}/{field}"
+    };
+  }
+
+  rpc HDel(HDelRequest) returns (HDelResponse) {
+    option (google.api.http) = {
+      delete: "/v1/hash/del/{key}/{field}"
+    };
+  }
+
+  rpc HMSet(HMSetRequest) returns (HMSetResponse) {
+    option (google.api.http) = {
+      post: "/v1/hash/mset"
+      body: "*"
+    };
+  }
+
+  rpc HMGet(HMGetRequest) returns (HMGetResponse) {
+    option (google.api.http) = {
+      post: "/v1/hash/mget"
+      body: "*"
+    };
+  }
+
+  rpc HLen(HLenRequest) returns (HLenResponse) {
+    option (google.api.http) = {
+      get: "/v1/hash/len/{key}"
+    };
+  }
+
+  rpc HGetAll(HGetAllRequest) returns (HGetAllResponse) {
+    option (google.api.http) = {
+      get: "/v1/hash/getall/{key}"
+    };
+  }
+
+  rpc HExists(HExistsRequest) returns (HExistsResponse) {
+    option (google.api.http) = {
+      get: "/v1/hash/exists/{key}/{field}"
+    };
+  }
+
+  // Set operations
+  rpc SAdd(SAddRequest) returns (SAddResponse) {
+    option (google.api.http) = {
+      post: "/v1/set/add"
+      body: "*"
+    };
+  }
+
+  rpc SMembers(SMembersRequest) returns (SMembersResponse) {
+    option (google.api.http) = {
+      get: "/v1/set/members/{key}"
+    };
+  }
+
+  rpc SRem(SRemRequest) returns (SRemResponse) {
+    option (google.api.http) = {
+      delete: "/v1/set/rem/{key}/{member}"
+    };
+  }
+
+  rpc SIsMember(SIsMemberRequest) returns (SIsMemberResponse) {
+    option (google.api.http) = {
+      get: "/v1/set/ismember/{key}/{member}"
+    };
+  }
+
+  rpc SCard(SCardRequest) returns (SCardResponse) {
+    option (google.api.http) = {
+      get: "/v1/set/card/{key}"
+    };
+  }
+
+  // List operations
+  rpc LPush(LPushRequest) returns (LPushResponse) {
+    option (google.api.http) = {
+      post: "/v1/list/push"
+      body: "*"
+    };
+  }
+
+  rpc LRange(LRangeRequest) returns (LRangeResponse) {
+    option (google.api.http) = {
+      get: "/v1/list/range/{key}"
+    };
+  }
+
+  rpc LRem(LRemRequest) returns (LRemResponse) {
+    option (google.api.http) = {
+      post: "/v1/list/rem"
+      body: "*"
+    };
+  }
+
+  rpc LPop(LPopRequest) returns (LPopResponse) {
+    option (google.api.http) = {
+      post: "/v1/list/lpop"
+      body: "*"
+    };
+  }
+
+  rpc RPush(RPushRequest) returns (RPushResponse) {
+    option (google.api.http) = {
+      post: "/v1/list/rpush"
+      body: "*"
+    };
+  }
+
+  rpc RPop(RPopRequest) returns (RPopResponse) {
+    option (google.api.http) = {
+      post: "/v1/list/rpop"
+      body: "*"
+    };
+  }
+
+  rpc LLen(LLenRequest) returns (LLenResponse) {
+    option (google.api.http) = {
+      get: "/v1/list/len/{key}"
+    };
+  }
+
+  rpc LIndex(LIndexRequest) returns (LIndexResponse) {
+    option (google.api.http) = {
+      get: "/v1/list/index/{key}/{index}"
+    };
+  }
+
+  rpc LSet(LSetRequest) returns (LSetResponse) {
+    option (google.api.http) = {
+      post: "/v1/list/set"
+      body: "*"
+    };
+  }
+}
+
+// KV Messages
+message SetRequest {
+  string key = 1;
+  string value = 2;
+}
+
+message SetResponse {
+  bool success = 1;
+}
+
+message GetRequest {
+  string key = 1;
+}
+
+message GetResponse {
+  string value = 1;
+  bool exists = 2;
+}
+
+message DelRequest {
+  string key = 1;
+}
+
+message DelResponse {
+  bool success = 1;
+  int32 deleted_count = 2;
+}
+
+message ExistsRequest {
+  string key = 1;
+}
+
+message ExistsResponse {
+  bool exists = 1;
+}
+
+// Hash Messages
+message HSetRequest {
+  string key = 1;
+  string field = 2;
+  string value = 3;
+}
+
+message HSetResponse {
+  bool success = 1;
+  bool created = 2; // true if new field, false if updated
+}
+
+message HGetRequest {
+  string key = 1;
+  string field = 2;
+}
+
+message HGetResponse {
+  string value = 1;
+  bool exists = 2;
+}
+
+message HDelRequest {
+  string key = 1;
+  string field = 2;
+}
+
+message HDelResponse {
+  bool success = 1;
+  int32 deleted_count = 2;
+}
+
+message HMSetRequest {
+  string key = 1;
+  map<string, string> fields = 2; // field -> value mapping
+}
+
+message HMSetResponse {
+  bool success = 1;
+  int32 count = 2; // number of fields set
+}
+
+message HMGetRequest {
+  string key = 1;
+  repeated string fields = 2;
+}
+
+message HMGetResponse {
+  map<string, string> values = 1; // field -> value mapping (only existing fields)
+}
+
+message HLenRequest {
+  string key = 1;
+}
+
+message HLenResponse {
+  int32 length = 1;
+}
+
+message HGetAllRequest {
+  string key = 1;
+}
+
+message HGetAllResponse {
+  map<string, string> fields = 1; // all field -> value pairs
+}
+
+message HExistsRequest {
+  string key = 1;
+  string field = 2;
+}
+
+message HExistsResponse {
+  bool exists = 1;
+}
+
+// Set Messages
+message SAddRequest {
+  string key = 1;
+  string member = 2;
+}
+
+message SAddResponse {
+  bool success = 1;
+  bool added = 2; // true if new member, false if already exists
+}
+
+message SMembersRequest {
+  string key = 1;
+}
+
+message SMembersResponse {
+  repeated string members = 1;
+}
+
+message SRemRequest {
+  string key = 1;
+  string member = 2;
+}
+
+message SRemResponse {
+  bool success = 1;
+  int32 deleted_count = 2;
+}
+
+message SIsMemberRequest {
+  string key = 1;
+  string member = 2;
+}
+
+message SIsMemberResponse {
+  bool is_member = 1;
+}
+
+message SCardRequest {
+  string key = 1;
+}
+
+message SCardResponse {
+  int32 cardinality = 1;
+}
+
+// List Messages
+message LPushRequest {
+  string key = 1;
+  string value = 2;
+}
+
+message LPushResponse {
+  bool success = 1;
+  int32 length = 2; // new length of list
+}
+
+message LRangeRequest {
+  string key = 1;
+  int32 start = 2;
+  int32 stop = 3;
+}
+
+message LRangeResponse {
+  repeated string values = 1;
+}
+
+message LRemRequest {
+  string key = 1;
+  int32 count = 2;
+  string value = 3;
+}
+
+message LRemResponse {
+  bool success = 1;
+  int32 deleted_count = 2;
+}
+
+message LPopRequest {
+  string key = 1;
+}
+
+message LPopResponse {
+  string value = 1;
+  bool success = 2;
+}
+
+message RPushRequest {
+  string key = 1;
+  string value = 2;
+}
+
+message RPushResponse {
+  bool success = 1;
+  int32 length = 2;
+}
+
+message RPopRequest {
+  string key = 1;
+}
+
+message RPopResponse {
+  string value = 1;
+  bool success = 2;
+}
+
+message LLenRequest {
+  string key = 1;
+}
+
+message LLenResponse {
+  int32 length = 1;
+}
+
+message LIndexRequest {
+  string key = 1;
+  int32 index = 2;
+}
+
+message LIndexResponse {
+  string value = 1;
+  bool exists = 2;
+}
+
+message LSetRequest {
+  string key = 1;
+  int32 index = 2;
+  string value = 3;
+}
+
+message LSetResponse {
+  bool success = 1;
+}
