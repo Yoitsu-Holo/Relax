@@ -44,3 +44,7 @@
 
 # claude
 **/.claude
+
+# golang
+
+**/go.work

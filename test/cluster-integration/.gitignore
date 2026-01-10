@@ -1,0 +1,25 @@
+# .gitignore for cluster-integration test environment
+
+# Logs directory
+logs/
+*.log
+
+# PID files
+*.pid
+pids.txt
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
