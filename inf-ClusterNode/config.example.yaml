@@ -1,0 +1,14 @@
+# 集群配置示例
+# 使用时复制此文件并根据实际环境修改
+
+nodes:
+  - id: node-1
+    address: localhost:50051
+  - id: node-2
+    address: localhost:50052
+  - id: node-3
+    address: localhost:50053
+
+health_check_interval: 10s
+grpc_port: ":50060"
+http_port: ":8080"
