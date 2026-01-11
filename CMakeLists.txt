@@ -13,6 +13,15 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
+# 构建共享库选项（用于 cgo 调用）
+option(BUILD_SHARED_LIBS "Build shared libraries (.so)" ON)
+
+# 如果构建共享库，启用位置无关代码
+if(BUILD_SHARED_LIBS)
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+    message(STATUS "Building with Position Independent Code (PIC) for shared libraries")
+endif()
+
 # 代码覆盖率选项
 option(ENABLE_COVERAGE "Enable coverage reporting" OFF)
 if(ENABLE_COVERAGE)
@@ -36,6 +45,7 @@ add_subdirectory(cache-Kernel/buddySystem)
 add_subdirectory(cache-Kernel/ralloc)
 add_subdirectory(cache-Kernel/kvEngine)
 add_subdirectory(cache-TypeDriver)
+add_subdirectory(cache-Interface)
 
 # 如果测试目录存在，添加测试
 if(EXISTS ${CMAKE_SOURCE_DIR}/test)
@@ -66,6 +76,10 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/test)
 
         if(EXISTS ${CMAKE_SOURCE_DIR}/test/hash_driver)
             add_subdirectory(test/hash_driver)
+        endif()
+
+        if(EXISTS ${CMAKE_SOURCE_DIR}/test/cache-Interface)
+            add_subdirectory(test/cache-Interface)
         endif()
 
         # 创建统一的代码覆盖率报告（包含所有测试模块）
