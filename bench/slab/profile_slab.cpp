@@ -1,4 +1,4 @@
-#include "../../cache-Kernel/slab/slab.h"
+#include "../../cache-Kernel/slab/slab_manager.h"
 #include "../../cache-Kernel/slab/slab_allocator.h"
 #include <iostream>
 #include <vector>
@@ -11,17 +11,17 @@ int main()
 
     void *batch_ptrs[BATCH_SIZE];
 
-    std::cout << "=== Slab Manager Profiling Test ===" << std::endl;
+    std::cout << "=== SlabManager Profiling Test ===" << std::endl;
     std::cout << "Total operations: " << TOTAL_OPS << std::endl;
     std::cout << "Batch size: " << BATCH_SIZE << std::endl;
     std::cout << "Number of batches: " << NUM_BATCHES << std::endl;
     std::cout << std::endl;
 
-    // 初始化 Slab Manager
-    Slab slab_mgr;
+    // 初始化 SlabManager
+    SlabManager slab_mgr;
     if (slab_mgr.init(32) != 0)
     {
-        std::cerr << "Failed to initialize Slab manager" << std::endl;
+        std::cerr << "Failed to initialize SlabManager" << std::endl;
         return 1;
     }
 

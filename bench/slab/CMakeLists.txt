@@ -18,14 +18,14 @@ set(SLAB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../cache-Kernel/slab)
 # 添加可执行文件 - benchmark
 add_executable(bench_slab
     bench_slab.cpp
-    ${SLAB_DIR}/slab.cpp
+    ${SLAB_DIR}/slab_manager.cpp
     ${SLAB_DIR}/slab_allocator.cpp
 )
 
 # 添加可执行文件 - profiling
 add_executable(profile_slab
     profile_slab.cpp
-    ${SLAB_DIR}/slab.cpp
+    ${SLAB_DIR}/slab_manager.cpp
     ${SLAB_DIR}/slab_allocator.cpp
 )
 

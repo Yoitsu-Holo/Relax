@@ -1,4 +1,4 @@
-# Slab Manager Performance Benchmark
+# SlabManager Performance Benchmark
 
 这个目录包含了扩展版 Slab 分配器的性能测试代码。
 
@@ -29,7 +29,7 @@ make
 
 测试对比了以下三种内存分配方式的性能：
 
-1. **Slab Manager**：自动扩容的 Slab 分配器
+1. **SlabManager**：自动扩容的 Slab 分配器
 2. **malloc/free**：标准库的 malloc/free
 3. **new/delete**：C++ 的 new/delete 操作符
 
@@ -53,7 +53,7 @@ make
 ## 实现文件
 
 - `bench_slab.cpp`：性能测试主程序
-- `../../cache-Kernel/slab/slab.h`：Slab 管理器头文件
-- `../../cache-Kernel/slab/slab.cpp`：Slab 管理器实现
+- `../../cache-Kernel/slab/slab_manager.h`：SlabManager 头文件
+- `../../cache-Kernel/slab/slab_manager.cpp`：SlabManager 实现
 - `../../cache-Kernel/slab/slab_allocator.h`：底层 SlabAllocator 头文件
 - `../../cache-Kernel/slab/slab_allocator.cpp`：底层 SlabAllocator 实现

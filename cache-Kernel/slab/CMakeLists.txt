@@ -11,6 +11,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -march=native -Wall -Wextra")
 # 创建静态库
 add_library(slab_allocator STATIC
     slab_allocator.cpp
+    slab_manager.cpp
 )
 
 # 设置包含目录

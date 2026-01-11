@@ -1,4 +1,4 @@
-#include "../../cache-Kernel/slab/slab.h"
+#include "../../cache-Kernel/slab/slab_manager.h"
 #include "../../cache-Kernel/slab/slab_allocator.h"
 #include <iostream>
 #include <chrono>
@@ -21,17 +21,17 @@ int main()
     std::cout << "Block size: " << WORD_LEN << " bytes" << std::endl;
     std::cout << std::endl;
 
-    // ========== Slab Manager测试 ==========
-    std::cout << "=== Testing Slab Manager (with auto-expansion) ===" << std::endl;
+    // ========== SlabManager测试 ==========
+    std::cout << "=== Testing SlabManager (with auto-expansion) ===" << std::endl;
 
-    Slab slab_mgr;
+    SlabManager slab_mgr;
     if (slab_mgr.init(128) != 0)
     {
-        std::cerr << "Failed to initialize Slab manager" << std::endl;
+        std::cerr << "Failed to initialize SlabManager" << std::endl;
         return 1;
     }
 
-    std::cout << "Initialized Slab manager with block size: " << WORD_LEN << " bytes " << std::endl;
+    std::cout << "Initialized SlabManager with block size: " << WORD_LEN << " bytes " << std::endl;
     std::cout << "Auto-expansion enabled" << std::endl;
     std::cout << std::endl;
 
@@ -52,7 +52,7 @@ int main()
     auto slab_end = std::chrono::high_resolution_clock::now();
     auto slab_time = std::chrono::duration_cast<std::chrono::microseconds>(slab_end - slab_start).count();
 
-    std::cout << "Slab Manager completed!" << std::endl;
+    std::cout << "SlabManager completed!" << std::endl;
     std::cout << "Total allocators created: " << slab_mgr.get_initialized_count() << std::endl;
     std::cout << std::endl;
 
@@ -107,7 +107,7 @@ int main()
     std::cout << "\n=== Performance Summary ===" << std::endl;
     std::cout << "----------------------------------------" << std::endl;
 
-    std::cout << "Slab Manager:" << std::endl;
+    std::cout << "SlabManager:" << std::endl;
     std::cout << "  Total time: " << slab_time << " μs" << std::endl;
     std::cout << "  Average per operation: " << (slab_time * 1000.0) / (TOTAL_OPS * 2) << " ns" << std::endl;
     std::cout << "  Operations per second: " << (TOTAL_OPS * 2 * 1000000.0) / slab_time << std::endl;
@@ -128,7 +128,7 @@ int main()
     double speedup_vs_malloc = (double)std_time / slab_time;
     double speedup_vs_new = (double)new_time / slab_time;
 
-    std::cout << "Slab Manager vs malloc/free: " << speedup_vs_malloc << "x ";
+    std::cout << "SlabManager vs malloc/free: " << speedup_vs_malloc << "x ";
     if (speedup_vs_malloc > 1.0)
     {
         std::cout << "faster" << std::endl;
@@ -138,7 +138,7 @@ int main()
         std::cout << "slower" << std::endl;
     }
 
-    std::cout << "Slab Manager vs new/delete: " << speedup_vs_new << "x ";
+    std::cout << "SlabManager vs new/delete: " << speedup_vs_new << "x ";
     if (speedup_vs_new > 1.0)
     {
         std::cout << "faster" << std::endl;

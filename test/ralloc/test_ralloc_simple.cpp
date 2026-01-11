@@ -165,29 +165,6 @@ void test_statistics()
     std::cout << "  ✓ Statistics test passed" << std::endl;
 }
 
-void test_global_interface()
-{
-    std::cout << "Testing global interface..." << std::endl;
-
-    void *ptr1 = ralloc_malloc(128);
-    void *ptr2 = ralloc_malloc(8192);
-    void *ptr3 = ralloc_malloc(1048576);
-
-    assert(ptr1 != nullptr);
-    assert(ptr2 != nullptr);
-    assert(ptr3 != nullptr);
-
-    std::cout << "  Allocated 128B at " << ptr1 << std::endl;
-    std::cout << "  Allocated 8KB at " << ptr2 << std::endl;
-    std::cout << "  Allocated 1MB at " << ptr3 << std::endl;
-
-    ralloc_free(ptr1);
-    ralloc_free(ptr2);
-    ralloc_free(ptr3);
-
-    std::cout << "  ✓ Global interface test passed" << std::endl;
-}
-
 void test_edge_cases()
 {
     std::cout << "Testing edge cases..." << std::endl;
@@ -257,9 +234,6 @@ int main()
         std::cout << std::endl;
 
         test_statistics();
-        std::cout << std::endl;
-
-        test_global_interface();
         std::cout << std::endl;
 
         test_edge_cases();

@@ -51,7 +51,7 @@ bool BuddyManager::init(size_t max_allocators)
     num_allocators_ = 0;
 
     // 分配 allocator 指针数组
-    allocators_ = new BuddyAllocator*[max_allocators];
+    allocators_ = new BuddyAllocator *[max_allocators];
 
     // 初始化所有指针为 nullptr
     for (size_t i = 0; i < max_allocators; ++i)

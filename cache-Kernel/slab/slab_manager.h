@@ -1,5 +1,5 @@
-#ifndef SLAB_H
-#define SLAB_H
+#ifndef SLAB_MANAGER_H
+#define SLAB_MANAGER_H
 
 #include "slab_allocator.h"
 #include <cstdint>
@@ -31,7 +31,7 @@ struct IndexGroup
 // 扩展的Slab管理器，对底层slab_allocator进行对象管理范围扩展
 // 采用紧凑的两级页表管理多个slab_allocator实例
 // 只对外暴露allocate()和deallocate()接口，内部自动扩容
-class Slab
+class SlabManager
 {
 private:
     // 常量定义
@@ -119,7 +119,7 @@ private:
 
 public:
     // 构造函数
-    Slab()
+    SlabManager()
         : block_size_(0)
     {
         memset(index_groups_, 0, sizeof(index_groups_));
@@ -128,7 +128,7 @@ public:
     }
 
     // 析构函数
-    ~Slab() = default;
+    ~SlabManager() = default;
 
     // 初始化Slab管理器
     FORCE_INLINE int init(size_t block_size)
@@ -235,4 +235,4 @@ public:
     }
 };
 
-#endif // SLAB_H
+#endif // SLAB_MANAGER_H

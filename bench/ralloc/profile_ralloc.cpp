@@ -11,7 +11,14 @@ int main()
     const size_t NUM_BATCHES = TOTAL_OPS / BATCH_SIZE;
 
     void *batch_ptrs[BATCH_SIZE];
-    RAlloc *allocator = ralloc_get_instance();
+
+    // Create allocator instance
+    RAlloc allocator;
+    if (!allocator.init())
+    {
+        std::cerr << "Failed to initialize RAlloc" << std::endl;
+        return 1;
+    }
 
     std::cout << "Starting RAlloc profiling run..." << std::endl;
     std::cout << "Total operations: " << TOTAL_OPS * 2 << std::endl;
@@ -22,6 +29,7 @@ int main()
 
     // Test different size classes
     size_t sizes[] = {64, 128, 512, 2048, 8192, 32768};
+    // size_t sizes[] = {8192};
     const size_t num_sizes = sizeof(sizes) / sizeof(sizes[0]);
 
     for (size_t size_idx = 0; size_idx < num_sizes; size_idx++)
@@ -34,13 +42,13 @@ int main()
             // Allocate
             for (size_t i = 0; i < BATCH_SIZE; i++)
             {
-                batch_ptrs[i] = allocator->allocate(size);
+                batch_ptrs[i] = allocator.allocate(size);
             }
 
             // Deallocate
             for (size_t i = 0; i < BATCH_SIZE; i++)
             {
-                allocator->deallocate(batch_ptrs[i]);
+                allocator.deallocate(batch_ptrs[i]);
             }
         }
     }
@@ -51,8 +59,8 @@ int main()
     std::cout << std::endl;
     std::cout << "Profiling run completed!" << std::endl;
     std::cout << "Total time: " << time_ms << " ms" << std::endl;
-    std::cout << "Slab allocators: " << allocator->get_slab_count() << std::endl;
-    std::cout << "Buddy allocators: " << allocator->get_buddy_count() << std::endl;
+    std::cout << "Slab allocators: " << allocator.get_slab_count() << std::endl;
+    std::cout << "Buddy allocators: " << allocator.get_buddy_count() << std::endl;
 
     return 0;
 }

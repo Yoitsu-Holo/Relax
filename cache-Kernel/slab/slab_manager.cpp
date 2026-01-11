@@ -1,9 +1,9 @@
-#include "slab.h"
+#include "slab_manager.h"
 #include <new>
 #include <cstdlib>
 
 // 创建一个新的slab_allocator（内部自动扩容）
-int Slab::create_allocator(size_t index)
+int SlabManager::create_allocator(size_t index)
 {
     if (index >= MAX_ALLOCATORS)
         return -1;

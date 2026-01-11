@@ -1,27 +1,27 @@
 /*
- * RAlloc - Unified Memory Allocator
+ * RAlloc - Unified Memory Allocator (Optimized)
  *
  * Architecture:
  *   RAlloc (single instance)
- *   ├── SlabManager (single instance managing multiple SlabAllocators)
- *   │   └── SlabAllocator[] (64KiB each, one per size class as needed)
- *   ├── BuddyManager (single instance managing multiple BuddyAllocators)
- *   │   └── BuddyAllocator[] (16MiB each, created on demand)
+ *   ├── Fixed SlabManager[14] (auto-expanding, one per predefined size)
+ *   ├── BuddyManager (for allocations > 4KiB)
  *   └── System malloc (for allocations > 256KiB)
  *
  * Allocation Strategy:
- *   [16B, 4KiB)    -> SlabManager
- *   [4KiB, 256KiB] -> BuddyManager
+ *   [1B, 4KiB]     -> Fixed SlabManager (with O(1) lookup table)
+ *   (4KiB, 256KiB] -> BuddyManager
  *   >256KiB        -> malloc with tracking header
+ *
+ * Optimization:
+ *   - Uses SlabManager for dynamic expansion of slab allocators
+ *   - Compact 128-byte lookup table for O(1) slab index resolution
+ *   - Each uint8 in lookup table stores two indices (4 bits each)
  */
 
 #include "ralloc.h"
-#include "../slab/slab_allocator.h"
 #include "../buddySystem/buddy_manager.h"
 #include <cstdlib>
 #include <cstring>
-#include <vector>
-#include <algorithm>
 
 // Forward declaration for alignment check
 #ifndef KiB
@@ -30,10 +30,14 @@
 #endif
 
 // Allocation type constants (matching RAlloc::AllocType)
+// Using bit encoding: low 4 bits for type, high 4 bits for slab_idx
+// - Buddy: 0x01 (1)
+// - Malloc: 0x02 (2)
+// - Slab: (slab_idx << 4), results in 0x00, 0x10, 0x20, ..., 0xD0
 constexpr uint8_t ALLOC_UNKNOWN = 0;
-constexpr uint8_t ALLOC_SLAB = 1;
-constexpr uint8_t ALLOC_BUDDY = 2;
-constexpr uint8_t ALLOC_MALLOC = 3;
+constexpr uint8_t ALLOC_SLAB = 1;   // Not used directly, kept for compatibility
+constexpr uint8_t ALLOC_BUDDY = 1;  // Low 4 bits = 1
+constexpr uint8_t ALLOC_MALLOC = 2; // Low 4 bits = 2
 
 // Malloc header for large allocations
 struct MallocHeader
@@ -45,192 +49,147 @@ struct MallocHeader
     static constexpr uint64_t MAGIC_NUMBER = 0xDEADBEEFCAFEBABEULL;
 };
 
-// SlabManager manages multiple SlabAllocators for different sizes
-class RAlloc::SlabManager
-{
-public:
-    SlabManager() : initialized_(false), max_slabs_(0) {}
-
-    ~SlabManager()
-    {
-        // Cleanup all slab lists
-        for (auto &list : slab_lists_)
-        {
-            for (auto *slab : list)
-            {
-                free(slab); // SlabAllocator was allocated with aligned_alloc
-            }
-        }
-    }
-
-    bool init(size_t max_slabs)
-    {
-        if (initialized_)
-            return false;
-
-        max_slabs_ = max_slabs;
-
-        // Initialize slab lists for each supported size
-        slab_lists_.resize(SLAB_SIZE_COUNT);
-        initialized_ = true;
-        return true;
-    }
-
-    void *allocate(size_t size)
-    {
-        if (!initialized_ || size < 16 || size >= 4 * KiB)
-            return nullptr;
-
-        // Find appropriate slab size index
-        int size_idx = get_size_index(size);
-        if (size_idx < 0)
-            return nullptr;
-
-        size_t actual_size = SLAB_SIZES[size_idx];
-
-        // Try to allocate from existing slabs
-        for (auto *slab : slab_lists_[size_idx])
-        {
-            void *ptr = slab->allocate();
-            if (ptr != nullptr)
-                return ptr;
-        }
-
-        // Need to create a new slab
-        if (get_total_slab_count() >= max_slabs_)
-            return nullptr; // Reached limit
-
-        // Create new slab allocator (64KiB aligned)
-        void *mem = aligned_alloc(64 * KiB, sizeof(SlabAllocator));
-        if (!mem)
-            return nullptr;
-
-        // Construct SlabAllocator in-place with manager index
-        uint64_t manager_info = (static_cast<uint64_t>(ALLOC_SLAB) << 56) | size_idx;
-        SlabAllocator *new_slab = new (mem) SlabAllocator(actual_size, manager_info);
-
-        slab_lists_[size_idx].push_back(new_slab);
-
-        // Try to allocate from the new slab
-        return new_slab->allocate();
-    }
-
-    void deallocate(void *ptr)
-    {
-        if (!ptr)
-            return;
-
-        // Get metadata to find the size index
-        uint64_t metadata = SlabAllocator::get_metadata(ptr);
-        int size_idx = static_cast<int>(metadata & 0xFF);
-
-        if (size_idx < 0 || size_idx >= SLAB_SIZE_COUNT)
-            return;
-
-        // Find the slab and deallocate
-        // The pointer is 64KiB aligned, so we can get the slab directly
-        uintptr_t addr = reinterpret_cast<uintptr_t>(ptr);
-        uintptr_t slab_addr = addr & ~(64 * KiB - 1);
-        SlabAllocator *slab = reinterpret_cast<SlabAllocator *>(slab_addr);
-
-        slab->deallocate(ptr);
-    }
-
-    size_t get_total_slab_count() const
-    {
-        size_t count = 0;
-        for (const auto &list : slab_lists_)
-        {
-            count += list.size();
-        }
-        return count;
-    }
-
-    size_t get_total_free_memory() const
-    {
-        size_t total = 0;
-        for (size_t i = 0; i < slab_lists_.size(); ++i)
-        {
-            for (const auto *slab : slab_lists_[i])
-            {
-                total += slab->get_free_blocks() * slab->get_block_size();
-            }
-        }
-        return total;
-    }
-
-private:
-    static constexpr size_t SLAB_SIZE_COUNT = 13;
-    static constexpr size_t SLAB_SIZES[SLAB_SIZE_COUNT] = {
-        16, 32, 64, 128, 192, 256, 384, 512, 768, 1024, 1536, 2048, 3072};
-
-    int get_size_index(size_t size) const
-    {
-        // Find the smallest slab size that can fit the requested size
-        for (int i = 0; i < SLAB_SIZE_COUNT; ++i)
-        {
-            if (size <= SLAB_SIZES[i])
-                return i;
-        }
-        return -1; // Size too large for slab
-    }
-
-    bool initialized_;
-    size_t max_slabs_;
-    std::vector<std::vector<SlabAllocator *>> slab_lists_;
-};
-
 // RAlloc implementation
 
 RAlloc::RAlloc()
-    : slab_manager_(nullptr),
-      buddy_manager_(nullptr),
+    : buddy_manager_(nullptr),
       initialized_(false)
 {
+    // Initialize slab array to nullptr
+    for (size_t i = 0; i < SLAB_COUNT; ++i)
+    {
+        slabs_[i] = nullptr;
+    }
+
+    // Initialize lookup table to 0
+    memset(slab_lookup_table_, 0, sizeof(slab_lookup_table_));
 }
 
 RAlloc::~RAlloc()
 {
-    if (slab_manager_)
+    // Cleanup slab managers
+    for (size_t i = 0; i < SLAB_COUNT; ++i)
     {
-        delete slab_manager_;
-        slab_manager_ = nullptr;
+        if (slabs_[i])
+        {
+            delete slabs_[i]; // SlabManager was allocated with new
+            slabs_[i] = nullptr;
+        }
     }
 
     if (buddy_manager_)
     {
-        delete static_cast<BuddyManager *>(buddy_manager_);
+        delete buddy_manager_;
         buddy_manager_ = nullptr;
     }
 }
 
-bool RAlloc::init(size_t max_slabs, size_t max_buddies)
+void RAlloc::build_lookup_table()
+{
+    // Build compact lookup table for sizes [1, 4096]
+    // lookup_idx ranges from 0 to 255 (for sizes 1-4096, divided by 16)
+    uint8_t lookup_raw[256];
+
+    // For each lookup_idx, find the appropriate slab index
+    for (size_t lookup_idx = 0; lookup_idx < 256; ++lookup_idx)
+    {
+        // Size range: [(lookup_idx * 16 + 1), (lookup_idx + 1) * 16]
+        size_t max_size = (lookup_idx + 1) * 16;
+
+        // Find the smallest slab that can fit max_size
+        uint8_t slab_idx = 0;
+        for (uint8_t i = 0; i < SLAB_COUNT; ++i)
+        {
+            if (max_size <= SLAB_SIZES[i])
+            {
+                slab_idx = i;
+                break;
+            }
+        }
+        lookup_raw[lookup_idx] = slab_idx;
+    }
+
+    // Pack into compact format: each uint8 stores two indices
+    // Low 4 bits = even lookup_idx, High 4 bits = odd lookup_idx
+    for (size_t i = 0; i < 128; ++i)
+    {
+        uint8_t even_idx = lookup_raw[i * 2];    // Low 4 bits
+        uint8_t odd_idx = lookup_raw[i * 2 + 1]; // High 4 bits
+        slab_lookup_table_[i] = (odd_idx << 4) | even_idx;
+    }
+}
+
+bool RAlloc::init(size_t max_buddies)
 {
     if (initialized_)
         return false;
 
-    // Initialize slab manager
-    slab_manager_ = new SlabManager();
-    if (!slab_manager_ || !slab_manager_->init(max_slabs))
+    // Build the compact lookup table
+    build_lookup_table();
+
+    // Initialize all fixed slab managers
+    for (size_t i = 0; i < SLAB_COUNT; ++i)
     {
-        delete slab_manager_;
-        slab_manager_ = nullptr;
-        return false;
+        // Create new SlabManager
+        slabs_[i] = new SlabManager();
+        if (!slabs_[i])
+        {
+            // Cleanup previously allocated slabs
+            for (size_t j = 0; j < i; ++j)
+            {
+                delete slabs_[j];
+                slabs_[j] = nullptr;
+            }
+            return false;
+        }
+
+        // Initialize SlabManager with the corresponding block size
+        if (slabs_[i]->init(SLAB_SIZES[i]) != 0)
+        {
+            // Cleanup on failure
+            for (size_t j = 0; j <= i; ++j)
+            {
+                delete slabs_[j];
+                slabs_[j] = nullptr;
+            }
+            return false;
+        }
     }
 
     // Initialize buddy manager
-    BuddyManager *buddy = new BuddyManager();
-    if (!buddy || !buddy->init(max_buddies))
+    buddy_manager_ = new BuddyManager();
+    if (!buddy_manager_ || !buddy_manager_->init(max_buddies))
     {
-        delete buddy;
-        delete slab_manager_;
-        slab_manager_ = nullptr;
+        delete buddy_manager_;
+
+        // Cleanup slabs
+        for (size_t i = 0; i < SLAB_COUNT; ++i)
+        {
+            delete slabs_[i];
+            slabs_[i] = nullptr;
+        }
         return false;
     }
-    buddy_manager_ = buddy;
 
     initialized_ = true;
     return true;
+}
+
+inline uint8_t RAlloc::get_slab_index(size_t size) const
+{
+    // Fast O(1) lookup using compact table
+    // Calculate lookup index: (size - 1) / 16
+    size_t lookup_idx = (size - 1) >> 4;
+
+    // Bounds check (should not happen if size <= 4096)
+    if (__builtin_expect(lookup_idx >= 256, 0))
+        return SLAB_COUNT - 1; // Use largest slab (4096)
+
+    // Extract slab index from packed table
+    uint8_t packed = slab_lookup_table_[lookup_idx >> 1];
+    uint8_t slab_idx = (lookup_idx & 1) ? (packed >> 4) : (packed & 0x0F);
+
+    return slab_idx;
 }
 
 void *RAlloc::allocate(size_t size)
@@ -238,26 +197,42 @@ void *RAlloc::allocate(size_t size)
     if (!initialized_ || size == 0)
         return nullptr;
 
-    // [16B, 4KiB) - try slab first
-    if (size >= 16 && size < 4 * KiB)
+    // [1B, 4KiB） - use fixed slab managers
+    if (size < 4 * KiB)
     {
-        void *ptr = slab_manager_->allocate(size);
-        if (ptr != nullptr)
-            return ptr;
+        uint8_t slab_idx = get_slab_index(size);
+        void *ptr = slabs_[slab_idx]->allocate();
 
-        // Slab allocation failed (might be too large for slab sizes)
-        // Fall through to try other allocators
+        if (ptr != nullptr)
+        {
+            // Record slab allocation with encoded value (64KiB aligned)
+            // Encode: slab_idx << 4 to avoid conflict with ALLOC_BUDDY(1) and ALLOC_MALLOC(2)
+            uint64_t aligned_addr = reinterpret_cast<uint64_t>(ptr) & ~(64 * KiB - 1);
+            alloc_map_[aligned_addr] = slab_idx << 4;
+            return ptr;
+        }
+        // Slab is full, fall through to buddy/malloc
+        exit(-1);
+        return nullptr;
     }
 
     // [4KiB, 256KiB] - use buddy
     if (size >= 4 * KiB && size <= 256 * KiB)
     {
-        BuddyManager *buddy = static_cast<BuddyManager *>(buddy_manager_);
-        return buddy->allocate(size);
+        void *ptr = buddy_manager_->allocate(size);
+
+        if (ptr != nullptr)
+        {
+            // Record buddy allocation (16MiB aligned)
+            uint64_t aligned_addr = reinterpret_cast<uint64_t>(ptr) & ~(16 * MiB - 1);
+            alloc_map_[aligned_addr] = ALLOC_BUDDY;
+            return ptr;
+        }
+        exit(-1);
+        return nullptr;
     }
 
-    // For sizes between largest slab and 4KiB, or >256KiB - use malloc
-    // Allocate extra space for header
+    // For >256KiB or slab overflow - use malloc with header
     size_t total_size = sizeof(MallocHeader) + size;
     void *raw_mem = malloc(total_size);
     if (!raw_mem)
@@ -269,7 +244,7 @@ void *RAlloc::allocate(size_t size)
     header->size = size;
     header->alloc_type = ALLOC_MALLOC;
 
-    // Return pointer after header
+    // Return pointer after header (no need to record in map)
     return static_cast<uint8_t *>(raw_mem) + sizeof(MallocHeader);
 }
 
@@ -278,100 +253,53 @@ void RAlloc::deallocate(void *ptr)
     if (!ptr || !initialized_)
         return;
 
-    AllocType type = identify_allocation(ptr);
-
-    switch (type)
-    {
-    case ALLOC_SLAB:
-        slab_manager_->deallocate(ptr);
-        break;
-
-    case ALLOC_BUDDY:
-    {
-        BuddyManager *buddy = static_cast<BuddyManager *>(buddy_manager_);
-        buddy->deallocate(ptr);
-        break;
-    }
-
-    case ALLOC_MALLOC:
-    {
-        // Get header and free
-        uint8_t *raw_mem = static_cast<uint8_t *>(ptr) - sizeof(MallocHeader);
-        free(raw_mem);
-        break;
-    }
-
-    default:
-        // Unknown allocation type, do nothing to avoid corruption
-        break;
-    }
-}
-
-RAlloc::AllocType RAlloc::identify_allocation(void *ptr) const
-{
-    if (!ptr)
-        return ALLOC_UNKNOWN;
-
     uintptr_t addr = reinterpret_cast<uintptr_t>(ptr);
 
-    // Strategy: Use alignment and metadata to identify allocation type
-    // 1. Check for malloc: validate header with magic number (most reliable)
-    // 2. Check for slab: validate metadata (64KiB aligned blocks)
-    // 3. Assume buddy: 4KiB aligned allocations
+    // Try 64KiB alignment (slab)
+    uint64_t aligned_64k = addr & ~(64 * KiB - 1);
+    auto it = alloc_map_.find(aligned_64k);
 
-    // First, try to identify malloc allocations by checking the header
-    // Malloc allocations are typically 16-byte aligned but not necessarily 4KiB aligned
-    if ((addr & (4 * KiB - 1)) != 0)
+    if (it != alloc_map_.end())
     {
-        // Not 4KiB aligned, likely malloc (slab and buddy are at least 16B and 4KiB aligned)
-        // However, small slab allocations might not be 4KiB aligned either
-        // Let's check the malloc header
-        if (addr >= sizeof(MallocHeader))
-        {
-            uint8_t *raw_mem = static_cast<uint8_t *>(ptr) - sizeof(MallocHeader);
-            MallocHeader *header = reinterpret_cast<MallocHeader *>(raw_mem);
+        uint8_t value = it->second;
 
-            if (header->magic == MallocHeader::MAGIC_NUMBER &&
-                header->alloc_type == ALLOC_MALLOC)
+        // Decode allocation type using bit pattern
+        if (value == ALLOC_BUDDY)
+        {
+            // This shouldn't happen for 64KiB aligned address
+            // Fall through to check 16MiB alignment
+        }
+        else if (value == ALLOC_MALLOC)
+        {
+            // This shouldn't happen for 64KiB aligned address
+            // Fall through to malloc handling
+        }
+        else if ((value & 0x0F) == 0)
+        {
+            // Slab allocation: decode slab_idx from high 4 bits
+            uint8_t slab_idx = value >> 4;
+            if (slab_idx < SLAB_COUNT)
             {
-                return ALLOC_MALLOC;
+                slabs_[slab_idx]->deallocate(ptr);
+                return;
             }
         }
     }
 
-    // Check if it's a slab allocation by examining metadata
-    // Slab allocations are in 64KiB-aligned blocks, but the returned pointers
-    // are not necessarily at the block boundary
-    uint64_t metadata = SlabAllocator::get_metadata(ptr);
-    uint8_t alloc_type = static_cast<uint8_t>((metadata >> 56) & 0xFF);
+    // Try 16MiB alignment (buddy)
+    uint64_t aligned_16m = addr & ~(16 * MiB - 1);
+    it = alloc_map_.find(aligned_16m);
 
-    if (alloc_type == ALLOC_SLAB)
+    if (it != alloc_map_.end() && it->second == ALLOC_BUDDY)
     {
-        return ALLOC_SLAB;
+        // Buddy allocation
+        buddy_manager_->deallocate(ptr);
+        return;
     }
 
-    // Check if it's 4KiB aligned, which suggests buddy allocation
-    // Buddy allocations are always 4KiB aligned
-    if ((addr & (4 * KiB - 1)) == 0)
-    {
-        // Very likely a buddy allocation
-        return ALLOC_BUDDY;
-    }
-
-    // Final fallback: check malloc header even for aligned pointers
-    if (addr >= sizeof(MallocHeader))
-    {
-        uint8_t *raw_mem = static_cast<uint8_t *>(ptr) - sizeof(MallocHeader);
-        MallocHeader *header = reinterpret_cast<MallocHeader *>(raw_mem);
-
-        if (header->magic == MallocHeader::MAGIC_NUMBER &&
-            header->alloc_type == ALLOC_MALLOC)
-        {
-            return ALLOC_MALLOC;
-        }
-    }
-
-    return ALLOC_UNKNOWN;
+    // Must be malloc allocation
+    uint8_t *raw_mem = static_cast<uint8_t *>(ptr) - sizeof(MallocHeader);
+    free(raw_mem);
 }
 
 size_t RAlloc::get_total_free_memory() const
@@ -381,17 +309,13 @@ size_t RAlloc::get_total_free_memory() const
 
     size_t total = 0;
 
-    // Slab free memory
-    if (slab_manager_)
-    {
-        total += slab_manager_->get_total_free_memory();
-    }
+    // Note: SlabManager doesn't expose free memory information
+    // Only counting buddy free memory
 
     // Buddy free memory
     if (buddy_manager_)
     {
-        BuddyManager *buddy = static_cast<BuddyManager *>(buddy_manager_);
-        total += buddy->get_total_free_memory();
+        total += buddy_manager_->get_total_free_memory();
     }
 
     return total;
@@ -399,10 +323,17 @@ size_t RAlloc::get_total_free_memory() const
 
 size_t RAlloc::get_slab_count() const
 {
-    if (!initialized_ || !slab_manager_)
+    if (!initialized_)
         return 0;
 
-    return slab_manager_->get_total_slab_count();
+    // Count total initialized SlabAllocators across all SlabManagers
+    size_t count = 0;
+    for (size_t i = 0; i < SLAB_COUNT; ++i)
+    {
+        if (slabs_[i])
+            count += slabs_[i]->get_initialized_count();
+    }
+    return count;
 }
 
 size_t RAlloc::get_buddy_count() const
@@ -410,29 +341,5 @@ size_t RAlloc::get_buddy_count() const
     if (!initialized_ || !buddy_manager_)
         return 0;
 
-    BuddyManager *buddy = static_cast<BuddyManager *>(buddy_manager_);
-    return buddy->get_allocator_count();
-}
-
-// Global instance
-static RAlloc *g_ralloc_instance = nullptr;
-
-RAlloc *ralloc_get_instance()
-{
-    if (!g_ralloc_instance)
-    {
-        g_ralloc_instance = new RAlloc();
-        g_ralloc_instance->init();
-    }
-    return g_ralloc_instance;
-}
-
-void *ralloc_malloc(size_t size)
-{
-    return ralloc_get_instance()->allocate(size);
-}
-
-void ralloc_free(void *ptr)
-{
-    ralloc_get_instance()->deallocate(ptr);
+    return buddy_manager_->get_allocator_count();
 }

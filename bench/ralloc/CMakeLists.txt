@@ -21,6 +21,17 @@ set(BUDDY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../cache-Kernel/buddySystem)
 add_executable(bench_ralloc
     bench_ralloc.cpp
     ${RALLOC_DIR}/ralloc.cpp
+    ${SLAB_DIR}/slab_manager.cpp
+    ${SLAB_DIR}/slab_allocator.cpp
+    ${BUDDY_DIR}/buddy_allocator.cpp
+    ${BUDDY_DIR}/buddy_manager.cpp
+)
+
+# 添加可执行文件 - comprehensive benchmark
+add_executable(benchmark_ralloc
+    benchmark_ralloc.cpp
+    ${RALLOC_DIR}/ralloc.cpp
+    ${SLAB_DIR}/slab_manager.cpp
     ${SLAB_DIR}/slab_allocator.cpp
     ${BUDDY_DIR}/buddy_allocator.cpp
     ${BUDDY_DIR}/buddy_manager.cpp
@@ -30,6 +41,17 @@ add_executable(bench_ralloc
 add_executable(profile_ralloc
     profile_ralloc.cpp
     ${RALLOC_DIR}/ralloc.cpp
+    ${SLAB_DIR}/slab_manager.cpp
+    ${SLAB_DIR}/slab_allocator.cpp
+    ${BUDDY_DIR}/buddy_allocator.cpp
+    ${BUDDY_DIR}/buddy_manager.cpp
+)
+
+# 添加可执行文件 - example
+add_executable(example_ralloc
+    example.cpp
+    ${RALLOC_DIR}/ralloc.cpp
+    ${SLAB_DIR}/slab_manager.cpp
     ${SLAB_DIR}/slab_allocator.cpp
     ${BUDDY_DIR}/buddy_allocator.cpp
     ${BUDDY_DIR}/buddy_manager.cpp
@@ -45,7 +67,19 @@ target_include_directories(bench_ralloc PRIVATE
     ${BUDDY_DIR}
 )
 
+target_include_directories(benchmark_ralloc PRIVATE
+    ${RALLOC_DIR}
+    ${SLAB_DIR}
+    ${BUDDY_DIR}
+)
+
 target_include_directories(profile_ralloc PRIVATE
+    ${RALLOC_DIR}
+    ${SLAB_DIR}
+    ${BUDDY_DIR}
+)
+
+target_include_directories(example_ralloc PRIVATE
     ${RALLOC_DIR}
     ${SLAB_DIR}
     ${BUDDY_DIR}
@@ -54,7 +88,9 @@ target_include_directories(profile_ralloc PRIVATE
 # 链接线程库
 find_package(Threads REQUIRED)
 target_link_libraries(bench_ralloc Threads::Threads)
+target_link_libraries(benchmark_ralloc Threads::Threads)
 target_link_libraries(profile_ralloc Threads::Threads)
+target_link_libraries(example_ralloc Threads::Threads)
 
 # 设置 Release 模式为默认
 if(NOT CMAKE_BUILD_TYPE)
@@ -66,3 +102,5 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "C++ compiler: ${CMAKE_CXX_COMPILER}")
 message(STATUS "C++ flags: ${CMAKE_CXX_FLAGS}")
 message(STATUS "RAlloc source directory: ${RALLOC_DIR}")
+
+

@@ -34,6 +34,8 @@ include(CodeCoverage)
 add_subdirectory(cache-Kernel/slab)
 add_subdirectory(cache-Kernel/buddySystem)
 add_subdirectory(cache-Kernel/ralloc)
+add_subdirectory(cache-Kernel/kvEngine)
+add_subdirectory(cache-TypeDriver)
 
 # 如果测试目录存在，添加测试
 if(EXISTS ${CMAKE_SOURCE_DIR}/test)
@@ -54,10 +56,17 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/test)
             add_subdirectory(test/time_wheel)
         endif()
 
-        # kv_engine目录为空，暂不添加
-        # if(EXISTS ${CMAKE_SOURCE_DIR}/test/kv_engine AND EXISTS ${CMAKE_SOURCE_DIR}/test/kv_engine/CMakeLists.txt)
-        #     add_subdirectory(test/kv_engine)
-        # endif()
+        if(EXISTS ${CMAKE_SOURCE_DIR}/test/kv_engine)
+            add_subdirectory(test/kv_engine)
+        endif()
+
+        if(EXISTS ${CMAKE_SOURCE_DIR}/test/kv_driver)
+            add_subdirectory(test/kv_driver)
+        endif()
+
+        if(EXISTS ${CMAKE_SOURCE_DIR}/test/hash_driver)
+            add_subdirectory(test/hash_driver)
+        endif()
 
         # 创建统一的代码覆盖率报告（包含所有测试模块）
         if(ENABLE_COVERAGE)
@@ -89,6 +98,16 @@ if(BUILD_BENCHMARKS)
     # 添加 simple_slab benchmark
     if(EXISTS ${CMAKE_SOURCE_DIR}/bench/simple_slab)
         add_subdirectory(bench/simple_slab)
+    endif()
+
+    # 添加 kvEngine benchmark
+    if(EXISTS ${CMAKE_SOURCE_DIR}/bench/kvEngine)
+        add_subdirectory(bench/kvEngine)
+    endif()
+
+    # 添加 typeDriver example
+    if(EXISTS ${CMAKE_SOURCE_DIR}/bench/typeDriver)
+        add_subdirectory(bench/typeDriver)
     endif()
 endif()
 

@@ -15,13 +15,18 @@ struct BenchmarkResult
     double ops_per_second;
 };
 
-BenchmarkResult run_benchmark(const std::string &name, size_t block_size, size_t total_ops)
+BenchmarkResult run_benchmark(const std::string &name, size_t block_size, size_t total_ops, RAlloc *allocator)
 {
-    constexpr size_t BATCH_SIZE = 10000;
+    // Adjust batch size based on block size to avoid excessive memory usage
+    size_t BATCH_SIZE = 10000;
+    if (block_size > 256 * 1024)     // For large allocations (>256KiB)
+        BATCH_SIZE = 100;            // Reduce to 100 to avoid OOM
+    else if (block_size > 64 * 1024) // For medium-large allocations (>64KiB)
+        BATCH_SIZE = 1000;           // Reduce to 1000
+
     const size_t NUM_BATCHES = total_ops / BATCH_SIZE;
 
-    void *batch_ptrs[BATCH_SIZE];
-    RAlloc *allocator = ralloc_get_instance();
+    void *batch_ptrs[10000]; // Use max size, but only use up to BATCH_SIZE
 
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -55,10 +60,16 @@ BenchmarkResult run_benchmark(const std::string &name, size_t block_size, size_t
 
 BenchmarkResult run_malloc_benchmark(size_t block_size, size_t total_ops)
 {
-    constexpr size_t BATCH_SIZE = 10000;
+    // Adjust batch size based on block size to avoid excessive memory usage
+    size_t BATCH_SIZE = 10000;
+    if (block_size > 256 * 1024)     // For large allocations (>256KiB)
+        BATCH_SIZE = 100;            // Reduce to 100 to avoid OOM
+    else if (block_size > 64 * 1024) // For medium-large allocations (>64KiB)
+        BATCH_SIZE = 1000;           // Reduce to 1000
+
     const size_t NUM_BATCHES = total_ops / BATCH_SIZE;
 
-    void *batch_ptrs[BATCH_SIZE];
+    void *batch_ptrs[10000]; // Use max size, but only use up to BATCH_SIZE
 
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -122,13 +133,21 @@ int main()
     std::cout << "=== RAlloc Performance Benchmark ===" << std::endl;
     std::cout << std::endl;
 
+    // Create allocator instance
+    RAlloc allocator;
+    if (!allocator.init())
+    {
+        std::cerr << "Failed to initialize RAlloc" << std::endl;
+        return 1;
+    }
+
     // Test 1: Small allocations (Slab)
     {
         std::cout << "=== Test 1: Small Allocations (64B - Slab) ===" << std::endl;
         constexpr size_t TOTAL_OPS = 100000000; // 100M operations
         constexpr size_t BLOCK_SIZE = 64;
 
-        auto ralloc_result = run_benchmark("RAlloc (Slab)", BLOCK_SIZE, TOTAL_OPS);
+        auto ralloc_result = run_benchmark("RAlloc (Slab)", BLOCK_SIZE, TOTAL_OPS, &allocator);
         auto malloc_result = run_malloc_benchmark(BLOCK_SIZE, TOTAL_OPS);
 
         print_result(ralloc_result);
@@ -142,7 +161,7 @@ int main()
         constexpr size_t TOTAL_OPS = 1000000; // 1M operations
         constexpr size_t BLOCK_SIZE = 8192;
 
-        auto ralloc_result = run_benchmark("RAlloc (Buddy)", BLOCK_SIZE, TOTAL_OPS);
+        auto ralloc_result = run_benchmark("RAlloc (Buddy)", BLOCK_SIZE, TOTAL_OPS, &allocator);
         auto malloc_result = run_malloc_benchmark(BLOCK_SIZE, TOTAL_OPS);
 
         print_result(ralloc_result);
@@ -153,10 +172,10 @@ int main()
     // Test 3: Large allocations (malloc fallback)
     {
         std::cout << "=== Test 3: Large Allocations (512KiB - Malloc) ===" << std::endl;
-        constexpr size_t TOTAL_OPS = 100000; // 100K operations
+        constexpr size_t TOTAL_OPS = 10000; // Reduced from 100K to 10K to avoid OOM
         constexpr size_t BLOCK_SIZE = 524288;
 
-        auto ralloc_result = run_benchmark("RAlloc (Malloc)", BLOCK_SIZE, TOTAL_OPS);
+        auto ralloc_result = run_benchmark("RAlloc (Malloc)", BLOCK_SIZE, TOTAL_OPS, &allocator);
         auto malloc_result = run_malloc_benchmark(BLOCK_SIZE, TOTAL_OPS);
 
         print_result(ralloc_result);
@@ -175,7 +194,6 @@ int main()
         const size_t num_sizes = sizeof(sizes) / sizeof(sizes[0]);
 
         void *batch_ptrs[BATCH_SIZE];
-        RAlloc *allocator = ralloc_get_instance();
 
         // RAlloc mixed test
         auto ralloc_start = std::chrono::high_resolution_clock::now();
@@ -184,12 +202,12 @@ int main()
         {
             for (size_t i = 0; i < BATCH_SIZE; i++)
             {
-                batch_ptrs[i] = allocator->allocate(sizes[i % num_sizes]);
+                batch_ptrs[i] = allocator.allocate(sizes[i % num_sizes]);
             }
 
             for (size_t i = 0; i < BATCH_SIZE; i++)
             {
-                allocator->deallocate(batch_ptrs[i]);
+                allocator.deallocate(batch_ptrs[i]);
             }
         }
 
@@ -236,9 +254,9 @@ int main()
 
     // Print overall statistics
     std::cout << "=== Final Statistics ===" << std::endl;
-    std::cout << "Total slab allocators created: " << ralloc_get_instance()->get_slab_count() << std::endl;
-    std::cout << "Total buddy allocators created: " << ralloc_get_instance()->get_buddy_count() << std::endl;
-    std::cout << "Total free memory: " << ralloc_get_instance()->get_total_free_memory() << " bytes" << std::endl;
+    std::cout << "Total slab allocators created: " << allocator.get_slab_count() << std::endl;
+    std::cout << "Total buddy allocators created: " << allocator.get_buddy_count() << std::endl;
+    std::cout << "Total free memory: " << allocator.get_total_free_memory() << " bytes" << std::endl;
 
     return 0;
 }

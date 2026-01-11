@@ -1,4 +1,4 @@
-# Slab Benchmark 快速开始
+# SlabManager Benchmark 快速开始
 
 ## 方式一：独立构建（推荐用于快速测试）
 
@@ -28,23 +28,23 @@ make bench_slab
 ## 示例输出
 
 ```
-=== Slab Manager Performance Benchmark ===
+=== SlabManager Performance Benchmark ===
 Total operations: 500000000
 Batch size: 1000
 Number of batches: 500000
 Block size: 27 bytes
 
-=== Testing Slab Manager (with auto-expansion) ===
-Initialized Slab manager with block size: 32 bytes
+=== Testing SlabManager (with auto-expansion) ===
+Initialized SlabManager with block size: 32 bytes
 Auto-expansion enabled
 
-Slab Manager completed!
+SlabManager completed!
 Total allocators created: 1
 Total slabs allocated: 1
 
 === Performance Summary ===
 ----------------------------------------
-Slab Manager:
+SlabManager:
   Total time: 9403152 μs
   Average per operation: 9.40315 ns
   Operations per second: 1.06347e+08
@@ -56,15 +56,15 @@ Standard malloc/free:
 
 === Performance Comparison ===
 ----------------------------------------
-Slab Manager vs malloc/free: 0.75x slower
-Slab Manager vs new/delete: 0.99x slower
+SlabManager vs malloc/free: 0.75x slower
+SlabManager vs new/delete: 0.99x slower
 ```
 
 ## 性能说明
 
 在当前测试场景下（批量分配1000个32字节对象后批量释放）：
-- Slab Manager 与 malloc/free 性能接近（约 0.75x）
-- Slab Manager 与 new/delete 性能几乎相当（约 0.99x）
+- SlabManager 与 malloc/free 性能接近（约 0.75x）
+- SlabManager 与 new/delete 性能几乎相当（约 0.99x）
 - 自动扩容功能仅在需要时才创建新的 allocator
 
 ## 自定义测试
