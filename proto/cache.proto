@@ -8,115 +8,270 @@ import "google/api/annotations.proto";
 
 // CacheService provides Redis-like cache operations
 service CacheService {
-  // KV operations
-  rpc Set(SetRequest) returns (SetResponse) {
+  // ============================================================
+  // NATIVE INTERFACES - Original cache operations
+  // ============================================================
+
+  // ---------- KV Native Operations ----------
+  rpc KvSet(KvSetRequest) returns (KvSetResponse) {
+    option (google.api.http) = {
+      post: "/v1/native/kv/set"
+      body: "*"
+    };
+  }
+
+  rpc KvGet(KvGetRequest) returns (KvGetResponse) {
+    option (google.api.http) = {
+      get: "/v1/native/kv/get/{key}"
+    };
+  }
+
+  rpc KvDel(KvDelRequest) returns (KvDelResponse) {
+    option (google.api.http) = {
+      delete: "/v1/native/kv/del/{key}"
+    };
+  }
+
+  rpc KvExists(KvExistsRequest) returns (KvExistsResponse) {
+    option (google.api.http) = {
+      get: "/v1/native/kv/exists/{key}"
+    };
+  }
+
+  // ---------- Hash Native Operations ----------
+  // Batch/whole hash operations
+  rpc HashSet(HashSetRequest) returns (HashSetResponse) {
+    option (google.api.http) = {
+      post: "/v1/native/hash/set"
+      body: "*"
+    };
+  }
+
+  rpc HashGet(HashGetRequest) returns (HashGetResponse) {
+    option (google.api.http) = {
+      get: "/v1/native/hash/get/{key}"
+    };
+  }
+
+  rpc HashDel(HashDelRequest) returns (HashDelResponse) {
+    option (google.api.http) = {
+      delete: "/v1/native/hash/del/{key}"
+    };
+  }
+
+  rpc HashExists(HashExistsRequest) returns (HashExistsResponse) {
+    option (google.api.http) = {
+      get: "/v1/native/hash/exists/{key}"
+    };
+  }
+
+  rpc HashLen(HashLenRequest) returns (HashLenResponse) {
+    option (google.api.http) = {
+      get: "/v1/native/hash/len/{key}"
+    };
+  }
+
+  // Single field operations
+  rpc HashSetM(HashSetMRequest) returns (HashSetMResponse) {
+    option (google.api.http) = {
+      post: "/v1/native/hash/set_m"
+      body: "*"
+    };
+  }
+
+  rpc HashGetM(HashGetMRequest) returns (HashGetMResponse) {
+    option (google.api.http) = {
+      get: "/v1/native/hash/get_m/{key}/{field}"
+    };
+  }
+
+  rpc HashDelM(HashDelMRequest) returns (HashDelMResponse) {
+    option (google.api.http) = {
+      delete: "/v1/native/hash/del_m/{key}/{field}"
+    };
+  }
+
+  rpc HashExistsM(HashExistsMRequest) returns (HashExistsMResponse) {
+    option (google.api.http) = {
+      get: "/v1/native/hash/exists_m/{key}/{field}"
+    };
+  }
+
+  // ---------- Set Native Operations ----------
+  // Batch/whole set operations
+  rpc SetSet(SetSetRequest) returns (SetSetResponse) {
+    option (google.api.http) = {
+      post: "/v1/native/set/set"
+      body: "*"
+    };
+  }
+
+  rpc SetGet(SetGetRequest) returns (SetGetResponse) {
+    option (google.api.http) = {
+      get: "/v1/native/set/get/{key}"
+    };
+  }
+
+  rpc SetDel(SetDelRequest) returns (SetDelResponse) {
+    option (google.api.http) = {
+      delete: "/v1/native/set/del/{key}"
+    };
+  }
+
+  rpc SetExists(SetExistsRequest) returns (SetExistsResponse) {
+    option (google.api.http) = {
+      get: "/v1/native/set/exists/{key}"
+    };
+  }
+
+  rpc SetLen(SetLenRequest) returns (SetLenResponse) {
+    option (google.api.http) = {
+      get: "/v1/native/set/len/{key}"
+    };
+  }
+
+  // Single member operations
+  rpc SetAddM(SetAddMRequest) returns (SetAddMResponse) {
+    option (google.api.http) = {
+      post: "/v1/native/set/add_m"
+      body: "*"
+    };
+  }
+
+  rpc SetExistsM(SetExistsMRequest) returns (SetExistsMResponse) {
+    option (google.api.http) = {
+      get: "/v1/native/set/exists_m/{key}/{member}"
+    };
+  }
+
+  rpc SetDelM(SetDelMRequest) returns (SetDelMResponse) {
+    option (google.api.http) = {
+      delete: "/v1/native/set/del_m/{key}/{member}"
+    };
+  }
+
+  rpc SetGetM(SetGetMRequest) returns (SetGetMResponse) {
+    option (google.api.http) = {
+      get: "/v1/native/set/get_m/{key}/{member}"
+    };
+  }
+
+  // ============================================================
+  // REDIS-COMPATIBLE ALIASES - Forward to native interfaces
+  // ============================================================
+
+  // ---------- KV Redis Aliases ----------
+  // SET -> forwards to KvSet
+  rpc Set(KvSetRequest) returns (KvSetResponse) {
     option (google.api.http) = {
       post: "/v1/kv/set"
       body: "*"
     };
   }
 
-  rpc Get(GetRequest) returns (GetResponse) {
+  // GET -> forwards to KvGet
+  rpc Get(KvGetRequest) returns (KvGetResponse) {
     option (google.api.http) = {
       get: "/v1/kv/get/{key}"
     };
   }
 
-  rpc Del(DelRequest) returns (DelResponse) {
+  // DEL -> forwards to KvDel
+  rpc Del(KvDelRequest) returns (KvDelResponse) {
     option (google.api.http) = {
       delete: "/v1/kv/del/{key}"
     };
   }
 
-  rpc Exists(ExistsRequest) returns (ExistsResponse) {
+  // EXISTS -> forwards to KvExists
+  rpc Exists(KvExistsRequest) returns (KvExistsResponse) {
     option (google.api.http) = {
       get: "/v1/kv/exists/{key}"
     };
   }
 
-  // Hash operations
-  rpc HSet(HSetRequest) returns (HSetResponse) {
-    option (google.api.http) = {
-      post: "/v1/hash/set"
-      body: "*"
-    };
-  }
-
-  rpc HGet(HGetRequest) returns (HGetResponse) {
-    option (google.api.http) = {
-      get: "/v1/hash/get/{key}/{field}"
-    };
-  }
-
-  rpc HDel(HDelRequest) returns (HDelResponse) {
-    option (google.api.http) = {
-      delete: "/v1/hash/del/{key}/{field}"
-    };
-  }
-
-  rpc HMSet(HMSetRequest) returns (HMSetResponse) {
+  // ---------- Hash Redis Aliases ----------
+  // HMSET -> forwards to HashSetM (set single field)
+  rpc HMSet(HashSetMRequest) returns (HashSetMResponse) {
     option (google.api.http) = {
       post: "/v1/hash/mset"
       body: "*"
     };
   }
 
-  rpc HMGet(HMGetRequest) returns (HMGetResponse) {
+  // HMGET -> forwards to HashGetM (get single field)
+  rpc HMGet(HashGetMRequest) returns (HashGetMResponse) {
     option (google.api.http) = {
-      post: "/v1/hash/mget"
-      body: "*"
+      get: "/v1/hash/mget/{key}/{field}"
     };
   }
 
-  rpc HLen(HLenRequest) returns (HLenResponse) {
+  // HLEN -> forwards to HashLen
+  rpc HLen(HashLenRequest) returns (HashLenResponse) {
     option (google.api.http) = {
       get: "/v1/hash/len/{key}"
     };
   }
 
-  rpc HGetAll(HGetAllRequest) returns (HGetAllResponse) {
+  // HGETALL -> forwards to HashGet (get all fields)
+  rpc HGetAll(HashGetRequest) returns (HashGetResponse) {
     option (google.api.http) = {
       get: "/v1/hash/getall/{key}"
     };
   }
 
-  rpc HExists(HExistsRequest) returns (HExistsResponse) {
+  // HDEL -> forwards to HashDel (delete entire hash)
+  rpc HDel(HashDelRequest) returns (HashDelResponse) {
+    option (google.api.http) = {
+      delete: "/v1/hash/del/{key}"
+    };
+  }
+
+  // HEXISTS -> forwards to HashExistsM (check field exists)
+  rpc HExists(HashExistsMRequest) returns (HashExistsMResponse) {
     option (google.api.http) = {
       get: "/v1/hash/exists/{key}/{field}"
     };
   }
 
-  // Set operations
-  rpc SAdd(SAddRequest) returns (SAddResponse) {
+  // ---------- Set Redis Aliases ----------
+  // SADD -> forwards to SetAddM (add single member)
+  rpc SAdd(SetAddMRequest) returns (SetAddMResponse) {
     option (google.api.http) = {
       post: "/v1/set/add"
       body: "*"
     };
   }
 
-  rpc SMembers(SMembersRequest) returns (SMembersResponse) {
-    option (google.api.http) = {
-      get: "/v1/set/members/{key}"
-    };
-  }
-
-  rpc SRem(SRemRequest) returns (SRemResponse) {
-    option (google.api.http) = {
-      delete: "/v1/set/rem/{key}/{member}"
-    };
-  }
-
-  rpc SIsMember(SIsMemberRequest) returns (SIsMemberResponse) {
+  // SISMEMBER -> forwards to SetExistsM (check member exists)
+  rpc SIsMember(SetExistsMRequest) returns (SetExistsMResponse) {
     option (google.api.http) = {
       get: "/v1/set/ismember/{key}/{member}"
     };
   }
 
-  rpc SCard(SCardRequest) returns (SCardResponse) {
+  // SCARD -> forwards to SetLen (get member count)
+  rpc SCard(SetLenRequest) returns (SetLenResponse) {
     option (google.api.http) = {
       get: "/v1/set/card/{key}"
     };
   }
+
+  // SMEMBERS -> forwards to SetGet (get all members)
+  rpc SMembers(SetGetRequest) returns (SetGetResponse) {
+    option (google.api.http) = {
+      get: "/v1/set/members/{key}"
+    };
+  }
+
+  // SREM -> forwards to SetDelM (remove single member)
+  rpc SRem(SetDelMRequest) returns (SetDelMResponse) {
+    option (google.api.http) = {
+      delete: "/v1/set/rem/{key}/{member}"
+    };
+  }
+
+  // ============================================================
 
   // List operations
   rpc LPush(LPushRequest) returns (LPushResponse) {
@@ -180,162 +335,215 @@ service CacheService {
   }
 }
 
-// KV Messages
-message SetRequest {
+// ============================================================
+// NATIVE INTERFACE MESSAGES
+// ============================================================
+
+// ---------- KV Native Messages ----------
+message KvSetRequest {
   string key = 1;
   string value = 2;
 }
 
-message SetResponse {
+message KvSetResponse {
   bool success = 1;
 }
 
-message GetRequest {
+message KvGetRequest {
   string key = 1;
 }
 
-message GetResponse {
+message KvGetResponse {
   string value = 1;
   bool exists = 2;
 }
 
-message DelRequest {
+message KvDelRequest {
   string key = 1;
 }
 
-message DelResponse {
+message KvDelResponse {
   bool success = 1;
   int32 deleted_count = 2;
 }
 
-message ExistsRequest {
+message KvExistsRequest {
   string key = 1;
 }
 
-message ExistsResponse {
+message KvExistsResponse {
   bool exists = 1;
 }
 
-// Hash Messages
-message HSetRequest {
+// ---------- Hash Native Messages ----------
+// Batch/whole hash operations
+message HashSetRequest {
   string key = 1;
-  string field = 2;
-  string value = 3;
+  map<string, string> fields = 2; // batch set multiple fields (calls hash_set)
 }
 
-message HSetResponse {
-  bool success = 1;
-  bool created = 2; // true if new field, false if updated
-}
-
-message HGetRequest {
-  string key = 1;
-  string field = 2;
-}
-
-message HGetResponse {
-  string value = 1;
-  bool exists = 2;
-}
-
-message HDelRequest {
-  string key = 1;
-  string field = 2;
-}
-
-message HDelResponse {
-  bool success = 1;
-  int32 deleted_count = 2;
-}
-
-message HMSetRequest {
-  string key = 1;
-  map<string, string> fields = 2; // field -> value mapping
-}
-
-message HMSetResponse {
+message HashSetResponse {
   bool success = 1;
   int32 count = 2; // number of fields set
 }
 
-message HMGetRequest {
-  string key = 1;
-  repeated string fields = 2;
+message HashGetRequest {
+  string key = 1; // get all field-value pairs (calls hash_get)
 }
 
-message HMGetResponse {
-  map<string, string> values = 1; // field -> value mapping (only existing fields)
-}
-
-message HLenRequest {
-  string key = 1;
-}
-
-message HLenResponse {
-  int32 length = 1;
-}
-
-message HGetAllRequest {
-  string key = 1;
-}
-
-message HGetAllResponse {
+message HashGetResponse {
   map<string, string> fields = 1; // all field -> value pairs
 }
 
-message HExistsRequest {
-  string key = 1;
-  string field = 2;
+message HashDelRequest {
+  string key = 1; // delete entire hash (calls hash_del)
 }
 
-message HExistsResponse {
-  bool exists = 1;
-}
-
-// Set Messages
-message SAddRequest {
-  string key = 1;
-  string member = 2;
-}
-
-message SAddResponse {
-  bool success = 1;
-  bool added = 2; // true if new member, false if already exists
-}
-
-message SMembersRequest {
-  string key = 1;
-}
-
-message SMembersResponse {
-  repeated string members = 1;
-}
-
-message SRemRequest {
-  string key = 1;
-  string member = 2;
-}
-
-message SRemResponse {
+message HashDelResponse {
   bool success = 1;
   int32 deleted_count = 2;
 }
 
-message SIsMemberRequest {
-  string key = 1;
-  string member = 2;
+message HashExistsRequest {
+  string key = 1; // check if hash key exists (calls hash_exists)
 }
 
-message SIsMemberResponse {
+message HashExistsResponse {
+  bool exists = 1;
+}
+
+message HashLenRequest {
+  string key = 1; // get number of fields (calls hash_len)
+}
+
+message HashLenResponse {
+  int32 length = 1;
+}
+
+// Single field operations
+message HashSetMRequest {
+  string key = 1;
+  string field = 2;
+  string value = 3; // set single field (calls hash_set_m)
+}
+
+message HashSetMResponse {
+  bool success = 1;
+  bool created = 2; // true if new field, false if updated
+}
+
+message HashGetMRequest {
+  string key = 1;
+  string field = 2; // get single field (calls hash_get_m)
+}
+
+message HashGetMResponse {
+  string value = 1;
+  bool exists = 2;
+}
+
+message HashDelMRequest {
+  string key = 1;
+  string field = 2; // delete single field (calls hash_del_m)
+}
+
+message HashDelMResponse {
+  bool success = 1;
+  int32 deleted_count = 2;
+}
+
+message HashExistsMRequest {
+  string key = 1;
+  string field = 2; // check if field exists (calls hash_exists_m)
+}
+
+message HashExistsMResponse {
+  bool exists = 1;
+}
+
+// ---------- Set Native Messages ----------
+// Batch/whole set operations
+message SetSetRequest {
+  string key = 1;
+  repeated string members = 2; // batch add multiple members (calls set_set)
+}
+
+message SetSetResponse {
+  bool success = 1;
+  int32 count = 2; // number of members added
+}
+
+message SetGetRequest {
+  string key = 1; // get all members (calls set_get)
+}
+
+message SetGetResponse {
+  repeated string members = 1;
+}
+
+message SetDelRequest {
+  string key = 1; // delete entire set (calls set_del)
+}
+
+message SetDelResponse {
+  bool success = 1;
+  int32 deleted_count = 2;
+}
+
+message SetExistsRequest {
+  string key = 1; // check if set key exists (calls set_exists)
+}
+
+message SetExistsResponse {
+  bool exists = 1;
+}
+
+message SetLenRequest {
+  string key = 1; // get number of members (calls set_len)
+}
+
+message SetLenResponse {
+  int32 length = 1;
+}
+
+// Single member operations
+message SetAddMRequest {
+  string key = 1;
+  string member = 2; // add single member (calls set_add_m)
+}
+
+message SetAddMResponse {
+  bool success = 1;
+  bool added = 2; // true if new member, false if already exists
+}
+
+message SetExistsMRequest {
+  string key = 1;
+  string member = 2; // check if member exists (calls set_exists_m)
+}
+
+message SetExistsMResponse {
   bool is_member = 1;
 }
 
-message SCardRequest {
+message SetDelMRequest {
   string key = 1;
+  string member = 2; // delete single member (calls set_del_m)
 }
 
-message SCardResponse {
-  int32 cardinality = 1;
+message SetDelMResponse {
+  bool success = 1;
+  int32 deleted_count = 2;
+}
+
+message SetGetMRequest {
+  string key = 1;
+  string member = 2; // get single member data for verification (calls set_get_m)
+}
+
+message SetGetMResponse {
+  string value = 1;
+  bool exists = 2;
 }
 
 // List Messages

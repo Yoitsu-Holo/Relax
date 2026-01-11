@@ -19,32 +19,52 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CacheService_Set_FullMethodName       = "/cache.CacheService/Set"
-	CacheService_Get_FullMethodName       = "/cache.CacheService/Get"
-	CacheService_Del_FullMethodName       = "/cache.CacheService/Del"
-	CacheService_Exists_FullMethodName    = "/cache.CacheService/Exists"
-	CacheService_HSet_FullMethodName      = "/cache.CacheService/HSet"
-	CacheService_HGet_FullMethodName      = "/cache.CacheService/HGet"
-	CacheService_HDel_FullMethodName      = "/cache.CacheService/HDel"
-	CacheService_HMSet_FullMethodName     = "/cache.CacheService/HMSet"
-	CacheService_HMGet_FullMethodName     = "/cache.CacheService/HMGet"
-	CacheService_HLen_FullMethodName      = "/cache.CacheService/HLen"
-	CacheService_HGetAll_FullMethodName   = "/cache.CacheService/HGetAll"
-	CacheService_HExists_FullMethodName   = "/cache.CacheService/HExists"
-	CacheService_SAdd_FullMethodName      = "/cache.CacheService/SAdd"
-	CacheService_SMembers_FullMethodName  = "/cache.CacheService/SMembers"
-	CacheService_SRem_FullMethodName      = "/cache.CacheService/SRem"
-	CacheService_SIsMember_FullMethodName = "/cache.CacheService/SIsMember"
-	CacheService_SCard_FullMethodName     = "/cache.CacheService/SCard"
-	CacheService_LPush_FullMethodName     = "/cache.CacheService/LPush"
-	CacheService_LRange_FullMethodName    = "/cache.CacheService/LRange"
-	CacheService_LRem_FullMethodName      = "/cache.CacheService/LRem"
-	CacheService_LPop_FullMethodName      = "/cache.CacheService/LPop"
-	CacheService_RPush_FullMethodName     = "/cache.CacheService/RPush"
-	CacheService_RPop_FullMethodName      = "/cache.CacheService/RPop"
-	CacheService_LLen_FullMethodName      = "/cache.CacheService/LLen"
-	CacheService_LIndex_FullMethodName    = "/cache.CacheService/LIndex"
-	CacheService_LSet_FullMethodName      = "/cache.CacheService/LSet"
+	CacheService_KvSet_FullMethodName       = "/cache.CacheService/KvSet"
+	CacheService_KvGet_FullMethodName       = "/cache.CacheService/KvGet"
+	CacheService_KvDel_FullMethodName       = "/cache.CacheService/KvDel"
+	CacheService_KvExists_FullMethodName    = "/cache.CacheService/KvExists"
+	CacheService_HashSet_FullMethodName     = "/cache.CacheService/HashSet"
+	CacheService_HashGet_FullMethodName     = "/cache.CacheService/HashGet"
+	CacheService_HashDel_FullMethodName     = "/cache.CacheService/HashDel"
+	CacheService_HashExists_FullMethodName  = "/cache.CacheService/HashExists"
+	CacheService_HashLen_FullMethodName     = "/cache.CacheService/HashLen"
+	CacheService_HashSetM_FullMethodName    = "/cache.CacheService/HashSetM"
+	CacheService_HashGetM_FullMethodName    = "/cache.CacheService/HashGetM"
+	CacheService_HashDelM_FullMethodName    = "/cache.CacheService/HashDelM"
+	CacheService_HashExistsM_FullMethodName = "/cache.CacheService/HashExistsM"
+	CacheService_SetSet_FullMethodName      = "/cache.CacheService/SetSet"
+	CacheService_SetGet_FullMethodName      = "/cache.CacheService/SetGet"
+	CacheService_SetDel_FullMethodName      = "/cache.CacheService/SetDel"
+	CacheService_SetExists_FullMethodName   = "/cache.CacheService/SetExists"
+	CacheService_SetLen_FullMethodName      = "/cache.CacheService/SetLen"
+	CacheService_SetAddM_FullMethodName     = "/cache.CacheService/SetAddM"
+	CacheService_SetExistsM_FullMethodName  = "/cache.CacheService/SetExistsM"
+	CacheService_SetDelM_FullMethodName     = "/cache.CacheService/SetDelM"
+	CacheService_SetGetM_FullMethodName     = "/cache.CacheService/SetGetM"
+	CacheService_Set_FullMethodName         = "/cache.CacheService/Set"
+	CacheService_Get_FullMethodName         = "/cache.CacheService/Get"
+	CacheService_Del_FullMethodName         = "/cache.CacheService/Del"
+	CacheService_Exists_FullMethodName      = "/cache.CacheService/Exists"
+	CacheService_HMSet_FullMethodName       = "/cache.CacheService/HMSet"
+	CacheService_HMGet_FullMethodName       = "/cache.CacheService/HMGet"
+	CacheService_HLen_FullMethodName        = "/cache.CacheService/HLen"
+	CacheService_HGetAll_FullMethodName     = "/cache.CacheService/HGetAll"
+	CacheService_HDel_FullMethodName        = "/cache.CacheService/HDel"
+	CacheService_HExists_FullMethodName     = "/cache.CacheService/HExists"
+	CacheService_SAdd_FullMethodName        = "/cache.CacheService/SAdd"
+	CacheService_SIsMember_FullMethodName   = "/cache.CacheService/SIsMember"
+	CacheService_SCard_FullMethodName       = "/cache.CacheService/SCard"
+	CacheService_SMembers_FullMethodName    = "/cache.CacheService/SMembers"
+	CacheService_SRem_FullMethodName        = "/cache.CacheService/SRem"
+	CacheService_LPush_FullMethodName       = "/cache.CacheService/LPush"
+	CacheService_LRange_FullMethodName      = "/cache.CacheService/LRange"
+	CacheService_LRem_FullMethodName        = "/cache.CacheService/LRem"
+	CacheService_LPop_FullMethodName        = "/cache.CacheService/LPop"
+	CacheService_RPush_FullMethodName       = "/cache.CacheService/RPush"
+	CacheService_RPop_FullMethodName        = "/cache.CacheService/RPop"
+	CacheService_LLen_FullMethodName        = "/cache.CacheService/LLen"
+	CacheService_LIndex_FullMethodName      = "/cache.CacheService/LIndex"
+	CacheService_LSet_FullMethodName        = "/cache.CacheService/LSet"
 )
 
 // CacheServiceClient is the client API for CacheService service.
@@ -53,26 +73,68 @@ const (
 //
 // CacheService provides Redis-like cache operations
 type CacheServiceClient interface {
-	// KV operations
-	Set(ctx context.Context, in *SetRequest, opts ...grpc.CallOption) (*SetResponse, error)
-	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
-	Del(ctx context.Context, in *DelRequest, opts ...grpc.CallOption) (*DelResponse, error)
-	Exists(ctx context.Context, in *ExistsRequest, opts ...grpc.CallOption) (*ExistsResponse, error)
-	// Hash operations
-	HSet(ctx context.Context, in *HSetRequest, opts ...grpc.CallOption) (*HSetResponse, error)
-	HGet(ctx context.Context, in *HGetRequest, opts ...grpc.CallOption) (*HGetResponse, error)
-	HDel(ctx context.Context, in *HDelRequest, opts ...grpc.CallOption) (*HDelResponse, error)
-	HMSet(ctx context.Context, in *HMSetRequest, opts ...grpc.CallOption) (*HMSetResponse, error)
-	HMGet(ctx context.Context, in *HMGetRequest, opts ...grpc.CallOption) (*HMGetResponse, error)
-	HLen(ctx context.Context, in *HLenRequest, opts ...grpc.CallOption) (*HLenResponse, error)
-	HGetAll(ctx context.Context, in *HGetAllRequest, opts ...grpc.CallOption) (*HGetAllResponse, error)
-	HExists(ctx context.Context, in *HExistsRequest, opts ...grpc.CallOption) (*HExistsResponse, error)
-	// Set operations
-	SAdd(ctx context.Context, in *SAddRequest, opts ...grpc.CallOption) (*SAddResponse, error)
-	SMembers(ctx context.Context, in *SMembersRequest, opts ...grpc.CallOption) (*SMembersResponse, error)
-	SRem(ctx context.Context, in *SRemRequest, opts ...grpc.CallOption) (*SRemResponse, error)
-	SIsMember(ctx context.Context, in *SIsMemberRequest, opts ...grpc.CallOption) (*SIsMemberResponse, error)
-	SCard(ctx context.Context, in *SCardRequest, opts ...grpc.CallOption) (*SCardResponse, error)
+	// ---------- KV Native Operations ----------
+	KvSet(ctx context.Context, in *KvSetRequest, opts ...grpc.CallOption) (*KvSetResponse, error)
+	KvGet(ctx context.Context, in *KvGetRequest, opts ...grpc.CallOption) (*KvGetResponse, error)
+	KvDel(ctx context.Context, in *KvDelRequest, opts ...grpc.CallOption) (*KvDelResponse, error)
+	KvExists(ctx context.Context, in *KvExistsRequest, opts ...grpc.CallOption) (*KvExistsResponse, error)
+	// ---------- Hash Native Operations ----------
+	// Batch/whole hash operations
+	HashSet(ctx context.Context, in *HashSetRequest, opts ...grpc.CallOption) (*HashSetResponse, error)
+	HashGet(ctx context.Context, in *HashGetRequest, opts ...grpc.CallOption) (*HashGetResponse, error)
+	HashDel(ctx context.Context, in *HashDelRequest, opts ...grpc.CallOption) (*HashDelResponse, error)
+	HashExists(ctx context.Context, in *HashExistsRequest, opts ...grpc.CallOption) (*HashExistsResponse, error)
+	HashLen(ctx context.Context, in *HashLenRequest, opts ...grpc.CallOption) (*HashLenResponse, error)
+	// Single field operations
+	HashSetM(ctx context.Context, in *HashSetMRequest, opts ...grpc.CallOption) (*HashSetMResponse, error)
+	HashGetM(ctx context.Context, in *HashGetMRequest, opts ...grpc.CallOption) (*HashGetMResponse, error)
+	HashDelM(ctx context.Context, in *HashDelMRequest, opts ...grpc.CallOption) (*HashDelMResponse, error)
+	HashExistsM(ctx context.Context, in *HashExistsMRequest, opts ...grpc.CallOption) (*HashExistsMResponse, error)
+	// ---------- Set Native Operations ----------
+	// Batch/whole set operations
+	SetSet(ctx context.Context, in *SetSetRequest, opts ...grpc.CallOption) (*SetSetResponse, error)
+	SetGet(ctx context.Context, in *SetGetRequest, opts ...grpc.CallOption) (*SetGetResponse, error)
+	SetDel(ctx context.Context, in *SetDelRequest, opts ...grpc.CallOption) (*SetDelResponse, error)
+	SetExists(ctx context.Context, in *SetExistsRequest, opts ...grpc.CallOption) (*SetExistsResponse, error)
+	SetLen(ctx context.Context, in *SetLenRequest, opts ...grpc.CallOption) (*SetLenResponse, error)
+	// Single member operations
+	SetAddM(ctx context.Context, in *SetAddMRequest, opts ...grpc.CallOption) (*SetAddMResponse, error)
+	SetExistsM(ctx context.Context, in *SetExistsMRequest, opts ...grpc.CallOption) (*SetExistsMResponse, error)
+	SetDelM(ctx context.Context, in *SetDelMRequest, opts ...grpc.CallOption) (*SetDelMResponse, error)
+	SetGetM(ctx context.Context, in *SetGetMRequest, opts ...grpc.CallOption) (*SetGetMResponse, error)
+	// ---------- KV Redis Aliases ----------
+	// SET -> forwards to KvSet
+	Set(ctx context.Context, in *KvSetRequest, opts ...grpc.CallOption) (*KvSetResponse, error)
+	// GET -> forwards to KvGet
+	Get(ctx context.Context, in *KvGetRequest, opts ...grpc.CallOption) (*KvGetResponse, error)
+	// DEL -> forwards to KvDel
+	Del(ctx context.Context, in *KvDelRequest, opts ...grpc.CallOption) (*KvDelResponse, error)
+	// EXISTS -> forwards to KvExists
+	Exists(ctx context.Context, in *KvExistsRequest, opts ...grpc.CallOption) (*KvExistsResponse, error)
+	// ---------- Hash Redis Aliases ----------
+	// HMSET -> forwards to HashSetM (set single field)
+	HMSet(ctx context.Context, in *HashSetMRequest, opts ...grpc.CallOption) (*HashSetMResponse, error)
+	// HMGET -> forwards to HashGetM (get single field)
+	HMGet(ctx context.Context, in *HashGetMRequest, opts ...grpc.CallOption) (*HashGetMResponse, error)
+	// HLEN -> forwards to HashLen
+	HLen(ctx context.Context, in *HashLenRequest, opts ...grpc.CallOption) (*HashLenResponse, error)
+	// HGETALL -> forwards to HashGet (get all fields)
+	HGetAll(ctx context.Context, in *HashGetRequest, opts ...grpc.CallOption) (*HashGetResponse, error)
+	// HDEL -> forwards to HashDel (delete entire hash)
+	HDel(ctx context.Context, in *HashDelRequest, opts ...grpc.CallOption) (*HashDelResponse, error)
+	// HEXISTS -> forwards to HashExistsM (check field exists)
+	HExists(ctx context.Context, in *HashExistsMRequest, opts ...grpc.CallOption) (*HashExistsMResponse, error)
+	// ---------- Set Redis Aliases ----------
+	// SADD -> forwards to SetAddM (add single member)
+	SAdd(ctx context.Context, in *SetAddMRequest, opts ...grpc.CallOption) (*SetAddMResponse, error)
+	// SISMEMBER -> forwards to SetExistsM (check member exists)
+	SIsMember(ctx context.Context, in *SetExistsMRequest, opts ...grpc.CallOption) (*SetExistsMResponse, error)
+	// SCARD -> forwards to SetLen (get member count)
+	SCard(ctx context.Context, in *SetLenRequest, opts ...grpc.CallOption) (*SetLenResponse, error)
+	// SMEMBERS -> forwards to SetGet (get all members)
+	SMembers(ctx context.Context, in *SetGetRequest, opts ...grpc.CallOption) (*SetGetResponse, error)
+	// SREM -> forwards to SetDelM (remove single member)
+	SRem(ctx context.Context, in *SetDelMRequest, opts ...grpc.CallOption) (*SetDelMResponse, error)
 	// List operations
 	LPush(ctx context.Context, in *LPushRequest, opts ...grpc.CallOption) (*LPushResponse, error)
 	LRange(ctx context.Context, in *LRangeRequest, opts ...grpc.CallOption) (*LRangeResponse, error)
@@ -93,9 +155,229 @@ func NewCacheServiceClient(cc grpc.ClientConnInterface) CacheServiceClient {
 	return &cacheServiceClient{cc}
 }
 
-func (c *cacheServiceClient) Set(ctx context.Context, in *SetRequest, opts ...grpc.CallOption) (*SetResponse, error) {
+func (c *cacheServiceClient) KvSet(ctx context.Context, in *KvSetRequest, opts ...grpc.CallOption) (*KvSetResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SetResponse)
+	out := new(KvSetResponse)
+	err := c.cc.Invoke(ctx, CacheService_KvSet_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) KvGet(ctx context.Context, in *KvGetRequest, opts ...grpc.CallOption) (*KvGetResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(KvGetResponse)
+	err := c.cc.Invoke(ctx, CacheService_KvGet_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) KvDel(ctx context.Context, in *KvDelRequest, opts ...grpc.CallOption) (*KvDelResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(KvDelResponse)
+	err := c.cc.Invoke(ctx, CacheService_KvDel_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) KvExists(ctx context.Context, in *KvExistsRequest, opts ...grpc.CallOption) (*KvExistsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(KvExistsResponse)
+	err := c.cc.Invoke(ctx, CacheService_KvExists_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) HashSet(ctx context.Context, in *HashSetRequest, opts ...grpc.CallOption) (*HashSetResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HashSetResponse)
+	err := c.cc.Invoke(ctx, CacheService_HashSet_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) HashGet(ctx context.Context, in *HashGetRequest, opts ...grpc.CallOption) (*HashGetResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HashGetResponse)
+	err := c.cc.Invoke(ctx, CacheService_HashGet_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) HashDel(ctx context.Context, in *HashDelRequest, opts ...grpc.CallOption) (*HashDelResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HashDelResponse)
+	err := c.cc.Invoke(ctx, CacheService_HashDel_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) HashExists(ctx context.Context, in *HashExistsRequest, opts ...grpc.CallOption) (*HashExistsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HashExistsResponse)
+	err := c.cc.Invoke(ctx, CacheService_HashExists_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) HashLen(ctx context.Context, in *HashLenRequest, opts ...grpc.CallOption) (*HashLenResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HashLenResponse)
+	err := c.cc.Invoke(ctx, CacheService_HashLen_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) HashSetM(ctx context.Context, in *HashSetMRequest, opts ...grpc.CallOption) (*HashSetMResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HashSetMResponse)
+	err := c.cc.Invoke(ctx, CacheService_HashSetM_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) HashGetM(ctx context.Context, in *HashGetMRequest, opts ...grpc.CallOption) (*HashGetMResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HashGetMResponse)
+	err := c.cc.Invoke(ctx, CacheService_HashGetM_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) HashDelM(ctx context.Context, in *HashDelMRequest, opts ...grpc.CallOption) (*HashDelMResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HashDelMResponse)
+	err := c.cc.Invoke(ctx, CacheService_HashDelM_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) HashExistsM(ctx context.Context, in *HashExistsMRequest, opts ...grpc.CallOption) (*HashExistsMResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HashExistsMResponse)
+	err := c.cc.Invoke(ctx, CacheService_HashExistsM_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) SetSet(ctx context.Context, in *SetSetRequest, opts ...grpc.CallOption) (*SetSetResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetSetResponse)
+	err := c.cc.Invoke(ctx, CacheService_SetSet_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) SetGet(ctx context.Context, in *SetGetRequest, opts ...grpc.CallOption) (*SetGetResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetGetResponse)
+	err := c.cc.Invoke(ctx, CacheService_SetGet_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) SetDel(ctx context.Context, in *SetDelRequest, opts ...grpc.CallOption) (*SetDelResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetDelResponse)
+	err := c.cc.Invoke(ctx, CacheService_SetDel_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) SetExists(ctx context.Context, in *SetExistsRequest, opts ...grpc.CallOption) (*SetExistsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetExistsResponse)
+	err := c.cc.Invoke(ctx, CacheService_SetExists_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) SetLen(ctx context.Context, in *SetLenRequest, opts ...grpc.CallOption) (*SetLenResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetLenResponse)
+	err := c.cc.Invoke(ctx, CacheService_SetLen_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) SetAddM(ctx context.Context, in *SetAddMRequest, opts ...grpc.CallOption) (*SetAddMResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetAddMResponse)
+	err := c.cc.Invoke(ctx, CacheService_SetAddM_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) SetExistsM(ctx context.Context, in *SetExistsMRequest, opts ...grpc.CallOption) (*SetExistsMResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetExistsMResponse)
+	err := c.cc.Invoke(ctx, CacheService_SetExistsM_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) SetDelM(ctx context.Context, in *SetDelMRequest, opts ...grpc.CallOption) (*SetDelMResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetDelMResponse)
+	err := c.cc.Invoke(ctx, CacheService_SetDelM_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) SetGetM(ctx context.Context, in *SetGetMRequest, opts ...grpc.CallOption) (*SetGetMResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetGetMResponse)
+	err := c.cc.Invoke(ctx, CacheService_SetGetM_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) Set(ctx context.Context, in *KvSetRequest, opts ...grpc.CallOption) (*KvSetResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(KvSetResponse)
 	err := c.cc.Invoke(ctx, CacheService_Set_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -103,9 +385,9 @@ func (c *cacheServiceClient) Set(ctx context.Context, in *SetRequest, opts ...gr
 	return out, nil
 }
 
-func (c *cacheServiceClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+func (c *cacheServiceClient) Get(ctx context.Context, in *KvGetRequest, opts ...grpc.CallOption) (*KvGetResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetResponse)
+	out := new(KvGetResponse)
 	err := c.cc.Invoke(ctx, CacheService_Get_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -113,9 +395,9 @@ func (c *cacheServiceClient) Get(ctx context.Context, in *GetRequest, opts ...gr
 	return out, nil
 }
 
-func (c *cacheServiceClient) Del(ctx context.Context, in *DelRequest, opts ...grpc.CallOption) (*DelResponse, error) {
+func (c *cacheServiceClient) Del(ctx context.Context, in *KvDelRequest, opts ...grpc.CallOption) (*KvDelResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DelResponse)
+	out := new(KvDelResponse)
 	err := c.cc.Invoke(ctx, CacheService_Del_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -123,9 +405,9 @@ func (c *cacheServiceClient) Del(ctx context.Context, in *DelRequest, opts ...gr
 	return out, nil
 }
 
-func (c *cacheServiceClient) Exists(ctx context.Context, in *ExistsRequest, opts ...grpc.CallOption) (*ExistsResponse, error) {
+func (c *cacheServiceClient) Exists(ctx context.Context, in *KvExistsRequest, opts ...grpc.CallOption) (*KvExistsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ExistsResponse)
+	out := new(KvExistsResponse)
 	err := c.cc.Invoke(ctx, CacheService_Exists_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -133,39 +415,9 @@ func (c *cacheServiceClient) Exists(ctx context.Context, in *ExistsRequest, opts
 	return out, nil
 }
 
-func (c *cacheServiceClient) HSet(ctx context.Context, in *HSetRequest, opts ...grpc.CallOption) (*HSetResponse, error) {
+func (c *cacheServiceClient) HMSet(ctx context.Context, in *HashSetMRequest, opts ...grpc.CallOption) (*HashSetMResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HSetResponse)
-	err := c.cc.Invoke(ctx, CacheService_HSet_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *cacheServiceClient) HGet(ctx context.Context, in *HGetRequest, opts ...grpc.CallOption) (*HGetResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HGetResponse)
-	err := c.cc.Invoke(ctx, CacheService_HGet_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *cacheServiceClient) HDel(ctx context.Context, in *HDelRequest, opts ...grpc.CallOption) (*HDelResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HDelResponse)
-	err := c.cc.Invoke(ctx, CacheService_HDel_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *cacheServiceClient) HMSet(ctx context.Context, in *HMSetRequest, opts ...grpc.CallOption) (*HMSetResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HMSetResponse)
+	out := new(HashSetMResponse)
 	err := c.cc.Invoke(ctx, CacheService_HMSet_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -173,9 +425,9 @@ func (c *cacheServiceClient) HMSet(ctx context.Context, in *HMSetRequest, opts .
 	return out, nil
 }
 
-func (c *cacheServiceClient) HMGet(ctx context.Context, in *HMGetRequest, opts ...grpc.CallOption) (*HMGetResponse, error) {
+func (c *cacheServiceClient) HMGet(ctx context.Context, in *HashGetMRequest, opts ...grpc.CallOption) (*HashGetMResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HMGetResponse)
+	out := new(HashGetMResponse)
 	err := c.cc.Invoke(ctx, CacheService_HMGet_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -183,9 +435,9 @@ func (c *cacheServiceClient) HMGet(ctx context.Context, in *HMGetRequest, opts .
 	return out, nil
 }
 
-func (c *cacheServiceClient) HLen(ctx context.Context, in *HLenRequest, opts ...grpc.CallOption) (*HLenResponse, error) {
+func (c *cacheServiceClient) HLen(ctx context.Context, in *HashLenRequest, opts ...grpc.CallOption) (*HashLenResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HLenResponse)
+	out := new(HashLenResponse)
 	err := c.cc.Invoke(ctx, CacheService_HLen_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -193,9 +445,9 @@ func (c *cacheServiceClient) HLen(ctx context.Context, in *HLenRequest, opts ...
 	return out, nil
 }
 
-func (c *cacheServiceClient) HGetAll(ctx context.Context, in *HGetAllRequest, opts ...grpc.CallOption) (*HGetAllResponse, error) {
+func (c *cacheServiceClient) HGetAll(ctx context.Context, in *HashGetRequest, opts ...grpc.CallOption) (*HashGetResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HGetAllResponse)
+	out := new(HashGetResponse)
 	err := c.cc.Invoke(ctx, CacheService_HGetAll_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -203,9 +455,19 @@ func (c *cacheServiceClient) HGetAll(ctx context.Context, in *HGetAllRequest, op
 	return out, nil
 }
 
-func (c *cacheServiceClient) HExists(ctx context.Context, in *HExistsRequest, opts ...grpc.CallOption) (*HExistsResponse, error) {
+func (c *cacheServiceClient) HDel(ctx context.Context, in *HashDelRequest, opts ...grpc.CallOption) (*HashDelResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HExistsResponse)
+	out := new(HashDelResponse)
+	err := c.cc.Invoke(ctx, CacheService_HDel_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) HExists(ctx context.Context, in *HashExistsMRequest, opts ...grpc.CallOption) (*HashExistsMResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HashExistsMResponse)
 	err := c.cc.Invoke(ctx, CacheService_HExists_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -213,9 +475,9 @@ func (c *cacheServiceClient) HExists(ctx context.Context, in *HExistsRequest, op
 	return out, nil
 }
 
-func (c *cacheServiceClient) SAdd(ctx context.Context, in *SAddRequest, opts ...grpc.CallOption) (*SAddResponse, error) {
+func (c *cacheServiceClient) SAdd(ctx context.Context, in *SetAddMRequest, opts ...grpc.CallOption) (*SetAddMResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SAddResponse)
+	out := new(SetAddMResponse)
 	err := c.cc.Invoke(ctx, CacheService_SAdd_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -223,29 +485,9 @@ func (c *cacheServiceClient) SAdd(ctx context.Context, in *SAddRequest, opts ...
 	return out, nil
 }
 
-func (c *cacheServiceClient) SMembers(ctx context.Context, in *SMembersRequest, opts ...grpc.CallOption) (*SMembersResponse, error) {
+func (c *cacheServiceClient) SIsMember(ctx context.Context, in *SetExistsMRequest, opts ...grpc.CallOption) (*SetExistsMResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SMembersResponse)
-	err := c.cc.Invoke(ctx, CacheService_SMembers_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *cacheServiceClient) SRem(ctx context.Context, in *SRemRequest, opts ...grpc.CallOption) (*SRemResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SRemResponse)
-	err := c.cc.Invoke(ctx, CacheService_SRem_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *cacheServiceClient) SIsMember(ctx context.Context, in *SIsMemberRequest, opts ...grpc.CallOption) (*SIsMemberResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SIsMemberResponse)
+	out := new(SetExistsMResponse)
 	err := c.cc.Invoke(ctx, CacheService_SIsMember_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -253,10 +495,30 @@ func (c *cacheServiceClient) SIsMember(ctx context.Context, in *SIsMemberRequest
 	return out, nil
 }
 
-func (c *cacheServiceClient) SCard(ctx context.Context, in *SCardRequest, opts ...grpc.CallOption) (*SCardResponse, error) {
+func (c *cacheServiceClient) SCard(ctx context.Context, in *SetLenRequest, opts ...grpc.CallOption) (*SetLenResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SCardResponse)
+	out := new(SetLenResponse)
 	err := c.cc.Invoke(ctx, CacheService_SCard_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) SMembers(ctx context.Context, in *SetGetRequest, opts ...grpc.CallOption) (*SetGetResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetGetResponse)
+	err := c.cc.Invoke(ctx, CacheService_SMembers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheServiceClient) SRem(ctx context.Context, in *SetDelMRequest, opts ...grpc.CallOption) (*SetDelMResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetDelMResponse)
+	err := c.cc.Invoke(ctx, CacheService_SRem_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -359,26 +621,68 @@ func (c *cacheServiceClient) LSet(ctx context.Context, in *LSetRequest, opts ...
 //
 // CacheService provides Redis-like cache operations
 type CacheServiceServer interface {
-	// KV operations
-	Set(context.Context, *SetRequest) (*SetResponse, error)
-	Get(context.Context, *GetRequest) (*GetResponse, error)
-	Del(context.Context, *DelRequest) (*DelResponse, error)
-	Exists(context.Context, *ExistsRequest) (*ExistsResponse, error)
-	// Hash operations
-	HSet(context.Context, *HSetRequest) (*HSetResponse, error)
-	HGet(context.Context, *HGetRequest) (*HGetResponse, error)
-	HDel(context.Context, *HDelRequest) (*HDelResponse, error)
-	HMSet(context.Context, *HMSetRequest) (*HMSetResponse, error)
-	HMGet(context.Context, *HMGetRequest) (*HMGetResponse, error)
-	HLen(context.Context, *HLenRequest) (*HLenResponse, error)
-	HGetAll(context.Context, *HGetAllRequest) (*HGetAllResponse, error)
-	HExists(context.Context, *HExistsRequest) (*HExistsResponse, error)
-	// Set operations
-	SAdd(context.Context, *SAddRequest) (*SAddResponse, error)
-	SMembers(context.Context, *SMembersRequest) (*SMembersResponse, error)
-	SRem(context.Context, *SRemRequest) (*SRemResponse, error)
-	SIsMember(context.Context, *SIsMemberRequest) (*SIsMemberResponse, error)
-	SCard(context.Context, *SCardRequest) (*SCardResponse, error)
+	// ---------- KV Native Operations ----------
+	KvSet(context.Context, *KvSetRequest) (*KvSetResponse, error)
+	KvGet(context.Context, *KvGetRequest) (*KvGetResponse, error)
+	KvDel(context.Context, *KvDelRequest) (*KvDelResponse, error)
+	KvExists(context.Context, *KvExistsRequest) (*KvExistsResponse, error)
+	// ---------- Hash Native Operations ----------
+	// Batch/whole hash operations
+	HashSet(context.Context, *HashSetRequest) (*HashSetResponse, error)
+	HashGet(context.Context, *HashGetRequest) (*HashGetResponse, error)
+	HashDel(context.Context, *HashDelRequest) (*HashDelResponse, error)
+	HashExists(context.Context, *HashExistsRequest) (*HashExistsResponse, error)
+	HashLen(context.Context, *HashLenRequest) (*HashLenResponse, error)
+	// Single field operations
+	HashSetM(context.Context, *HashSetMRequest) (*HashSetMResponse, error)
+	HashGetM(context.Context, *HashGetMRequest) (*HashGetMResponse, error)
+	HashDelM(context.Context, *HashDelMRequest) (*HashDelMResponse, error)
+	HashExistsM(context.Context, *HashExistsMRequest) (*HashExistsMResponse, error)
+	// ---------- Set Native Operations ----------
+	// Batch/whole set operations
+	SetSet(context.Context, *SetSetRequest) (*SetSetResponse, error)
+	SetGet(context.Context, *SetGetRequest) (*SetGetResponse, error)
+	SetDel(context.Context, *SetDelRequest) (*SetDelResponse, error)
+	SetExists(context.Context, *SetExistsRequest) (*SetExistsResponse, error)
+	SetLen(context.Context, *SetLenRequest) (*SetLenResponse, error)
+	// Single member operations
+	SetAddM(context.Context, *SetAddMRequest) (*SetAddMResponse, error)
+	SetExistsM(context.Context, *SetExistsMRequest) (*SetExistsMResponse, error)
+	SetDelM(context.Context, *SetDelMRequest) (*SetDelMResponse, error)
+	SetGetM(context.Context, *SetGetMRequest) (*SetGetMResponse, error)
+	// ---------- KV Redis Aliases ----------
+	// SET -> forwards to KvSet
+	Set(context.Context, *KvSetRequest) (*KvSetResponse, error)
+	// GET -> forwards to KvGet
+	Get(context.Context, *KvGetRequest) (*KvGetResponse, error)
+	// DEL -> forwards to KvDel
+	Del(context.Context, *KvDelRequest) (*KvDelResponse, error)
+	// EXISTS -> forwards to KvExists
+	Exists(context.Context, *KvExistsRequest) (*KvExistsResponse, error)
+	// ---------- Hash Redis Aliases ----------
+	// HMSET -> forwards to HashSetM (set single field)
+	HMSet(context.Context, *HashSetMRequest) (*HashSetMResponse, error)
+	// HMGET -> forwards to HashGetM (get single field)
+	HMGet(context.Context, *HashGetMRequest) (*HashGetMResponse, error)
+	// HLEN -> forwards to HashLen
+	HLen(context.Context, *HashLenRequest) (*HashLenResponse, error)
+	// HGETALL -> forwards to HashGet (get all fields)
+	HGetAll(context.Context, *HashGetRequest) (*HashGetResponse, error)
+	// HDEL -> forwards to HashDel (delete entire hash)
+	HDel(context.Context, *HashDelRequest) (*HashDelResponse, error)
+	// HEXISTS -> forwards to HashExistsM (check field exists)
+	HExists(context.Context, *HashExistsMRequest) (*HashExistsMResponse, error)
+	// ---------- Set Redis Aliases ----------
+	// SADD -> forwards to SetAddM (add single member)
+	SAdd(context.Context, *SetAddMRequest) (*SetAddMResponse, error)
+	// SISMEMBER -> forwards to SetExistsM (check member exists)
+	SIsMember(context.Context, *SetExistsMRequest) (*SetExistsMResponse, error)
+	// SCARD -> forwards to SetLen (get member count)
+	SCard(context.Context, *SetLenRequest) (*SetLenResponse, error)
+	// SMEMBERS -> forwards to SetGet (get all members)
+	SMembers(context.Context, *SetGetRequest) (*SetGetResponse, error)
+	// SREM -> forwards to SetDelM (remove single member)
+	SRem(context.Context, *SetDelMRequest) (*SetDelMResponse, error)
 	// List operations
 	LPush(context.Context, *LPushRequest) (*LPushResponse, error)
 	LRange(context.Context, *LRangeRequest) (*LRangeResponse, error)
@@ -399,56 +703,116 @@ type CacheServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedCacheServiceServer struct{}
 
-func (UnimplementedCacheServiceServer) Set(context.Context, *SetRequest) (*SetResponse, error) {
+func (UnimplementedCacheServiceServer) KvSet(context.Context, *KvSetRequest) (*KvSetResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method KvSet not implemented")
+}
+func (UnimplementedCacheServiceServer) KvGet(context.Context, *KvGetRequest) (*KvGetResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method KvGet not implemented")
+}
+func (UnimplementedCacheServiceServer) KvDel(context.Context, *KvDelRequest) (*KvDelResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method KvDel not implemented")
+}
+func (UnimplementedCacheServiceServer) KvExists(context.Context, *KvExistsRequest) (*KvExistsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method KvExists not implemented")
+}
+func (UnimplementedCacheServiceServer) HashSet(context.Context, *HashSetRequest) (*HashSetResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method HashSet not implemented")
+}
+func (UnimplementedCacheServiceServer) HashGet(context.Context, *HashGetRequest) (*HashGetResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method HashGet not implemented")
+}
+func (UnimplementedCacheServiceServer) HashDel(context.Context, *HashDelRequest) (*HashDelResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method HashDel not implemented")
+}
+func (UnimplementedCacheServiceServer) HashExists(context.Context, *HashExistsRequest) (*HashExistsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method HashExists not implemented")
+}
+func (UnimplementedCacheServiceServer) HashLen(context.Context, *HashLenRequest) (*HashLenResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method HashLen not implemented")
+}
+func (UnimplementedCacheServiceServer) HashSetM(context.Context, *HashSetMRequest) (*HashSetMResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method HashSetM not implemented")
+}
+func (UnimplementedCacheServiceServer) HashGetM(context.Context, *HashGetMRequest) (*HashGetMResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method HashGetM not implemented")
+}
+func (UnimplementedCacheServiceServer) HashDelM(context.Context, *HashDelMRequest) (*HashDelMResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method HashDelM not implemented")
+}
+func (UnimplementedCacheServiceServer) HashExistsM(context.Context, *HashExistsMRequest) (*HashExistsMResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method HashExistsM not implemented")
+}
+func (UnimplementedCacheServiceServer) SetSet(context.Context, *SetSetRequest) (*SetSetResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetSet not implemented")
+}
+func (UnimplementedCacheServiceServer) SetGet(context.Context, *SetGetRequest) (*SetGetResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetGet not implemented")
+}
+func (UnimplementedCacheServiceServer) SetDel(context.Context, *SetDelRequest) (*SetDelResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetDel not implemented")
+}
+func (UnimplementedCacheServiceServer) SetExists(context.Context, *SetExistsRequest) (*SetExistsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetExists not implemented")
+}
+func (UnimplementedCacheServiceServer) SetLen(context.Context, *SetLenRequest) (*SetLenResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetLen not implemented")
+}
+func (UnimplementedCacheServiceServer) SetAddM(context.Context, *SetAddMRequest) (*SetAddMResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetAddM not implemented")
+}
+func (UnimplementedCacheServiceServer) SetExistsM(context.Context, *SetExistsMRequest) (*SetExistsMResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetExistsM not implemented")
+}
+func (UnimplementedCacheServiceServer) SetDelM(context.Context, *SetDelMRequest) (*SetDelMResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetDelM not implemented")
+}
+func (UnimplementedCacheServiceServer) SetGetM(context.Context, *SetGetMRequest) (*SetGetMResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetGetM not implemented")
+}
+func (UnimplementedCacheServiceServer) Set(context.Context, *KvSetRequest) (*KvSetResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Set not implemented")
 }
-func (UnimplementedCacheServiceServer) Get(context.Context, *GetRequest) (*GetResponse, error) {
+func (UnimplementedCacheServiceServer) Get(context.Context, *KvGetRequest) (*KvGetResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedCacheServiceServer) Del(context.Context, *DelRequest) (*DelResponse, error) {
+func (UnimplementedCacheServiceServer) Del(context.Context, *KvDelRequest) (*KvDelResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Del not implemented")
 }
-func (UnimplementedCacheServiceServer) Exists(context.Context, *ExistsRequest) (*ExistsResponse, error) {
+func (UnimplementedCacheServiceServer) Exists(context.Context, *KvExistsRequest) (*KvExistsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Exists not implemented")
 }
-func (UnimplementedCacheServiceServer) HSet(context.Context, *HSetRequest) (*HSetResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method HSet not implemented")
-}
-func (UnimplementedCacheServiceServer) HGet(context.Context, *HGetRequest) (*HGetResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method HGet not implemented")
-}
-func (UnimplementedCacheServiceServer) HDel(context.Context, *HDelRequest) (*HDelResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method HDel not implemented")
-}
-func (UnimplementedCacheServiceServer) HMSet(context.Context, *HMSetRequest) (*HMSetResponse, error) {
+func (UnimplementedCacheServiceServer) HMSet(context.Context, *HashSetMRequest) (*HashSetMResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method HMSet not implemented")
 }
-func (UnimplementedCacheServiceServer) HMGet(context.Context, *HMGetRequest) (*HMGetResponse, error) {
+func (UnimplementedCacheServiceServer) HMGet(context.Context, *HashGetMRequest) (*HashGetMResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method HMGet not implemented")
 }
-func (UnimplementedCacheServiceServer) HLen(context.Context, *HLenRequest) (*HLenResponse, error) {
+func (UnimplementedCacheServiceServer) HLen(context.Context, *HashLenRequest) (*HashLenResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method HLen not implemented")
 }
-func (UnimplementedCacheServiceServer) HGetAll(context.Context, *HGetAllRequest) (*HGetAllResponse, error) {
+func (UnimplementedCacheServiceServer) HGetAll(context.Context, *HashGetRequest) (*HashGetResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method HGetAll not implemented")
 }
-func (UnimplementedCacheServiceServer) HExists(context.Context, *HExistsRequest) (*HExistsResponse, error) {
+func (UnimplementedCacheServiceServer) HDel(context.Context, *HashDelRequest) (*HashDelResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method HDel not implemented")
+}
+func (UnimplementedCacheServiceServer) HExists(context.Context, *HashExistsMRequest) (*HashExistsMResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method HExists not implemented")
 }
-func (UnimplementedCacheServiceServer) SAdd(context.Context, *SAddRequest) (*SAddResponse, error) {
+func (UnimplementedCacheServiceServer) SAdd(context.Context, *SetAddMRequest) (*SetAddMResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method SAdd not implemented")
 }
-func (UnimplementedCacheServiceServer) SMembers(context.Context, *SMembersRequest) (*SMembersResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method SMembers not implemented")
-}
-func (UnimplementedCacheServiceServer) SRem(context.Context, *SRemRequest) (*SRemResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method SRem not implemented")
-}
-func (UnimplementedCacheServiceServer) SIsMember(context.Context, *SIsMemberRequest) (*SIsMemberResponse, error) {
+func (UnimplementedCacheServiceServer) SIsMember(context.Context, *SetExistsMRequest) (*SetExistsMResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method SIsMember not implemented")
 }
-func (UnimplementedCacheServiceServer) SCard(context.Context, *SCardRequest) (*SCardResponse, error) {
+func (UnimplementedCacheServiceServer) SCard(context.Context, *SetLenRequest) (*SetLenResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method SCard not implemented")
+}
+func (UnimplementedCacheServiceServer) SMembers(context.Context, *SetGetRequest) (*SetGetResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SMembers not implemented")
+}
+func (UnimplementedCacheServiceServer) SRem(context.Context, *SetDelMRequest) (*SetDelMResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SRem not implemented")
 }
 func (UnimplementedCacheServiceServer) LPush(context.Context, *LPushRequest) (*LPushResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method LPush not implemented")
@@ -498,8 +862,404 @@ func RegisterCacheServiceServer(s grpc.ServiceRegistrar, srv CacheServiceServer)
 	s.RegisterService(&CacheService_ServiceDesc, srv)
 }
 
+func _CacheService_KvSet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(KvSetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).KvSet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_KvSet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).KvSet(ctx, req.(*KvSetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_KvGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(KvGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).KvGet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_KvGet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).KvGet(ctx, req.(*KvGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_KvDel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(KvDelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).KvDel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_KvDel_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).KvDel(ctx, req.(*KvDelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_KvExists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(KvExistsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).KvExists(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_KvExists_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).KvExists(ctx, req.(*KvExistsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_HashSet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HashSetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).HashSet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_HashSet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).HashSet(ctx, req.(*HashSetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_HashGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HashGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).HashGet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_HashGet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).HashGet(ctx, req.(*HashGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_HashDel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HashDelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).HashDel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_HashDel_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).HashDel(ctx, req.(*HashDelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_HashExists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HashExistsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).HashExists(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_HashExists_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).HashExists(ctx, req.(*HashExistsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_HashLen_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HashLenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).HashLen(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_HashLen_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).HashLen(ctx, req.(*HashLenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_HashSetM_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HashSetMRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).HashSetM(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_HashSetM_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).HashSetM(ctx, req.(*HashSetMRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_HashGetM_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HashGetMRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).HashGetM(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_HashGetM_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).HashGetM(ctx, req.(*HashGetMRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_HashDelM_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HashDelMRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).HashDelM(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_HashDelM_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).HashDelM(ctx, req.(*HashDelMRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_HashExistsM_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HashExistsMRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).HashExistsM(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_HashExistsM_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).HashExistsM(ctx, req.(*HashExistsMRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_SetSet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetSetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).SetSet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_SetSet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).SetSet(ctx, req.(*SetSetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_SetGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).SetGet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_SetGet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).SetGet(ctx, req.(*SetGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_SetDel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetDelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).SetDel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_SetDel_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).SetDel(ctx, req.(*SetDelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_SetExists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetExistsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).SetExists(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_SetExists_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).SetExists(ctx, req.(*SetExistsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_SetLen_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetLenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).SetLen(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_SetLen_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).SetLen(ctx, req.(*SetLenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_SetAddM_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetAddMRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).SetAddM(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_SetAddM_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).SetAddM(ctx, req.(*SetAddMRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_SetExistsM_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetExistsMRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).SetExistsM(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_SetExistsM_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).SetExistsM(ctx, req.(*SetExistsMRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_SetDelM_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetDelMRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).SetDelM(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_SetDelM_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).SetDelM(ctx, req.(*SetDelMRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_SetGetM_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetGetMRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).SetGetM(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_SetGetM_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).SetGetM(ctx, req.(*SetGetMRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CacheService_Set_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetRequest)
+	in := new(KvSetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -511,13 +1271,13 @@ func _CacheService_Set_Handler(srv interface{}, ctx context.Context, dec func(in
 		FullMethod: CacheService_Set_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).Set(ctx, req.(*SetRequest))
+		return srv.(CacheServiceServer).Set(ctx, req.(*KvSetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CacheService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetRequest)
+	in := new(KvGetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -529,13 +1289,13 @@ func _CacheService_Get_Handler(srv interface{}, ctx context.Context, dec func(in
 		FullMethod: CacheService_Get_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).Get(ctx, req.(*GetRequest))
+		return srv.(CacheServiceServer).Get(ctx, req.(*KvGetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CacheService_Del_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelRequest)
+	in := new(KvDelRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -547,13 +1307,13 @@ func _CacheService_Del_Handler(srv interface{}, ctx context.Context, dec func(in
 		FullMethod: CacheService_Del_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).Del(ctx, req.(*DelRequest))
+		return srv.(CacheServiceServer).Del(ctx, req.(*KvDelRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CacheService_Exists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ExistsRequest)
+	in := new(KvExistsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -565,67 +1325,13 @@ func _CacheService_Exists_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: CacheService_Exists_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).Exists(ctx, req.(*ExistsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _CacheService_HSet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HSetRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CacheServiceServer).HSet(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: CacheService_HSet_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).HSet(ctx, req.(*HSetRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _CacheService_HGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HGetRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CacheServiceServer).HGet(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: CacheService_HGet_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).HGet(ctx, req.(*HGetRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _CacheService_HDel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HDelRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CacheServiceServer).HDel(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: CacheService_HDel_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).HDel(ctx, req.(*HDelRequest))
+		return srv.(CacheServiceServer).Exists(ctx, req.(*KvExistsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CacheService_HMSet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HMSetRequest)
+	in := new(HashSetMRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -637,13 +1343,13 @@ func _CacheService_HMSet_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: CacheService_HMSet_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).HMSet(ctx, req.(*HMSetRequest))
+		return srv.(CacheServiceServer).HMSet(ctx, req.(*HashSetMRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CacheService_HMGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HMGetRequest)
+	in := new(HashGetMRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -655,13 +1361,13 @@ func _CacheService_HMGet_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: CacheService_HMGet_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).HMGet(ctx, req.(*HMGetRequest))
+		return srv.(CacheServiceServer).HMGet(ctx, req.(*HashGetMRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CacheService_HLen_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HLenRequest)
+	in := new(HashLenRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -673,13 +1379,13 @@ func _CacheService_HLen_Handler(srv interface{}, ctx context.Context, dec func(i
 		FullMethod: CacheService_HLen_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).HLen(ctx, req.(*HLenRequest))
+		return srv.(CacheServiceServer).HLen(ctx, req.(*HashLenRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CacheService_HGetAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HGetAllRequest)
+	in := new(HashGetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -691,13 +1397,31 @@ func _CacheService_HGetAll_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: CacheService_HGetAll_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).HGetAll(ctx, req.(*HGetAllRequest))
+		return srv.(CacheServiceServer).HGetAll(ctx, req.(*HashGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_HDel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HashDelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).HDel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_HDel_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).HDel(ctx, req.(*HashDelRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CacheService_HExists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HExistsRequest)
+	in := new(HashExistsMRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -709,13 +1433,13 @@ func _CacheService_HExists_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: CacheService_HExists_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).HExists(ctx, req.(*HExistsRequest))
+		return srv.(CacheServiceServer).HExists(ctx, req.(*HashExistsMRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CacheService_SAdd_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SAddRequest)
+	in := new(SetAddMRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -727,49 +1451,13 @@ func _CacheService_SAdd_Handler(srv interface{}, ctx context.Context, dec func(i
 		FullMethod: CacheService_SAdd_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).SAdd(ctx, req.(*SAddRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _CacheService_SMembers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SMembersRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CacheServiceServer).SMembers(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: CacheService_SMembers_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).SMembers(ctx, req.(*SMembersRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _CacheService_SRem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SRemRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CacheServiceServer).SRem(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: CacheService_SRem_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).SRem(ctx, req.(*SRemRequest))
+		return srv.(CacheServiceServer).SAdd(ctx, req.(*SetAddMRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CacheService_SIsMember_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SIsMemberRequest)
+	in := new(SetExistsMRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -781,13 +1469,13 @@ func _CacheService_SIsMember_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: CacheService_SIsMember_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).SIsMember(ctx, req.(*SIsMemberRequest))
+		return srv.(CacheServiceServer).SIsMember(ctx, req.(*SetExistsMRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _CacheService_SCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SCardRequest)
+	in := new(SetLenRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -799,7 +1487,43 @@ func _CacheService_SCard_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: CacheService_SCard_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CacheServiceServer).SCard(ctx, req.(*SCardRequest))
+		return srv.(CacheServiceServer).SCard(ctx, req.(*SetLenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_SMembers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).SMembers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_SMembers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).SMembers(ctx, req.(*SetGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CacheService_SRem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetDelMRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServiceServer).SRem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CacheService_SRem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServiceServer).SRem(ctx, req.(*SetDelMRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -974,6 +1698,94 @@ var CacheService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*CacheServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "KvSet",
+			Handler:    _CacheService_KvSet_Handler,
+		},
+		{
+			MethodName: "KvGet",
+			Handler:    _CacheService_KvGet_Handler,
+		},
+		{
+			MethodName: "KvDel",
+			Handler:    _CacheService_KvDel_Handler,
+		},
+		{
+			MethodName: "KvExists",
+			Handler:    _CacheService_KvExists_Handler,
+		},
+		{
+			MethodName: "HashSet",
+			Handler:    _CacheService_HashSet_Handler,
+		},
+		{
+			MethodName: "HashGet",
+			Handler:    _CacheService_HashGet_Handler,
+		},
+		{
+			MethodName: "HashDel",
+			Handler:    _CacheService_HashDel_Handler,
+		},
+		{
+			MethodName: "HashExists",
+			Handler:    _CacheService_HashExists_Handler,
+		},
+		{
+			MethodName: "HashLen",
+			Handler:    _CacheService_HashLen_Handler,
+		},
+		{
+			MethodName: "HashSetM",
+			Handler:    _CacheService_HashSetM_Handler,
+		},
+		{
+			MethodName: "HashGetM",
+			Handler:    _CacheService_HashGetM_Handler,
+		},
+		{
+			MethodName: "HashDelM",
+			Handler:    _CacheService_HashDelM_Handler,
+		},
+		{
+			MethodName: "HashExistsM",
+			Handler:    _CacheService_HashExistsM_Handler,
+		},
+		{
+			MethodName: "SetSet",
+			Handler:    _CacheService_SetSet_Handler,
+		},
+		{
+			MethodName: "SetGet",
+			Handler:    _CacheService_SetGet_Handler,
+		},
+		{
+			MethodName: "SetDel",
+			Handler:    _CacheService_SetDel_Handler,
+		},
+		{
+			MethodName: "SetExists",
+			Handler:    _CacheService_SetExists_Handler,
+		},
+		{
+			MethodName: "SetLen",
+			Handler:    _CacheService_SetLen_Handler,
+		},
+		{
+			MethodName: "SetAddM",
+			Handler:    _CacheService_SetAddM_Handler,
+		},
+		{
+			MethodName: "SetExistsM",
+			Handler:    _CacheService_SetExistsM_Handler,
+		},
+		{
+			MethodName: "SetDelM",
+			Handler:    _CacheService_SetDelM_Handler,
+		},
+		{
+			MethodName: "SetGetM",
+			Handler:    _CacheService_SetGetM_Handler,
+		},
+		{
 			MethodName: "Set",
 			Handler:    _CacheService_Set_Handler,
 		},
@@ -988,18 +1800,6 @@ var CacheService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Exists",
 			Handler:    _CacheService_Exists_Handler,
-		},
-		{
-			MethodName: "HSet",
-			Handler:    _CacheService_HSet_Handler,
-		},
-		{
-			MethodName: "HGet",
-			Handler:    _CacheService_HGet_Handler,
-		},
-		{
-			MethodName: "HDel",
-			Handler:    _CacheService_HDel_Handler,
 		},
 		{
 			MethodName: "HMSet",
@@ -1018,6 +1818,10 @@ var CacheService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _CacheService_HGetAll_Handler,
 		},
 		{
+			MethodName: "HDel",
+			Handler:    _CacheService_HDel_Handler,
+		},
+		{
 			MethodName: "HExists",
 			Handler:    _CacheService_HExists_Handler,
 		},
@@ -1026,20 +1830,20 @@ var CacheService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _CacheService_SAdd_Handler,
 		},
 		{
-			MethodName: "SMembers",
-			Handler:    _CacheService_SMembers_Handler,
-		},
-		{
-			MethodName: "SRem",
-			Handler:    _CacheService_SRem_Handler,
-		},
-		{
 			MethodName: "SIsMember",
 			Handler:    _CacheService_SIsMember_Handler,
 		},
 		{
 			MethodName: "SCard",
 			Handler:    _CacheService_SCard_Handler,
+		},
+		{
+			MethodName: "SMembers",
+			Handler:    _CacheService_SMembers_Handler,
+		},
+		{
+			MethodName: "SRem",
+			Handler:    _CacheService_SRem_Handler,
 		},
 		{
 			MethodName: "LPush",

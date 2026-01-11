@@ -22,8 +22,8 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// KV Messages
-type SetRequest struct {
+// ---------- KV Native Messages ----------
+type KvSetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
 	Value         string                 `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
@@ -31,20 +31,20 @@ type SetRequest struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SetRequest) Reset() {
-	*x = SetRequest{}
+func (x *KvSetRequest) Reset() {
+	*x = KvSetRequest{}
 	mi := &file_cache_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SetRequest) String() string {
+func (x *KvSetRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SetRequest) ProtoMessage() {}
+func (*KvSetRequest) ProtoMessage() {}
 
-func (x *SetRequest) ProtoReflect() protoreflect.Message {
+func (x *KvSetRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_cache_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -56,46 +56,46 @@ func (x *SetRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SetRequest.ProtoReflect.Descriptor instead.
-func (*SetRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use KvSetRequest.ProtoReflect.Descriptor instead.
+func (*KvSetRequest) Descriptor() ([]byte, []int) {
 	return file_cache_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *SetRequest) GetKey() string {
+func (x *KvSetRequest) GetKey() string {
 	if x != nil {
 		return x.Key
 	}
 	return ""
 }
 
-func (x *SetRequest) GetValue() string {
+func (x *KvSetRequest) GetValue() string {
 	if x != nil {
 		return x.Value
 	}
 	return ""
 }
 
-type SetResponse struct {
+type KvSetResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SetResponse) Reset() {
-	*x = SetResponse{}
+func (x *KvSetResponse) Reset() {
+	*x = KvSetResponse{}
 	mi := &file_cache_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SetResponse) String() string {
+func (x *KvSetResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SetResponse) ProtoMessage() {}
+func (*KvSetResponse) ProtoMessage() {}
 
-func (x *SetResponse) ProtoReflect() protoreflect.Message {
+func (x *KvSetResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_cache_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -107,39 +107,39 @@ func (x *SetResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SetResponse.ProtoReflect.Descriptor instead.
-func (*SetResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use KvSetResponse.ProtoReflect.Descriptor instead.
+func (*KvSetResponse) Descriptor() ([]byte, []int) {
 	return file_cache_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *SetResponse) GetSuccess() bool {
+func (x *KvSetResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
 	return false
 }
 
-type GetRequest struct {
+type KvGetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetRequest) Reset() {
-	*x = GetRequest{}
+func (x *KvGetRequest) Reset() {
+	*x = KvGetRequest{}
 	mi := &file_cache_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetRequest) String() string {
+func (x *KvGetRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetRequest) ProtoMessage() {}
+func (*KvGetRequest) ProtoMessage() {}
 
-func (x *GetRequest) ProtoReflect() protoreflect.Message {
+func (x *KvGetRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_cache_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -151,19 +151,19 @@ func (x *GetRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetRequest.ProtoReflect.Descriptor instead.
-func (*GetRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use KvGetRequest.ProtoReflect.Descriptor instead.
+func (*KvGetRequest) Descriptor() ([]byte, []int) {
 	return file_cache_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *GetRequest) GetKey() string {
+func (x *KvGetRequest) GetKey() string {
 	if x != nil {
 		return x.Key
 	}
 	return ""
 }
 
-type GetResponse struct {
+type KvGetResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Value         string                 `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
 	Exists        bool                   `protobuf:"varint,2,opt,name=exists,proto3" json:"exists,omitempty"`
@@ -171,20 +171,20 @@ type GetResponse struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetResponse) Reset() {
-	*x = GetResponse{}
+func (x *KvGetResponse) Reset() {
+	*x = KvGetResponse{}
 	mi := &file_cache_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetResponse) String() string {
+func (x *KvGetResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetResponse) ProtoMessage() {}
+func (*KvGetResponse) ProtoMessage() {}
 
-func (x *GetResponse) ProtoReflect() protoreflect.Message {
+func (x *KvGetResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_cache_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -196,46 +196,46 @@ func (x *GetResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetResponse.ProtoReflect.Descriptor instead.
-func (*GetResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use KvGetResponse.ProtoReflect.Descriptor instead.
+func (*KvGetResponse) Descriptor() ([]byte, []int) {
 	return file_cache_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GetResponse) GetValue() string {
+func (x *KvGetResponse) GetValue() string {
 	if x != nil {
 		return x.Value
 	}
 	return ""
 }
 
-func (x *GetResponse) GetExists() bool {
+func (x *KvGetResponse) GetExists() bool {
 	if x != nil {
 		return x.Exists
 	}
 	return false
 }
 
-type DelRequest struct {
+type KvDelRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *DelRequest) Reset() {
-	*x = DelRequest{}
+func (x *KvDelRequest) Reset() {
+	*x = KvDelRequest{}
 	mi := &file_cache_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *DelRequest) String() string {
+func (x *KvDelRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DelRequest) ProtoMessage() {}
+func (*KvDelRequest) ProtoMessage() {}
 
-func (x *DelRequest) ProtoReflect() protoreflect.Message {
+func (x *KvDelRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_cache_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -247,19 +247,19 @@ func (x *DelRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use DelRequest.ProtoReflect.Descriptor instead.
-func (*DelRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use KvDelRequest.ProtoReflect.Descriptor instead.
+func (*KvDelRequest) Descriptor() ([]byte, []int) {
 	return file_cache_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *DelRequest) GetKey() string {
+func (x *KvDelRequest) GetKey() string {
 	if x != nil {
 		return x.Key
 	}
 	return ""
 }
 
-type DelResponse struct {
+type KvDelResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	DeletedCount  int32                  `protobuf:"varint,2,opt,name=deleted_count,json=deletedCount,proto3" json:"deleted_count,omitempty"`
@@ -267,20 +267,20 @@ type DelResponse struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *DelResponse) Reset() {
-	*x = DelResponse{}
+func (x *KvDelResponse) Reset() {
+	*x = KvDelResponse{}
 	mi := &file_cache_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *DelResponse) String() string {
+func (x *KvDelResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DelResponse) ProtoMessage() {}
+func (*KvDelResponse) ProtoMessage() {}
 
-func (x *DelResponse) ProtoReflect() protoreflect.Message {
+func (x *KvDelResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_cache_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -292,46 +292,46 @@ func (x *DelResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use DelResponse.ProtoReflect.Descriptor instead.
-func (*DelResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use KvDelResponse.ProtoReflect.Descriptor instead.
+func (*KvDelResponse) Descriptor() ([]byte, []int) {
 	return file_cache_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *DelResponse) GetSuccess() bool {
+func (x *KvDelResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
 	return false
 }
 
-func (x *DelResponse) GetDeletedCount() int32 {
+func (x *KvDelResponse) GetDeletedCount() int32 {
 	if x != nil {
 		return x.DeletedCount
 	}
 	return 0
 }
 
-type ExistsRequest struct {
+type KvExistsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ExistsRequest) Reset() {
-	*x = ExistsRequest{}
+func (x *KvExistsRequest) Reset() {
+	*x = KvExistsRequest{}
 	mi := &file_cache_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ExistsRequest) String() string {
+func (x *KvExistsRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ExistsRequest) ProtoMessage() {}
+func (*KvExistsRequest) ProtoMessage() {}
 
-func (x *ExistsRequest) ProtoReflect() protoreflect.Message {
+func (x *KvExistsRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_cache_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -343,39 +343,39 @@ func (x *ExistsRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ExistsRequest.ProtoReflect.Descriptor instead.
-func (*ExistsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use KvExistsRequest.ProtoReflect.Descriptor instead.
+func (*KvExistsRequest) Descriptor() ([]byte, []int) {
 	return file_cache_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *ExistsRequest) GetKey() string {
+func (x *KvExistsRequest) GetKey() string {
 	if x != nil {
 		return x.Key
 	}
 	return ""
 }
 
-type ExistsResponse struct {
+type KvExistsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Exists        bool                   `protobuf:"varint,1,opt,name=exists,proto3" json:"exists,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ExistsResponse) Reset() {
-	*x = ExistsResponse{}
+func (x *KvExistsResponse) Reset() {
+	*x = KvExistsResponse{}
 	mi := &file_cache_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ExistsResponse) String() string {
+func (x *KvExistsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ExistsResponse) ProtoMessage() {}
+func (*KvExistsResponse) ProtoMessage() {}
 
-func (x *ExistsResponse) ProtoReflect() protoreflect.Message {
+func (x *KvExistsResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_cache_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -387,42 +387,42 @@ func (x *ExistsResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ExistsResponse.ProtoReflect.Descriptor instead.
-func (*ExistsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use KvExistsResponse.ProtoReflect.Descriptor instead.
+func (*KvExistsResponse) Descriptor() ([]byte, []int) {
 	return file_cache_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *ExistsResponse) GetExists() bool {
+func (x *KvExistsResponse) GetExists() bool {
 	if x != nil {
 		return x.Exists
 	}
 	return false
 }
 
-// Hash Messages
-type HSetRequest struct {
+// ---------- Hash Native Messages ----------
+// Batch/whole hash operations
+type HashSetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	Field         string                 `protobuf:"bytes,2,opt,name=field,proto3" json:"field,omitempty"`
-	Value         string                 `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
+	Fields        map[string]string      `protobuf:"bytes,2,rep,name=fields,proto3" json:"fields,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // batch set multiple fields (calls hash_set)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *HSetRequest) Reset() {
-	*x = HSetRequest{}
+func (x *HashSetRequest) Reset() {
+	*x = HashSetRequest{}
 	mi := &file_cache_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *HSetRequest) String() string {
+func (x *HashSetRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*HSetRequest) ProtoMessage() {}
+func (*HashSetRequest) ProtoMessage() {}
 
-func (x *HSetRequest) ProtoReflect() protoreflect.Message {
+func (x *HashSetRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_cache_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -434,345 +434,26 @@ func (x *HSetRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use HSetRequest.ProtoReflect.Descriptor instead.
-func (*HSetRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use HashSetRequest.ProtoReflect.Descriptor instead.
+func (*HashSetRequest) Descriptor() ([]byte, []int) {
 	return file_cache_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *HSetRequest) GetKey() string {
+func (x *HashSetRequest) GetKey() string {
 	if x != nil {
 		return x.Key
 	}
 	return ""
 }
 
-func (x *HSetRequest) GetField() string {
-	if x != nil {
-		return x.Field
-	}
-	return ""
-}
-
-func (x *HSetRequest) GetValue() string {
-	if x != nil {
-		return x.Value
-	}
-	return ""
-}
-
-type HSetResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	Created       bool                   `protobuf:"varint,2,opt,name=created,proto3" json:"created,omitempty"` // true if new field, false if updated
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *HSetResponse) Reset() {
-	*x = HSetResponse{}
-	mi := &file_cache_proto_msgTypes[9]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *HSetResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HSetResponse) ProtoMessage() {}
-
-func (x *HSetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[9]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HSetResponse.ProtoReflect.Descriptor instead.
-func (*HSetResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *HSetResponse) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
-}
-
-func (x *HSetResponse) GetCreated() bool {
-	if x != nil {
-		return x.Created
-	}
-	return false
-}
-
-type HGetRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	Field         string                 `protobuf:"bytes,2,opt,name=field,proto3" json:"field,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *HGetRequest) Reset() {
-	*x = HGetRequest{}
-	mi := &file_cache_proto_msgTypes[10]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *HGetRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HGetRequest) ProtoMessage() {}
-
-func (x *HGetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[10]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HGetRequest.ProtoReflect.Descriptor instead.
-func (*HGetRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{10}
-}
-
-func (x *HGetRequest) GetKey() string {
-	if x != nil {
-		return x.Key
-	}
-	return ""
-}
-
-func (x *HGetRequest) GetField() string {
-	if x != nil {
-		return x.Field
-	}
-	return ""
-}
-
-type HGetResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Value         string                 `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	Exists        bool                   `protobuf:"varint,2,opt,name=exists,proto3" json:"exists,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *HGetResponse) Reset() {
-	*x = HGetResponse{}
-	mi := &file_cache_proto_msgTypes[11]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *HGetResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HGetResponse) ProtoMessage() {}
-
-func (x *HGetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[11]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HGetResponse.ProtoReflect.Descriptor instead.
-func (*HGetResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{11}
-}
-
-func (x *HGetResponse) GetValue() string {
-	if x != nil {
-		return x.Value
-	}
-	return ""
-}
-
-func (x *HGetResponse) GetExists() bool {
-	if x != nil {
-		return x.Exists
-	}
-	return false
-}
-
-type HDelRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	Field         string                 `protobuf:"bytes,2,opt,name=field,proto3" json:"field,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *HDelRequest) Reset() {
-	*x = HDelRequest{}
-	mi := &file_cache_proto_msgTypes[12]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *HDelRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HDelRequest) ProtoMessage() {}
-
-func (x *HDelRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[12]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HDelRequest.ProtoReflect.Descriptor instead.
-func (*HDelRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{12}
-}
-
-func (x *HDelRequest) GetKey() string {
-	if x != nil {
-		return x.Key
-	}
-	return ""
-}
-
-func (x *HDelRequest) GetField() string {
-	if x != nil {
-		return x.Field
-	}
-	return ""
-}
-
-type HDelResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	DeletedCount  int32                  `protobuf:"varint,2,opt,name=deleted_count,json=deletedCount,proto3" json:"deleted_count,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *HDelResponse) Reset() {
-	*x = HDelResponse{}
-	mi := &file_cache_proto_msgTypes[13]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *HDelResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HDelResponse) ProtoMessage() {}
-
-func (x *HDelResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[13]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HDelResponse.ProtoReflect.Descriptor instead.
-func (*HDelResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{13}
-}
-
-func (x *HDelResponse) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
-}
-
-func (x *HDelResponse) GetDeletedCount() int32 {
-	if x != nil {
-		return x.DeletedCount
-	}
-	return 0
-}
-
-type HMSetRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	Fields        map[string]string      `protobuf:"bytes,2,rep,name=fields,proto3" json:"fields,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // field -> value mapping
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *HMSetRequest) Reset() {
-	*x = HMSetRequest{}
-	mi := &file_cache_proto_msgTypes[14]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *HMSetRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HMSetRequest) ProtoMessage() {}
-
-func (x *HMSetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[14]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HMSetRequest.ProtoReflect.Descriptor instead.
-func (*HMSetRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{14}
-}
-
-func (x *HMSetRequest) GetKey() string {
-	if x != nil {
-		return x.Key
-	}
-	return ""
-}
-
-func (x *HMSetRequest) GetFields() map[string]string {
+func (x *HashSetRequest) GetFields() map[string]string {
 	if x != nil {
 		return x.Fields
 	}
 	return nil
 }
 
-type HMSetResponse struct {
+type HashSetResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	Count         int32                  `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"` // number of fields set
@@ -780,21 +461,21 @@ type HMSetResponse struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *HMSetResponse) Reset() {
-	*x = HMSetResponse{}
-	mi := &file_cache_proto_msgTypes[15]
+func (x *HashSetResponse) Reset() {
+	*x = HashSetResponse{}
+	mi := &file_cache_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *HMSetResponse) String() string {
+func (x *HashSetResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*HMSetResponse) ProtoMessage() {}
+func (*HashSetResponse) ProtoMessage() {}
 
-func (x *HMSetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[15]
+func (x *HashSetResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -805,48 +486,47 @@ func (x *HMSetResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use HMSetResponse.ProtoReflect.Descriptor instead.
-func (*HMSetResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{15}
+// Deprecated: Use HashSetResponse.ProtoReflect.Descriptor instead.
+func (*HashSetResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *HMSetResponse) GetSuccess() bool {
+func (x *HashSetResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
 	return false
 }
 
-func (x *HMSetResponse) GetCount() int32 {
+func (x *HashSetResponse) GetCount() int32 {
 	if x != nil {
 		return x.Count
 	}
 	return 0
 }
 
-type HMGetRequest struct {
+type HashGetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	Fields        []string               `protobuf:"bytes,2,rep,name=fields,proto3" json:"fields,omitempty"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"` // get all field-value pairs (calls hash_get)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *HMGetRequest) Reset() {
-	*x = HMGetRequest{}
-	mi := &file_cache_proto_msgTypes[16]
+func (x *HashGetRequest) Reset() {
+	*x = HashGetRequest{}
+	mi := &file_cache_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *HMGetRequest) String() string {
+func (x *HashGetRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*HMGetRequest) ProtoMessage() {}
+func (*HashGetRequest) ProtoMessage() {}
 
-func (x *HMGetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[16]
+func (x *HashGetRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -857,223 +537,40 @@ func (x *HMGetRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use HMGetRequest.ProtoReflect.Descriptor instead.
-func (*HMGetRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{16}
+// Deprecated: Use HashGetRequest.ProtoReflect.Descriptor instead.
+func (*HashGetRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *HMGetRequest) GetKey() string {
+func (x *HashGetRequest) GetKey() string {
 	if x != nil {
 		return x.Key
 	}
 	return ""
 }
 
-func (x *HMGetRequest) GetFields() []string {
-	if x != nil {
-		return x.Fields
-	}
-	return nil
-}
-
-type HMGetResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Values        map[string]string      `protobuf:"bytes,1,rep,name=values,proto3" json:"values,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // field -> value mapping (only existing fields)
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *HMGetResponse) Reset() {
-	*x = HMGetResponse{}
-	mi := &file_cache_proto_msgTypes[17]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *HMGetResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HMGetResponse) ProtoMessage() {}
-
-func (x *HMGetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[17]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HMGetResponse.ProtoReflect.Descriptor instead.
-func (*HMGetResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{17}
-}
-
-func (x *HMGetResponse) GetValues() map[string]string {
-	if x != nil {
-		return x.Values
-	}
-	return nil
-}
-
-type HLenRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *HLenRequest) Reset() {
-	*x = HLenRequest{}
-	mi := &file_cache_proto_msgTypes[18]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *HLenRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HLenRequest) ProtoMessage() {}
-
-func (x *HLenRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[18]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HLenRequest.ProtoReflect.Descriptor instead.
-func (*HLenRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{18}
-}
-
-func (x *HLenRequest) GetKey() string {
-	if x != nil {
-		return x.Key
-	}
-	return ""
-}
-
-type HLenResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Length        int32                  `protobuf:"varint,1,opt,name=length,proto3" json:"length,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *HLenResponse) Reset() {
-	*x = HLenResponse{}
-	mi := &file_cache_proto_msgTypes[19]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *HLenResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HLenResponse) ProtoMessage() {}
-
-func (x *HLenResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[19]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HLenResponse.ProtoReflect.Descriptor instead.
-func (*HLenResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{19}
-}
-
-func (x *HLenResponse) GetLength() int32 {
-	if x != nil {
-		return x.Length
-	}
-	return 0
-}
-
-type HGetAllRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *HGetAllRequest) Reset() {
-	*x = HGetAllRequest{}
-	mi := &file_cache_proto_msgTypes[20]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *HGetAllRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HGetAllRequest) ProtoMessage() {}
-
-func (x *HGetAllRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[20]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HGetAllRequest.ProtoReflect.Descriptor instead.
-func (*HGetAllRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{20}
-}
-
-func (x *HGetAllRequest) GetKey() string {
-	if x != nil {
-		return x.Key
-	}
-	return ""
-}
-
-type HGetAllResponse struct {
+type HashGetResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Fields        map[string]string      `protobuf:"bytes,1,rep,name=fields,proto3" json:"fields,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // all field -> value pairs
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *HGetAllResponse) Reset() {
-	*x = HGetAllResponse{}
-	mi := &file_cache_proto_msgTypes[21]
+func (x *HashGetResponse) Reset() {
+	*x = HashGetResponse{}
+	mi := &file_cache_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *HGetAllResponse) String() string {
+func (x *HashGetResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*HGetAllResponse) ProtoMessage() {}
+func (*HashGetResponse) ProtoMessage() {}
 
-func (x *HGetAllResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[21]
+func (x *HashGetResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1084,41 +581,40 @@ func (x *HGetAllResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use HGetAllResponse.ProtoReflect.Descriptor instead.
-func (*HGetAllResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{21}
+// Deprecated: Use HashGetResponse.ProtoReflect.Descriptor instead.
+func (*HashGetResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *HGetAllResponse) GetFields() map[string]string {
+func (x *HashGetResponse) GetFields() map[string]string {
 	if x != nil {
 		return x.Fields
 	}
 	return nil
 }
 
-type HExistsRequest struct {
+type HashDelRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	Field         string                 `protobuf:"bytes,2,opt,name=field,proto3" json:"field,omitempty"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"` // delete entire hash (calls hash_del)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *HExistsRequest) Reset() {
-	*x = HExistsRequest{}
-	mi := &file_cache_proto_msgTypes[22]
+func (x *HashDelRequest) Reset() {
+	*x = HashDelRequest{}
+	mi := &file_cache_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *HExistsRequest) String() string {
+func (x *HashDelRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*HExistsRequest) ProtoMessage() {}
+func (*HashDelRequest) ProtoMessage() {}
 
-func (x *HExistsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[22]
+func (x *HashDelRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1129,315 +625,19 @@ func (x *HExistsRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use HExistsRequest.ProtoReflect.Descriptor instead.
-func (*HExistsRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{22}
+// Deprecated: Use HashDelRequest.ProtoReflect.Descriptor instead.
+func (*HashDelRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *HExistsRequest) GetKey() string {
+func (x *HashDelRequest) GetKey() string {
 	if x != nil {
 		return x.Key
 	}
 	return ""
 }
 
-func (x *HExistsRequest) GetField() string {
-	if x != nil {
-		return x.Field
-	}
-	return ""
-}
-
-type HExistsResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Exists        bool                   `protobuf:"varint,1,opt,name=exists,proto3" json:"exists,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *HExistsResponse) Reset() {
-	*x = HExistsResponse{}
-	mi := &file_cache_proto_msgTypes[23]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *HExistsResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HExistsResponse) ProtoMessage() {}
-
-func (x *HExistsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[23]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HExistsResponse.ProtoReflect.Descriptor instead.
-func (*HExistsResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{23}
-}
-
-func (x *HExistsResponse) GetExists() bool {
-	if x != nil {
-		return x.Exists
-	}
-	return false
-}
-
-// Set Messages
-type SAddRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	Member        string                 `protobuf:"bytes,2,opt,name=member,proto3" json:"member,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *SAddRequest) Reset() {
-	*x = SAddRequest{}
-	mi := &file_cache_proto_msgTypes[24]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *SAddRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SAddRequest) ProtoMessage() {}
-
-func (x *SAddRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[24]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SAddRequest.ProtoReflect.Descriptor instead.
-func (*SAddRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{24}
-}
-
-func (x *SAddRequest) GetKey() string {
-	if x != nil {
-		return x.Key
-	}
-	return ""
-}
-
-func (x *SAddRequest) GetMember() string {
-	if x != nil {
-		return x.Member
-	}
-	return ""
-}
-
-type SAddResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	Added         bool                   `protobuf:"varint,2,opt,name=added,proto3" json:"added,omitempty"` // true if new member, false if already exists
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *SAddResponse) Reset() {
-	*x = SAddResponse{}
-	mi := &file_cache_proto_msgTypes[25]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *SAddResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SAddResponse) ProtoMessage() {}
-
-func (x *SAddResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[25]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SAddResponse.ProtoReflect.Descriptor instead.
-func (*SAddResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{25}
-}
-
-func (x *SAddResponse) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
-}
-
-func (x *SAddResponse) GetAdded() bool {
-	if x != nil {
-		return x.Added
-	}
-	return false
-}
-
-type SMembersRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *SMembersRequest) Reset() {
-	*x = SMembersRequest{}
-	mi := &file_cache_proto_msgTypes[26]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *SMembersRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SMembersRequest) ProtoMessage() {}
-
-func (x *SMembersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[26]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SMembersRequest.ProtoReflect.Descriptor instead.
-func (*SMembersRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{26}
-}
-
-func (x *SMembersRequest) GetKey() string {
-	if x != nil {
-		return x.Key
-	}
-	return ""
-}
-
-type SMembersResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Members       []string               `protobuf:"bytes,1,rep,name=members,proto3" json:"members,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *SMembersResponse) Reset() {
-	*x = SMembersResponse{}
-	mi := &file_cache_proto_msgTypes[27]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *SMembersResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SMembersResponse) ProtoMessage() {}
-
-func (x *SMembersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[27]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SMembersResponse.ProtoReflect.Descriptor instead.
-func (*SMembersResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{27}
-}
-
-func (x *SMembersResponse) GetMembers() []string {
-	if x != nil {
-		return x.Members
-	}
-	return nil
-}
-
-type SRemRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	Member        string                 `protobuf:"bytes,2,opt,name=member,proto3" json:"member,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *SRemRequest) Reset() {
-	*x = SRemRequest{}
-	mi := &file_cache_proto_msgTypes[28]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *SRemRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SRemRequest) ProtoMessage() {}
-
-func (x *SRemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[28]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SRemRequest.ProtoReflect.Descriptor instead.
-func (*SRemRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{28}
-}
-
-func (x *SRemRequest) GetKey() string {
-	if x != nil {
-		return x.Key
-	}
-	return ""
-}
-
-func (x *SRemRequest) GetMember() string {
-	if x != nil {
-		return x.Member
-	}
-	return ""
-}
-
-type SRemResponse struct {
+type HashDelResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	DeletedCount  int32                  `protobuf:"varint,2,opt,name=deleted_count,json=deletedCount,proto3" json:"deleted_count,omitempty"`
@@ -1445,21 +645,21 @@ type SRemResponse struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SRemResponse) Reset() {
-	*x = SRemResponse{}
-	mi := &file_cache_proto_msgTypes[29]
+func (x *HashDelResponse) Reset() {
+	*x = HashDelResponse{}
+	mi := &file_cache_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SRemResponse) String() string {
+func (x *HashDelResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SRemResponse) ProtoMessage() {}
+func (*HashDelResponse) ProtoMessage() {}
 
-func (x *SRemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[29]
+func (x *HashDelResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1470,47 +670,833 @@ func (x *SRemResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SRemResponse.ProtoReflect.Descriptor instead.
-func (*SRemResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{29}
+// Deprecated: Use HashDelResponse.ProtoReflect.Descriptor instead.
+func (*HashDelResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{13}
 }
 
-func (x *SRemResponse) GetSuccess() bool {
+func (x *HashDelResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
 	return false
 }
 
-func (x *SRemResponse) GetDeletedCount() int32 {
+func (x *HashDelResponse) GetDeletedCount() int32 {
 	if x != nil {
 		return x.DeletedCount
 	}
 	return 0
 }
 
-type SIsMemberRequest struct {
+type HashExistsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	Member        string                 `protobuf:"bytes,2,opt,name=member,proto3" json:"member,omitempty"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"` // check if hash key exists (calls hash_exists)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SIsMemberRequest) Reset() {
-	*x = SIsMemberRequest{}
+func (x *HashExistsRequest) Reset() {
+	*x = HashExistsRequest{}
+	mi := &file_cache_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HashExistsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HashExistsRequest) ProtoMessage() {}
+
+func (x *HashExistsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HashExistsRequest.ProtoReflect.Descriptor instead.
+func (*HashExistsRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *HashExistsRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+type HashExistsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Exists        bool                   `protobuf:"varint,1,opt,name=exists,proto3" json:"exists,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HashExistsResponse) Reset() {
+	*x = HashExistsResponse{}
+	mi := &file_cache_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HashExistsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HashExistsResponse) ProtoMessage() {}
+
+func (x *HashExistsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HashExistsResponse.ProtoReflect.Descriptor instead.
+func (*HashExistsResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *HashExistsResponse) GetExists() bool {
+	if x != nil {
+		return x.Exists
+	}
+	return false
+}
+
+type HashLenRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"` // get number of fields (calls hash_len)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HashLenRequest) Reset() {
+	*x = HashLenRequest{}
+	mi := &file_cache_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HashLenRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HashLenRequest) ProtoMessage() {}
+
+func (x *HashLenRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HashLenRequest.ProtoReflect.Descriptor instead.
+func (*HashLenRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *HashLenRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+type HashLenResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Length        int32                  `protobuf:"varint,1,opt,name=length,proto3" json:"length,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HashLenResponse) Reset() {
+	*x = HashLenResponse{}
+	mi := &file_cache_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HashLenResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HashLenResponse) ProtoMessage() {}
+
+func (x *HashLenResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HashLenResponse.ProtoReflect.Descriptor instead.
+func (*HashLenResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *HashLenResponse) GetLength() int32 {
+	if x != nil {
+		return x.Length
+	}
+	return 0
+}
+
+// Single field operations
+type HashSetMRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Field         string                 `protobuf:"bytes,2,opt,name=field,proto3" json:"field,omitempty"`
+	Value         string                 `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"` // set single field (calls hash_set_m)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HashSetMRequest) Reset() {
+	*x = HashSetMRequest{}
+	mi := &file_cache_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HashSetMRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HashSetMRequest) ProtoMessage() {}
+
+func (x *HashSetMRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HashSetMRequest.ProtoReflect.Descriptor instead.
+func (*HashSetMRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *HashSetMRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *HashSetMRequest) GetField() string {
+	if x != nil {
+		return x.Field
+	}
+	return ""
+}
+
+func (x *HashSetMRequest) GetValue() string {
+	if x != nil {
+		return x.Value
+	}
+	return ""
+}
+
+type HashSetMResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Created       bool                   `protobuf:"varint,2,opt,name=created,proto3" json:"created,omitempty"` // true if new field, false if updated
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HashSetMResponse) Reset() {
+	*x = HashSetMResponse{}
+	mi := &file_cache_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HashSetMResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HashSetMResponse) ProtoMessage() {}
+
+func (x *HashSetMResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HashSetMResponse.ProtoReflect.Descriptor instead.
+func (*HashSetMResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *HashSetMResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *HashSetMResponse) GetCreated() bool {
+	if x != nil {
+		return x.Created
+	}
+	return false
+}
+
+type HashGetMRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Field         string                 `protobuf:"bytes,2,opt,name=field,proto3" json:"field,omitempty"` // get single field (calls hash_get_m)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HashGetMRequest) Reset() {
+	*x = HashGetMRequest{}
+	mi := &file_cache_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HashGetMRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HashGetMRequest) ProtoMessage() {}
+
+func (x *HashGetMRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HashGetMRequest.ProtoReflect.Descriptor instead.
+func (*HashGetMRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *HashGetMRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *HashGetMRequest) GetField() string {
+	if x != nil {
+		return x.Field
+	}
+	return ""
+}
+
+type HashGetMResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Value         string                 `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Exists        bool                   `protobuf:"varint,2,opt,name=exists,proto3" json:"exists,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HashGetMResponse) Reset() {
+	*x = HashGetMResponse{}
+	mi := &file_cache_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HashGetMResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HashGetMResponse) ProtoMessage() {}
+
+func (x *HashGetMResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HashGetMResponse.ProtoReflect.Descriptor instead.
+func (*HashGetMResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *HashGetMResponse) GetValue() string {
+	if x != nil {
+		return x.Value
+	}
+	return ""
+}
+
+func (x *HashGetMResponse) GetExists() bool {
+	if x != nil {
+		return x.Exists
+	}
+	return false
+}
+
+type HashDelMRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Field         string                 `protobuf:"bytes,2,opt,name=field,proto3" json:"field,omitempty"` // delete single field (calls hash_del_m)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HashDelMRequest) Reset() {
+	*x = HashDelMRequest{}
+	mi := &file_cache_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HashDelMRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HashDelMRequest) ProtoMessage() {}
+
+func (x *HashDelMRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HashDelMRequest.ProtoReflect.Descriptor instead.
+func (*HashDelMRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *HashDelMRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *HashDelMRequest) GetField() string {
+	if x != nil {
+		return x.Field
+	}
+	return ""
+}
+
+type HashDelMResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	DeletedCount  int32                  `protobuf:"varint,2,opt,name=deleted_count,json=deletedCount,proto3" json:"deleted_count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HashDelMResponse) Reset() {
+	*x = HashDelMResponse{}
+	mi := &file_cache_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HashDelMResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HashDelMResponse) ProtoMessage() {}
+
+func (x *HashDelMResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HashDelMResponse.ProtoReflect.Descriptor instead.
+func (*HashDelMResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *HashDelMResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *HashDelMResponse) GetDeletedCount() int32 {
+	if x != nil {
+		return x.DeletedCount
+	}
+	return 0
+}
+
+type HashExistsMRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Field         string                 `protobuf:"bytes,2,opt,name=field,proto3" json:"field,omitempty"` // check if field exists (calls hash_exists_m)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HashExistsMRequest) Reset() {
+	*x = HashExistsMRequest{}
+	mi := &file_cache_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HashExistsMRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HashExistsMRequest) ProtoMessage() {}
+
+func (x *HashExistsMRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HashExistsMRequest.ProtoReflect.Descriptor instead.
+func (*HashExistsMRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *HashExistsMRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *HashExistsMRequest) GetField() string {
+	if x != nil {
+		return x.Field
+	}
+	return ""
+}
+
+type HashExistsMResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Exists        bool                   `protobuf:"varint,1,opt,name=exists,proto3" json:"exists,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HashExistsMResponse) Reset() {
+	*x = HashExistsMResponse{}
+	mi := &file_cache_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HashExistsMResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HashExistsMResponse) ProtoMessage() {}
+
+func (x *HashExistsMResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HashExistsMResponse.ProtoReflect.Descriptor instead.
+func (*HashExistsMResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *HashExistsMResponse) GetExists() bool {
+	if x != nil {
+		return x.Exists
+	}
+	return false
+}
+
+// ---------- Set Native Messages ----------
+// Batch/whole set operations
+type SetSetRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Members       []string               `protobuf:"bytes,2,rep,name=members,proto3" json:"members,omitempty"` // batch add multiple members (calls set_set)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetSetRequest) Reset() {
+	*x = SetSetRequest{}
+	mi := &file_cache_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetSetRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetSetRequest) ProtoMessage() {}
+
+func (x *SetSetRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetSetRequest.ProtoReflect.Descriptor instead.
+func (*SetSetRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *SetSetRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *SetSetRequest) GetMembers() []string {
+	if x != nil {
+		return x.Members
+	}
+	return nil
+}
+
+type SetSetResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Count         int32                  `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"` // number of members added
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetSetResponse) Reset() {
+	*x = SetSetResponse{}
+	mi := &file_cache_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetSetResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetSetResponse) ProtoMessage() {}
+
+func (x *SetSetResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetSetResponse.ProtoReflect.Descriptor instead.
+func (*SetSetResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *SetSetResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *SetSetResponse) GetCount() int32 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
+type SetGetRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"` // get all members (calls set_get)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetGetRequest) Reset() {
+	*x = SetGetRequest{}
+	mi := &file_cache_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetGetRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetGetRequest) ProtoMessage() {}
+
+func (x *SetGetRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetGetRequest.ProtoReflect.Descriptor instead.
+func (*SetGetRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *SetGetRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+type SetGetResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Members       []string               `protobuf:"bytes,1,rep,name=members,proto3" json:"members,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetGetResponse) Reset() {
+	*x = SetGetResponse{}
+	mi := &file_cache_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetGetResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetGetResponse) ProtoMessage() {}
+
+func (x *SetGetResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetGetResponse.ProtoReflect.Descriptor instead.
+func (*SetGetResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *SetGetResponse) GetMembers() []string {
+	if x != nil {
+		return x.Members
+	}
+	return nil
+}
+
+type SetDelRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"` // delete entire set (calls set_del)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetDelRequest) Reset() {
+	*x = SetDelRequest{}
 	mi := &file_cache_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SIsMemberRequest) String() string {
+func (x *SetDelRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SIsMemberRequest) ProtoMessage() {}
+func (*SetDelRequest) ProtoMessage() {}
 
-func (x *SIsMemberRequest) ProtoReflect() protoreflect.Message {
+func (x *SetDelRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_cache_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1522,47 +1508,322 @@ func (x *SIsMemberRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SIsMemberRequest.ProtoReflect.Descriptor instead.
-func (*SIsMemberRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use SetDelRequest.ProtoReflect.Descriptor instead.
+func (*SetDelRequest) Descriptor() ([]byte, []int) {
 	return file_cache_proto_rawDescGZIP(), []int{30}
 }
 
-func (x *SIsMemberRequest) GetKey() string {
+func (x *SetDelRequest) GetKey() string {
 	if x != nil {
 		return x.Key
 	}
 	return ""
 }
 
-func (x *SIsMemberRequest) GetMember() string {
+type SetDelResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	DeletedCount  int32                  `protobuf:"varint,2,opt,name=deleted_count,json=deletedCount,proto3" json:"deleted_count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetDelResponse) Reset() {
+	*x = SetDelResponse{}
+	mi := &file_cache_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetDelResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetDelResponse) ProtoMessage() {}
+
+func (x *SetDelResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetDelResponse.ProtoReflect.Descriptor instead.
+func (*SetDelResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *SetDelResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *SetDelResponse) GetDeletedCount() int32 {
+	if x != nil {
+		return x.DeletedCount
+	}
+	return 0
+}
+
+type SetExistsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"` // check if set key exists (calls set_exists)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetExistsRequest) Reset() {
+	*x = SetExistsRequest{}
+	mi := &file_cache_proto_msgTypes[32]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetExistsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetExistsRequest) ProtoMessage() {}
+
+func (x *SetExistsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[32]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetExistsRequest.ProtoReflect.Descriptor instead.
+func (*SetExistsRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{32}
+}
+
+func (x *SetExistsRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+type SetExistsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Exists        bool                   `protobuf:"varint,1,opt,name=exists,proto3" json:"exists,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetExistsResponse) Reset() {
+	*x = SetExistsResponse{}
+	mi := &file_cache_proto_msgTypes[33]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetExistsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetExistsResponse) ProtoMessage() {}
+
+func (x *SetExistsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[33]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetExistsResponse.ProtoReflect.Descriptor instead.
+func (*SetExistsResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *SetExistsResponse) GetExists() bool {
+	if x != nil {
+		return x.Exists
+	}
+	return false
+}
+
+type SetLenRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"` // get number of members (calls set_len)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetLenRequest) Reset() {
+	*x = SetLenRequest{}
+	mi := &file_cache_proto_msgTypes[34]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetLenRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetLenRequest) ProtoMessage() {}
+
+func (x *SetLenRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[34]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetLenRequest.ProtoReflect.Descriptor instead.
+func (*SetLenRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *SetLenRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+type SetLenResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Length        int32                  `protobuf:"varint,1,opt,name=length,proto3" json:"length,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetLenResponse) Reset() {
+	*x = SetLenResponse{}
+	mi := &file_cache_proto_msgTypes[35]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetLenResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetLenResponse) ProtoMessage() {}
+
+func (x *SetLenResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[35]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetLenResponse.ProtoReflect.Descriptor instead.
+func (*SetLenResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{35}
+}
+
+func (x *SetLenResponse) GetLength() int32 {
+	if x != nil {
+		return x.Length
+	}
+	return 0
+}
+
+// Single member operations
+type SetAddMRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Member        string                 `protobuf:"bytes,2,opt,name=member,proto3" json:"member,omitempty"` // add single member (calls set_add_m)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetAddMRequest) Reset() {
+	*x = SetAddMRequest{}
+	mi := &file_cache_proto_msgTypes[36]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetAddMRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetAddMRequest) ProtoMessage() {}
+
+func (x *SetAddMRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[36]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetAddMRequest.ProtoReflect.Descriptor instead.
+func (*SetAddMRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{36}
+}
+
+func (x *SetAddMRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *SetAddMRequest) GetMember() string {
 	if x != nil {
 		return x.Member
 	}
 	return ""
 }
 
-type SIsMemberResponse struct {
+type SetAddMResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	IsMember      bool                   `protobuf:"varint,1,opt,name=is_member,json=isMember,proto3" json:"is_member,omitempty"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Added         bool                   `protobuf:"varint,2,opt,name=added,proto3" json:"added,omitempty"` // true if new member, false if already exists
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SIsMemberResponse) Reset() {
-	*x = SIsMemberResponse{}
-	mi := &file_cache_proto_msgTypes[31]
+func (x *SetAddMResponse) Reset() {
+	*x = SetAddMResponse{}
+	mi := &file_cache_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SIsMemberResponse) String() string {
+func (x *SetAddMResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SIsMemberResponse) ProtoMessage() {}
+func (*SetAddMResponse) ProtoMessage() {}
 
-func (x *SIsMemberResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[31]
+func (x *SetAddMResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1573,40 +1834,48 @@ func (x *SIsMemberResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SIsMemberResponse.ProtoReflect.Descriptor instead.
-func (*SIsMemberResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{31}
+// Deprecated: Use SetAddMResponse.ProtoReflect.Descriptor instead.
+func (*SetAddMResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{37}
 }
 
-func (x *SIsMemberResponse) GetIsMember() bool {
+func (x *SetAddMResponse) GetSuccess() bool {
 	if x != nil {
-		return x.IsMember
+		return x.Success
 	}
 	return false
 }
 
-type SCardRequest struct {
+func (x *SetAddMResponse) GetAdded() bool {
+	if x != nil {
+		return x.Added
+	}
+	return false
+}
+
+type SetExistsMRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Member        string                 `protobuf:"bytes,2,opt,name=member,proto3" json:"member,omitempty"` // check if member exists (calls set_exists_m)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SCardRequest) Reset() {
-	*x = SCardRequest{}
-	mi := &file_cache_proto_msgTypes[32]
+func (x *SetExistsMRequest) Reset() {
+	*x = SetExistsMRequest{}
+	mi := &file_cache_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SCardRequest) String() string {
+func (x *SetExistsMRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SCardRequest) ProtoMessage() {}
+func (*SetExistsMRequest) ProtoMessage() {}
 
-func (x *SCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[32]
+func (x *SetExistsMRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1617,40 +1886,47 @@ func (x *SCardRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SCardRequest.ProtoReflect.Descriptor instead.
-func (*SCardRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{32}
+// Deprecated: Use SetExistsMRequest.ProtoReflect.Descriptor instead.
+func (*SetExistsMRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{38}
 }
 
-func (x *SCardRequest) GetKey() string {
+func (x *SetExistsMRequest) GetKey() string {
 	if x != nil {
 		return x.Key
 	}
 	return ""
 }
 
-type SCardResponse struct {
+func (x *SetExistsMRequest) GetMember() string {
+	if x != nil {
+		return x.Member
+	}
+	return ""
+}
+
+type SetExistsMResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Cardinality   int32                  `protobuf:"varint,1,opt,name=cardinality,proto3" json:"cardinality,omitempty"`
+	IsMember      bool                   `protobuf:"varint,1,opt,name=is_member,json=isMember,proto3" json:"is_member,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SCardResponse) Reset() {
-	*x = SCardResponse{}
-	mi := &file_cache_proto_msgTypes[33]
+func (x *SetExistsMResponse) Reset() {
+	*x = SetExistsMResponse{}
+	mi := &file_cache_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SCardResponse) String() string {
+func (x *SetExistsMResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SCardResponse) ProtoMessage() {}
+func (*SetExistsMResponse) ProtoMessage() {}
 
-func (x *SCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[33]
+func (x *SetExistsMResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1661,16 +1937,224 @@ func (x *SCardResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SCardResponse.ProtoReflect.Descriptor instead.
-func (*SCardResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{33}
+// Deprecated: Use SetExistsMResponse.ProtoReflect.Descriptor instead.
+func (*SetExistsMResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{39}
 }
 
-func (x *SCardResponse) GetCardinality() int32 {
+func (x *SetExistsMResponse) GetIsMember() bool {
 	if x != nil {
-		return x.Cardinality
+		return x.IsMember
+	}
+	return false
+}
+
+type SetDelMRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Member        string                 `protobuf:"bytes,2,opt,name=member,proto3" json:"member,omitempty"` // delete single member (calls set_del_m)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetDelMRequest) Reset() {
+	*x = SetDelMRequest{}
+	mi := &file_cache_proto_msgTypes[40]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetDelMRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetDelMRequest) ProtoMessage() {}
+
+func (x *SetDelMRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[40]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetDelMRequest.ProtoReflect.Descriptor instead.
+func (*SetDelMRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{40}
+}
+
+func (x *SetDelMRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *SetDelMRequest) GetMember() string {
+	if x != nil {
+		return x.Member
+	}
+	return ""
+}
+
+type SetDelMResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	DeletedCount  int32                  `protobuf:"varint,2,opt,name=deleted_count,json=deletedCount,proto3" json:"deleted_count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetDelMResponse) Reset() {
+	*x = SetDelMResponse{}
+	mi := &file_cache_proto_msgTypes[41]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetDelMResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetDelMResponse) ProtoMessage() {}
+
+func (x *SetDelMResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[41]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetDelMResponse.ProtoReflect.Descriptor instead.
+func (*SetDelMResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{41}
+}
+
+func (x *SetDelMResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *SetDelMResponse) GetDeletedCount() int32 {
+	if x != nil {
+		return x.DeletedCount
 	}
 	return 0
+}
+
+type SetGetMRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Member        string                 `protobuf:"bytes,2,opt,name=member,proto3" json:"member,omitempty"` // get single member data for verification (calls set_get_m)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetGetMRequest) Reset() {
+	*x = SetGetMRequest{}
+	mi := &file_cache_proto_msgTypes[42]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetGetMRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetGetMRequest) ProtoMessage() {}
+
+func (x *SetGetMRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[42]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetGetMRequest.ProtoReflect.Descriptor instead.
+func (*SetGetMRequest) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{42}
+}
+
+func (x *SetGetMRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *SetGetMRequest) GetMember() string {
+	if x != nil {
+		return x.Member
+	}
+	return ""
+}
+
+type SetGetMResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Value         string                 `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Exists        bool                   `protobuf:"varint,2,opt,name=exists,proto3" json:"exists,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetGetMResponse) Reset() {
+	*x = SetGetMResponse{}
+	mi := &file_cache_proto_msgTypes[43]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetGetMResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetGetMResponse) ProtoMessage() {}
+
+func (x *SetGetMResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cache_proto_msgTypes[43]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetGetMResponse.ProtoReflect.Descriptor instead.
+func (*SetGetMResponse) Descriptor() ([]byte, []int) {
+	return file_cache_proto_rawDescGZIP(), []int{43}
+}
+
+func (x *SetGetMResponse) GetValue() string {
+	if x != nil {
+		return x.Value
+	}
+	return ""
+}
+
+func (x *SetGetMResponse) GetExists() bool {
+	if x != nil {
+		return x.Exists
+	}
+	return false
 }
 
 // List Messages
@@ -1684,7 +2168,7 @@ type LPushRequest struct {
 
 func (x *LPushRequest) Reset() {
 	*x = LPushRequest{}
-	mi := &file_cache_proto_msgTypes[34]
+	mi := &file_cache_proto_msgTypes[44]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1696,7 +2180,7 @@ func (x *LPushRequest) String() string {
 func (*LPushRequest) ProtoMessage() {}
 
 func (x *LPushRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[34]
+	mi := &file_cache_proto_msgTypes[44]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1709,7 +2193,7 @@ func (x *LPushRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LPushRequest.ProtoReflect.Descriptor instead.
 func (*LPushRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{34}
+	return file_cache_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *LPushRequest) GetKey() string {
@@ -1736,7 +2220,7 @@ type LPushResponse struct {
 
 func (x *LPushResponse) Reset() {
 	*x = LPushResponse{}
-	mi := &file_cache_proto_msgTypes[35]
+	mi := &file_cache_proto_msgTypes[45]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1748,7 +2232,7 @@ func (x *LPushResponse) String() string {
 func (*LPushResponse) ProtoMessage() {}
 
 func (x *LPushResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[35]
+	mi := &file_cache_proto_msgTypes[45]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1761,7 +2245,7 @@ func (x *LPushResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LPushResponse.ProtoReflect.Descriptor instead.
 func (*LPushResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{35}
+	return file_cache_proto_rawDescGZIP(), []int{45}
 }
 
 func (x *LPushResponse) GetSuccess() bool {
@@ -1789,7 +2273,7 @@ type LRangeRequest struct {
 
 func (x *LRangeRequest) Reset() {
 	*x = LRangeRequest{}
-	mi := &file_cache_proto_msgTypes[36]
+	mi := &file_cache_proto_msgTypes[46]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1801,7 +2285,7 @@ func (x *LRangeRequest) String() string {
 func (*LRangeRequest) ProtoMessage() {}
 
 func (x *LRangeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[36]
+	mi := &file_cache_proto_msgTypes[46]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1814,7 +2298,7 @@ func (x *LRangeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LRangeRequest.ProtoReflect.Descriptor instead.
 func (*LRangeRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{36}
+	return file_cache_proto_rawDescGZIP(), []int{46}
 }
 
 func (x *LRangeRequest) GetKey() string {
@@ -1847,7 +2331,7 @@ type LRangeResponse struct {
 
 func (x *LRangeResponse) Reset() {
 	*x = LRangeResponse{}
-	mi := &file_cache_proto_msgTypes[37]
+	mi := &file_cache_proto_msgTypes[47]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1859,7 +2343,7 @@ func (x *LRangeResponse) String() string {
 func (*LRangeResponse) ProtoMessage() {}
 
 func (x *LRangeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[37]
+	mi := &file_cache_proto_msgTypes[47]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1872,7 +2356,7 @@ func (x *LRangeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LRangeResponse.ProtoReflect.Descriptor instead.
 func (*LRangeResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{37}
+	return file_cache_proto_rawDescGZIP(), []int{47}
 }
 
 func (x *LRangeResponse) GetValues() []string {
@@ -1893,7 +2377,7 @@ type LRemRequest struct {
 
 func (x *LRemRequest) Reset() {
 	*x = LRemRequest{}
-	mi := &file_cache_proto_msgTypes[38]
+	mi := &file_cache_proto_msgTypes[48]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1905,7 +2389,7 @@ func (x *LRemRequest) String() string {
 func (*LRemRequest) ProtoMessage() {}
 
 func (x *LRemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[38]
+	mi := &file_cache_proto_msgTypes[48]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1918,7 +2402,7 @@ func (x *LRemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LRemRequest.ProtoReflect.Descriptor instead.
 func (*LRemRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{38}
+	return file_cache_proto_rawDescGZIP(), []int{48}
 }
 
 func (x *LRemRequest) GetKey() string {
@@ -1952,7 +2436,7 @@ type LRemResponse struct {
 
 func (x *LRemResponse) Reset() {
 	*x = LRemResponse{}
-	mi := &file_cache_proto_msgTypes[39]
+	mi := &file_cache_proto_msgTypes[49]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1964,7 +2448,7 @@ func (x *LRemResponse) String() string {
 func (*LRemResponse) ProtoMessage() {}
 
 func (x *LRemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[39]
+	mi := &file_cache_proto_msgTypes[49]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1977,7 +2461,7 @@ func (x *LRemResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LRemResponse.ProtoReflect.Descriptor instead.
 func (*LRemResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{39}
+	return file_cache_proto_rawDescGZIP(), []int{49}
 }
 
 func (x *LRemResponse) GetSuccess() bool {
@@ -2003,7 +2487,7 @@ type LPopRequest struct {
 
 func (x *LPopRequest) Reset() {
 	*x = LPopRequest{}
-	mi := &file_cache_proto_msgTypes[40]
+	mi := &file_cache_proto_msgTypes[50]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2015,7 +2499,7 @@ func (x *LPopRequest) String() string {
 func (*LPopRequest) ProtoMessage() {}
 
 func (x *LPopRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[40]
+	mi := &file_cache_proto_msgTypes[50]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2028,7 +2512,7 @@ func (x *LPopRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LPopRequest.ProtoReflect.Descriptor instead.
 func (*LPopRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{40}
+	return file_cache_proto_rawDescGZIP(), []int{50}
 }
 
 func (x *LPopRequest) GetKey() string {
@@ -2048,7 +2532,7 @@ type LPopResponse struct {
 
 func (x *LPopResponse) Reset() {
 	*x = LPopResponse{}
-	mi := &file_cache_proto_msgTypes[41]
+	mi := &file_cache_proto_msgTypes[51]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2060,7 +2544,7 @@ func (x *LPopResponse) String() string {
 func (*LPopResponse) ProtoMessage() {}
 
 func (x *LPopResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[41]
+	mi := &file_cache_proto_msgTypes[51]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2073,7 +2557,7 @@ func (x *LPopResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LPopResponse.ProtoReflect.Descriptor instead.
 func (*LPopResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{41}
+	return file_cache_proto_rawDescGZIP(), []int{51}
 }
 
 func (x *LPopResponse) GetValue() string {
@@ -2100,7 +2584,7 @@ type RPushRequest struct {
 
 func (x *RPushRequest) Reset() {
 	*x = RPushRequest{}
-	mi := &file_cache_proto_msgTypes[42]
+	mi := &file_cache_proto_msgTypes[52]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2112,7 +2596,7 @@ func (x *RPushRequest) String() string {
 func (*RPushRequest) ProtoMessage() {}
 
 func (x *RPushRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[42]
+	mi := &file_cache_proto_msgTypes[52]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2125,7 +2609,7 @@ func (x *RPushRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RPushRequest.ProtoReflect.Descriptor instead.
 func (*RPushRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{42}
+	return file_cache_proto_rawDescGZIP(), []int{52}
 }
 
 func (x *RPushRequest) GetKey() string {
@@ -2152,7 +2636,7 @@ type RPushResponse struct {
 
 func (x *RPushResponse) Reset() {
 	*x = RPushResponse{}
-	mi := &file_cache_proto_msgTypes[43]
+	mi := &file_cache_proto_msgTypes[53]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2164,7 +2648,7 @@ func (x *RPushResponse) String() string {
 func (*RPushResponse) ProtoMessage() {}
 
 func (x *RPushResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[43]
+	mi := &file_cache_proto_msgTypes[53]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2177,7 +2661,7 @@ func (x *RPushResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RPushResponse.ProtoReflect.Descriptor instead.
 func (*RPushResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{43}
+	return file_cache_proto_rawDescGZIP(), []int{53}
 }
 
 func (x *RPushResponse) GetSuccess() bool {
@@ -2203,7 +2687,7 @@ type RPopRequest struct {
 
 func (x *RPopRequest) Reset() {
 	*x = RPopRequest{}
-	mi := &file_cache_proto_msgTypes[44]
+	mi := &file_cache_proto_msgTypes[54]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2215,7 +2699,7 @@ func (x *RPopRequest) String() string {
 func (*RPopRequest) ProtoMessage() {}
 
 func (x *RPopRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[44]
+	mi := &file_cache_proto_msgTypes[54]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2228,7 +2712,7 @@ func (x *RPopRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RPopRequest.ProtoReflect.Descriptor instead.
 func (*RPopRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{44}
+	return file_cache_proto_rawDescGZIP(), []int{54}
 }
 
 func (x *RPopRequest) GetKey() string {
@@ -2248,7 +2732,7 @@ type RPopResponse struct {
 
 func (x *RPopResponse) Reset() {
 	*x = RPopResponse{}
-	mi := &file_cache_proto_msgTypes[45]
+	mi := &file_cache_proto_msgTypes[55]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2260,7 +2744,7 @@ func (x *RPopResponse) String() string {
 func (*RPopResponse) ProtoMessage() {}
 
 func (x *RPopResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[45]
+	mi := &file_cache_proto_msgTypes[55]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2273,7 +2757,7 @@ func (x *RPopResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RPopResponse.ProtoReflect.Descriptor instead.
 func (*RPopResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{45}
+	return file_cache_proto_rawDescGZIP(), []int{55}
 }
 
 func (x *RPopResponse) GetValue() string {
@@ -2299,7 +2783,7 @@ type LLenRequest struct {
 
 func (x *LLenRequest) Reset() {
 	*x = LLenRequest{}
-	mi := &file_cache_proto_msgTypes[46]
+	mi := &file_cache_proto_msgTypes[56]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2311,7 +2795,7 @@ func (x *LLenRequest) String() string {
 func (*LLenRequest) ProtoMessage() {}
 
 func (x *LLenRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[46]
+	mi := &file_cache_proto_msgTypes[56]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2324,7 +2808,7 @@ func (x *LLenRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LLenRequest.ProtoReflect.Descriptor instead.
 func (*LLenRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{46}
+	return file_cache_proto_rawDescGZIP(), []int{56}
 }
 
 func (x *LLenRequest) GetKey() string {
@@ -2343,7 +2827,7 @@ type LLenResponse struct {
 
 func (x *LLenResponse) Reset() {
 	*x = LLenResponse{}
-	mi := &file_cache_proto_msgTypes[47]
+	mi := &file_cache_proto_msgTypes[57]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2355,7 +2839,7 @@ func (x *LLenResponse) String() string {
 func (*LLenResponse) ProtoMessage() {}
 
 func (x *LLenResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[47]
+	mi := &file_cache_proto_msgTypes[57]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2368,7 +2852,7 @@ func (x *LLenResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LLenResponse.ProtoReflect.Descriptor instead.
 func (*LLenResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{47}
+	return file_cache_proto_rawDescGZIP(), []int{57}
 }
 
 func (x *LLenResponse) GetLength() int32 {
@@ -2388,7 +2872,7 @@ type LIndexRequest struct {
 
 func (x *LIndexRequest) Reset() {
 	*x = LIndexRequest{}
-	mi := &file_cache_proto_msgTypes[48]
+	mi := &file_cache_proto_msgTypes[58]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2400,7 +2884,7 @@ func (x *LIndexRequest) String() string {
 func (*LIndexRequest) ProtoMessage() {}
 
 func (x *LIndexRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[48]
+	mi := &file_cache_proto_msgTypes[58]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2413,7 +2897,7 @@ func (x *LIndexRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LIndexRequest.ProtoReflect.Descriptor instead.
 func (*LIndexRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{48}
+	return file_cache_proto_rawDescGZIP(), []int{58}
 }
 
 func (x *LIndexRequest) GetKey() string {
@@ -2440,7 +2924,7 @@ type LIndexResponse struct {
 
 func (x *LIndexResponse) Reset() {
 	*x = LIndexResponse{}
-	mi := &file_cache_proto_msgTypes[49]
+	mi := &file_cache_proto_msgTypes[59]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2452,7 +2936,7 @@ func (x *LIndexResponse) String() string {
 func (*LIndexResponse) ProtoMessage() {}
 
 func (x *LIndexResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[49]
+	mi := &file_cache_proto_msgTypes[59]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2465,7 +2949,7 @@ func (x *LIndexResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LIndexResponse.ProtoReflect.Descriptor instead.
 func (*LIndexResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{49}
+	return file_cache_proto_rawDescGZIP(), []int{59}
 }
 
 func (x *LIndexResponse) GetValue() string {
@@ -2493,7 +2977,7 @@ type LSetRequest struct {
 
 func (x *LSetRequest) Reset() {
 	*x = LSetRequest{}
-	mi := &file_cache_proto_msgTypes[50]
+	mi := &file_cache_proto_msgTypes[60]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2505,7 +2989,7 @@ func (x *LSetRequest) String() string {
 func (*LSetRequest) ProtoMessage() {}
 
 func (x *LSetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[50]
+	mi := &file_cache_proto_msgTypes[60]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2518,7 +3002,7 @@ func (x *LSetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LSetRequest.ProtoReflect.Descriptor instead.
 func (*LSetRequest) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{50}
+	return file_cache_proto_rawDescGZIP(), []int{60}
 }
 
 func (x *LSetRequest) GetKey() string {
@@ -2551,7 +3035,7 @@ type LSetResponse struct {
 
 func (x *LSetResponse) Reset() {
 	*x = LSetResponse{}
-	mi := &file_cache_proto_msgTypes[51]
+	mi := &file_cache_proto_msgTypes[61]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2563,7 +3047,7 @@ func (x *LSetResponse) String() string {
 func (*LSetResponse) ProtoMessage() {}
 
 func (x *LSetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cache_proto_msgTypes[51]
+	mi := &file_cache_proto_msgTypes[61]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2576,7 +3060,7 @@ func (x *LSetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LSetResponse.ProtoReflect.Descriptor instead.
 func (*LSetResponse) Descriptor() ([]byte, []int) {
-	return file_cache_proto_rawDescGZIP(), []int{51}
+	return file_cache_proto_rawDescGZIP(), []int{61}
 }
 
 func (x *LSetResponse) GetSuccess() bool {
@@ -2590,106 +3074,125 @@ var File_cache_proto protoreflect.FileDescriptor
 
 const file_cache_proto_rawDesc = "" +
 	"\n" +
-	"\vcache.proto\x12\x05cache\x1a\x1cgoogle/api/annotations.proto\"4\n" +
-	"\n" +
-	"SetRequest\x12\x10\n" +
+	"\vcache.proto\x12\x05cache\x1a\x1cgoogle/api/annotations.proto\"6\n" +
+	"\fKvSetRequest\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value\"'\n" +
-	"\vSetResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\"\x1e\n" +
-	"\n" +
-	"GetRequest\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\";\n" +
-	"\vGetResponse\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value\")\n" +
+	"\rKvSetResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\" \n" +
+	"\fKvGetRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\"=\n" +
+	"\rKvGetResponse\x12\x14\n" +
 	"\x05value\x18\x01 \x01(\tR\x05value\x12\x16\n" +
-	"\x06exists\x18\x02 \x01(\bR\x06exists\"\x1e\n" +
-	"\n" +
-	"DelRequest\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\"L\n" +
-	"\vDelResponse\x12\x18\n" +
+	"\x06exists\x18\x02 \x01(\bR\x06exists\" \n" +
+	"\fKvDelRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\"N\n" +
+	"\rKvDelResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12#\n" +
-	"\rdeleted_count\x18\x02 \x01(\x05R\fdeletedCount\"!\n" +
-	"\rExistsRequest\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\"(\n" +
-	"\x0eExistsResponse\x12\x16\n" +
-	"\x06exists\x18\x01 \x01(\bR\x06exists\"K\n" +
-	"\vHSetRequest\x12\x10\n" +
+	"\rdeleted_count\x18\x02 \x01(\x05R\fdeletedCount\"#\n" +
+	"\x0fKvExistsRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\"*\n" +
+	"\x10KvExistsResponse\x12\x16\n" +
+	"\x06exists\x18\x01 \x01(\bR\x06exists\"\x98\x01\n" +
+	"\x0eHashSetRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x129\n" +
+	"\x06fields\x18\x02 \x03(\v2!.cache.HashSetRequest.FieldsEntryR\x06fields\x1a9\n" +
+	"\vFieldsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"A\n" +
+	"\x0fHashSetResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
+	"\x05count\x18\x02 \x01(\x05R\x05count\"\"\n" +
+	"\x0eHashGetRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\"\x88\x01\n" +
+	"\x0fHashGetResponse\x12:\n" +
+	"\x06fields\x18\x01 \x03(\v2\".cache.HashGetResponse.FieldsEntryR\x06fields\x1a9\n" +
+	"\vFieldsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\"\n" +
+	"\x0eHashDelRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\"P\n" +
+	"\x0fHashDelResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12#\n" +
+	"\rdeleted_count\x18\x02 \x01(\x05R\fdeletedCount\"%\n" +
+	"\x11HashExistsRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\",\n" +
+	"\x12HashExistsResponse\x12\x16\n" +
+	"\x06exists\x18\x01 \x01(\bR\x06exists\"\"\n" +
+	"\x0eHashLenRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\")\n" +
+	"\x0fHashLenResponse\x12\x16\n" +
+	"\x06length\x18\x01 \x01(\x05R\x06length\"O\n" +
+	"\x0fHashSetMRequest\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05field\x18\x02 \x01(\tR\x05field\x12\x14\n" +
-	"\x05value\x18\x03 \x01(\tR\x05value\"B\n" +
-	"\fHSetResponse\x12\x18\n" +
+	"\x05value\x18\x03 \x01(\tR\x05value\"F\n" +
+	"\x10HashSetMResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
-	"\acreated\x18\x02 \x01(\bR\acreated\"5\n" +
-	"\vHGetRequest\x12\x10\n" +
+	"\acreated\x18\x02 \x01(\bR\acreated\"9\n" +
+	"\x0fHashGetMRequest\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05field\x18\x02 \x01(\tR\x05field\"<\n" +
-	"\fHGetResponse\x12\x14\n" +
+	"\x05field\x18\x02 \x01(\tR\x05field\"@\n" +
+	"\x10HashGetMResponse\x12\x14\n" +
 	"\x05value\x18\x01 \x01(\tR\x05value\x12\x16\n" +
-	"\x06exists\x18\x02 \x01(\bR\x06exists\"5\n" +
-	"\vHDelRequest\x12\x10\n" +
+	"\x06exists\x18\x02 \x01(\bR\x06exists\"9\n" +
+	"\x0fHashDelMRequest\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05field\x18\x02 \x01(\tR\x05field\"M\n" +
-	"\fHDelResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\x12#\n" +
-	"\rdeleted_count\x18\x02 \x01(\x05R\fdeletedCount\"\x94\x01\n" +
-	"\fHMSetRequest\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x127\n" +
-	"\x06fields\x18\x02 \x03(\v2\x1f.cache.HMSetRequest.FieldsEntryR\x06fields\x1a9\n" +
-	"\vFieldsEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"?\n" +
-	"\rHMSetResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
-	"\x05count\x18\x02 \x01(\x05R\x05count\"8\n" +
-	"\fHMGetRequest\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x16\n" +
-	"\x06fields\x18\x02 \x03(\tR\x06fields\"\x84\x01\n" +
-	"\rHMGetResponse\x128\n" +
-	"\x06values\x18\x01 \x03(\v2 .cache.HMGetResponse.ValuesEntryR\x06values\x1a9\n" +
-	"\vValuesEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x1f\n" +
-	"\vHLenRequest\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\"&\n" +
-	"\fHLenResponse\x12\x16\n" +
-	"\x06length\x18\x01 \x01(\x05R\x06length\"\"\n" +
-	"\x0eHGetAllRequest\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\"\x88\x01\n" +
-	"\x0fHGetAllResponse\x12:\n" +
-	"\x06fields\x18\x01 \x03(\v2\".cache.HGetAllResponse.FieldsEntryR\x06fields\x1a9\n" +
-	"\vFieldsEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"8\n" +
-	"\x0eHExistsRequest\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05field\x18\x02 \x01(\tR\x05field\")\n" +
-	"\x0fHExistsResponse\x12\x16\n" +
-	"\x06exists\x18\x01 \x01(\bR\x06exists\"7\n" +
-	"\vSAddRequest\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x16\n" +
-	"\x06member\x18\x02 \x01(\tR\x06member\">\n" +
-	"\fSAddResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
-	"\x05added\x18\x02 \x01(\bR\x05added\"#\n" +
-	"\x0fSMembersRequest\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\",\n" +
-	"\x10SMembersResponse\x12\x18\n" +
-	"\amembers\x18\x01 \x03(\tR\amembers\"7\n" +
-	"\vSRemRequest\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x16\n" +
-	"\x06member\x18\x02 \x01(\tR\x06member\"M\n" +
-	"\fSRemResponse\x12\x18\n" +
+	"\x05field\x18\x02 \x01(\tR\x05field\"Q\n" +
+	"\x10HashDelMResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12#\n" +
 	"\rdeleted_count\x18\x02 \x01(\x05R\fdeletedCount\"<\n" +
-	"\x10SIsMemberRequest\x12\x10\n" +
+	"\x12HashExistsMRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05field\x18\x02 \x01(\tR\x05field\"-\n" +
+	"\x13HashExistsMResponse\x12\x16\n" +
+	"\x06exists\x18\x01 \x01(\bR\x06exists\";\n" +
+	"\rSetSetRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x18\n" +
+	"\amembers\x18\x02 \x03(\tR\amembers\"@\n" +
+	"\x0eSetSetResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
+	"\x05count\x18\x02 \x01(\x05R\x05count\"!\n" +
+	"\rSetGetRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\"*\n" +
+	"\x0eSetGetResponse\x12\x18\n" +
+	"\amembers\x18\x01 \x03(\tR\amembers\"!\n" +
+	"\rSetDelRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\"O\n" +
+	"\x0eSetDelResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12#\n" +
+	"\rdeleted_count\x18\x02 \x01(\x05R\fdeletedCount\"$\n" +
+	"\x10SetExistsRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\"+\n" +
+	"\x11SetExistsResponse\x12\x16\n" +
+	"\x06exists\x18\x01 \x01(\bR\x06exists\"!\n" +
+	"\rSetLenRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\"(\n" +
+	"\x0eSetLenResponse\x12\x16\n" +
+	"\x06length\x18\x01 \x01(\x05R\x06length\":\n" +
+	"\x0eSetAddMRequest\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x16\n" +
-	"\x06member\x18\x02 \x01(\tR\x06member\"0\n" +
-	"\x11SIsMemberResponse\x12\x1b\n" +
-	"\tis_member\x18\x01 \x01(\bR\bisMember\" \n" +
-	"\fSCardRequest\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\"1\n" +
-	"\rSCardResponse\x12 \n" +
-	"\vcardinality\x18\x01 \x01(\x05R\vcardinality\"6\n" +
+	"\x06member\x18\x02 \x01(\tR\x06member\"A\n" +
+	"\x0fSetAddMResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
+	"\x05added\x18\x02 \x01(\bR\x05added\"=\n" +
+	"\x11SetExistsMRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x16\n" +
+	"\x06member\x18\x02 \x01(\tR\x06member\"1\n" +
+	"\x12SetExistsMResponse\x12\x1b\n" +
+	"\tis_member\x18\x01 \x01(\bR\bisMember\":\n" +
+	"\x0eSetDelMRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x16\n" +
+	"\x06member\x18\x02 \x01(\tR\x06member\"P\n" +
+	"\x0fSetDelMResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12#\n" +
+	"\rdeleted_count\x18\x02 \x01(\x05R\fdeletedCount\":\n" +
+	"\x0eSetGetMRequest\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x16\n" +
+	"\x06member\x18\x02 \x01(\tR\x06member\"?\n" +
+	"\x0fSetGetMResponse\x12\x14\n" +
+	"\x05value\x18\x01 \x01(\tR\x05value\x12\x16\n" +
+	"\x06exists\x18\x02 \x01(\bR\x06exists\"6\n" +
 	"\fLPushRequest\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value\"A\n" +
@@ -2740,26 +3243,48 @@ const file_cache_proto_rawDesc = "" +
 	"\x05index\x18\x02 \x01(\x05R\x05index\x12\x14\n" +
 	"\x05value\x18\x03 \x01(\tR\x05value\"(\n" +
 	"\fLSetResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess2\xc7\x10\n" +
-	"\fCacheService\x12C\n" +
-	"\x03Set\x12\x11.cache.SetRequest\x1a\x12.cache.SetResponse\"\x15\x82\xd3\xe4\x93\x02\x0f:\x01*\"\n" +
-	"/v1/kv/set\x12F\n" +
-	"\x03Get\x12\x11.cache.GetRequest\x1a\x12.cache.GetResponse\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/kv/get/{key}\x12F\n" +
-	"\x03Del\x12\x11.cache.DelRequest\x1a\x12.cache.DelResponse\"\x18\x82\xd3\xe4\x93\x02\x12*\x10/v1/kv/del/{key}\x12R\n" +
-	"\x06Exists\x12\x14.cache.ExistsRequest\x1a\x15.cache.ExistsResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/v1/kv/exists/{key}\x12H\n" +
-	"\x04HSet\x12\x12.cache.HSetRequest\x1a\x13.cache.HSetResponse\"\x17\x82\xd3\xe4\x93\x02\x11:\x01*\"\f/v1/hash/set\x12S\n" +
-	"\x04HGet\x12\x12.cache.HGetRequest\x1a\x13.cache.HGetResponse\"\"\x82\xd3\xe4\x93\x02\x1c\x12\x1a/v1/hash/get/{key}/{field}\x12S\n" +
-	"\x04HDel\x12\x12.cache.HDelRequest\x1a\x13.cache.HDelResponse\"\"\x82\xd3\xe4\x93\x02\x1c*\x1a/v1/hash/del/{key}/{field}\x12L\n" +
-	"\x05HMSet\x12\x13.cache.HMSetRequest\x1a\x14.cache.HMSetResponse\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/v1/hash/mset\x12L\n" +
-	"\x05HMGet\x12\x13.cache.HMGetRequest\x1a\x14.cache.HMGetResponse\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/v1/hash/mget\x12K\n" +
-	"\x04HLen\x12\x12.cache.HLenRequest\x1a\x13.cache.HLenResponse\"\x1a\x82\xd3\xe4\x93\x02\x14\x12\x12/v1/hash/len/{key}\x12W\n" +
-	"\aHGetAll\x12\x15.cache.HGetAllRequest\x1a\x16.cache.HGetAllResponse\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/v1/hash/getall/{key}\x12_\n" +
-	"\aHExists\x12\x15.cache.HExistsRequest\x1a\x16.cache.HExistsResponse\"%\x82\xd3\xe4\x93\x02\x1f\x12\x1d/v1/hash/exists/{key}/{field}\x12G\n" +
-	"\x04SAdd\x12\x12.cache.SAddRequest\x1a\x13.cache.SAddResponse\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/v1/set/add\x12Z\n" +
-	"\bSMembers\x12\x16.cache.SMembersRequest\x1a\x17.cache.SMembersResponse\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/v1/set/members/{key}\x12S\n" +
-	"\x04SRem\x12\x12.cache.SRemRequest\x1a\x13.cache.SRemResponse\"\"\x82\xd3\xe4\x93\x02\x1c*\x1a/v1/set/rem/{key}/{member}\x12g\n" +
-	"\tSIsMember\x12\x17.cache.SIsMemberRequest\x1a\x18.cache.SIsMemberResponse\"'\x82\xd3\xe4\x93\x02!\x12\x1f/v1/set/ismember/{key}/{member}\x12N\n" +
-	"\x05SCard\x12\x13.cache.SCardRequest\x1a\x14.cache.SCardResponse\"\x1a\x82\xd3\xe4\x93\x02\x14\x12\x12/v1/set/card/{key}\x12L\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess2\xa9 \n" +
+	"\fCacheService\x12P\n" +
+	"\x05KvSet\x12\x13.cache.KvSetRequest\x1a\x14.cache.KvSetResponse\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/native/kv/set\x12S\n" +
+	"\x05KvGet\x12\x13.cache.KvGetRequest\x1a\x14.cache.KvGetResponse\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/v1/native/kv/get/{key}\x12S\n" +
+	"\x05KvDel\x12\x13.cache.KvDelRequest\x1a\x14.cache.KvDelResponse\"\x1f\x82\xd3\xe4\x93\x02\x19*\x17/v1/native/kv/del/{key}\x12_\n" +
+	"\bKvExists\x12\x16.cache.KvExistsRequest\x1a\x17.cache.KvExistsResponse\"\"\x82\xd3\xe4\x93\x02\x1c\x12\x1a/v1/native/kv/exists/{key}\x12X\n" +
+	"\aHashSet\x12\x15.cache.HashSetRequest\x1a\x16.cache.HashSetResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/native/hash/set\x12[\n" +
+	"\aHashGet\x12\x15.cache.HashGetRequest\x1a\x16.cache.HashGetResponse\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/v1/native/hash/get/{key}\x12[\n" +
+	"\aHashDel\x12\x15.cache.HashDelRequest\x1a\x16.cache.HashDelResponse\"!\x82\xd3\xe4\x93\x02\x1b*\x19/v1/native/hash/del/{key}\x12g\n" +
+	"\n" +
+	"HashExists\x12\x18.cache.HashExistsRequest\x1a\x19.cache.HashExistsResponse\"$\x82\xd3\xe4\x93\x02\x1e\x12\x1c/v1/native/hash/exists/{key}\x12[\n" +
+	"\aHashLen\x12\x15.cache.HashLenRequest\x1a\x16.cache.HashLenResponse\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/v1/native/hash/len/{key}\x12]\n" +
+	"\bHashSetM\x12\x16.cache.HashSetMRequest\x1a\x17.cache.HashSetMResponse\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/v1/native/hash/set_m\x12h\n" +
+	"\bHashGetM\x12\x16.cache.HashGetMRequest\x1a\x17.cache.HashGetMResponse\"+\x82\xd3\xe4\x93\x02%\x12#/v1/native/hash/get_m/{key}/{field}\x12h\n" +
+	"\bHashDelM\x12\x16.cache.HashDelMRequest\x1a\x17.cache.HashDelMResponse\"+\x82\xd3\xe4\x93\x02%*#/v1/native/hash/del_m/{key}/{field}\x12t\n" +
+	"\vHashExistsM\x12\x19.cache.HashExistsMRequest\x1a\x1a.cache.HashExistsMResponse\".\x82\xd3\xe4\x93\x02(\x12&/v1/native/hash/exists_m/{key}/{field}\x12T\n" +
+	"\x06SetSet\x12\x14.cache.SetSetRequest\x1a\x15.cache.SetSetResponse\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/native/set/set\x12W\n" +
+	"\x06SetGet\x12\x14.cache.SetGetRequest\x1a\x15.cache.SetGetResponse\" \x82\xd3\xe4\x93\x02\x1a\x12\x18/v1/native/set/get/{key}\x12W\n" +
+	"\x06SetDel\x12\x14.cache.SetDelRequest\x1a\x15.cache.SetDelResponse\" \x82\xd3\xe4\x93\x02\x1a*\x18/v1/native/set/del/{key}\x12c\n" +
+	"\tSetExists\x12\x17.cache.SetExistsRequest\x1a\x18.cache.SetExistsResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/v1/native/set/exists/{key}\x12W\n" +
+	"\x06SetLen\x12\x14.cache.SetLenRequest\x1a\x15.cache.SetLenResponse\" \x82\xd3\xe4\x93\x02\x1a\x12\x18/v1/native/set/len/{key}\x12Y\n" +
+	"\aSetAddM\x12\x15.cache.SetAddMRequest\x1a\x16.cache.SetAddMResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/v1/native/set/add_m\x12q\n" +
+	"\n" +
+	"SetExistsM\x12\x18.cache.SetExistsMRequest\x1a\x19.cache.SetExistsMResponse\".\x82\xd3\xe4\x93\x02(\x12&/v1/native/set/exists_m/{key}/{member}\x12e\n" +
+	"\aSetDelM\x12\x15.cache.SetDelMRequest\x1a\x16.cache.SetDelMResponse\"+\x82\xd3\xe4\x93\x02%*#/v1/native/set/del_m/{key}/{member}\x12e\n" +
+	"\aSetGetM\x12\x15.cache.SetGetMRequest\x1a\x16.cache.SetGetMResponse\"+\x82\xd3\xe4\x93\x02%\x12#/v1/native/set/get_m/{key}/{member}\x12G\n" +
+	"\x03Set\x12\x13.cache.KvSetRequest\x1a\x14.cache.KvSetResponse\"\x15\x82\xd3\xe4\x93\x02\x0f:\x01*\"\n" +
+	"/v1/kv/set\x12J\n" +
+	"\x03Get\x12\x13.cache.KvGetRequest\x1a\x14.cache.KvGetResponse\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/kv/get/{key}\x12J\n" +
+	"\x03Del\x12\x13.cache.KvDelRequest\x1a\x14.cache.KvDelResponse\"\x18\x82\xd3\xe4\x93\x02\x12*\x10/v1/kv/del/{key}\x12V\n" +
+	"\x06Exists\x12\x16.cache.KvExistsRequest\x1a\x17.cache.KvExistsResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/v1/kv/exists/{key}\x12R\n" +
+	"\x05HMSet\x12\x16.cache.HashSetMRequest\x1a\x17.cache.HashSetMResponse\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/v1/hash/mset\x12]\n" +
+	"\x05HMGet\x12\x16.cache.HashGetMRequest\x1a\x17.cache.HashGetMResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/v1/hash/mget/{key}/{field}\x12Q\n" +
+	"\x04HLen\x12\x15.cache.HashLenRequest\x1a\x16.cache.HashLenResponse\"\x1a\x82\xd3\xe4\x93\x02\x14\x12\x12/v1/hash/len/{key}\x12W\n" +
+	"\aHGetAll\x12\x15.cache.HashGetRequest\x1a\x16.cache.HashGetResponse\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/v1/hash/getall/{key}\x12Q\n" +
+	"\x04HDel\x12\x15.cache.HashDelRequest\x1a\x16.cache.HashDelResponse\"\x1a\x82\xd3\xe4\x93\x02\x14*\x12/v1/hash/del/{key}\x12g\n" +
+	"\aHExists\x12\x19.cache.HashExistsMRequest\x1a\x1a.cache.HashExistsMResponse\"%\x82\xd3\xe4\x93\x02\x1f\x12\x1d/v1/hash/exists/{key}/{field}\x12M\n" +
+	"\x04SAdd\x12\x15.cache.SetAddMRequest\x1a\x16.cache.SetAddMResponse\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/v1/set/add\x12i\n" +
+	"\tSIsMember\x12\x18.cache.SetExistsMRequest\x1a\x19.cache.SetExistsMResponse\"'\x82\xd3\xe4\x93\x02!\x12\x1f/v1/set/ismember/{key}/{member}\x12P\n" +
+	"\x05SCard\x12\x14.cache.SetLenRequest\x1a\x15.cache.SetLenResponse\"\x1a\x82\xd3\xe4\x93\x02\x14\x12\x12/v1/set/card/{key}\x12V\n" +
+	"\bSMembers\x12\x14.cache.SetGetRequest\x1a\x15.cache.SetGetResponse\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/v1/set/members/{key}\x12Y\n" +
+	"\x04SRem\x12\x15.cache.SetDelMRequest\x1a\x16.cache.SetDelMResponse\"\"\x82\xd3\xe4\x93\x02\x1c*\x1a/v1/set/rem/{key}/{member}\x12L\n" +
 	"\x05LPush\x12\x13.cache.LPushRequest\x1a\x14.cache.LPushResponse\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/v1/list/push\x12S\n" +
 	"\x06LRange\x12\x14.cache.LRangeRequest\x1a\x15.cache.LRangeResponse\"\x1c\x82\xd3\xe4\x93\x02\x16\x12\x14/v1/list/range/{key}\x12H\n" +
 	"\x04LRem\x12\x12.cache.LRemRequest\x1a\x13.cache.LRemResponse\"\x17\x82\xd3\xe4\x93\x02\x11:\x01*\"\f/v1/list/rem\x12I\n" +
@@ -2782,125 +3307,173 @@ func file_cache_proto_rawDescGZIP() []byte {
 	return file_cache_proto_rawDescData
 }
 
-var file_cache_proto_msgTypes = make([]protoimpl.MessageInfo, 55)
+var file_cache_proto_msgTypes = make([]protoimpl.MessageInfo, 64)
 var file_cache_proto_goTypes = []any{
-	(*SetRequest)(nil),        // 0: cache.SetRequest
-	(*SetResponse)(nil),       // 1: cache.SetResponse
-	(*GetRequest)(nil),        // 2: cache.GetRequest
-	(*GetResponse)(nil),       // 3: cache.GetResponse
-	(*DelRequest)(nil),        // 4: cache.DelRequest
-	(*DelResponse)(nil),       // 5: cache.DelResponse
-	(*ExistsRequest)(nil),     // 6: cache.ExistsRequest
-	(*ExistsResponse)(nil),    // 7: cache.ExistsResponse
-	(*HSetRequest)(nil),       // 8: cache.HSetRequest
-	(*HSetResponse)(nil),      // 9: cache.HSetResponse
-	(*HGetRequest)(nil),       // 10: cache.HGetRequest
-	(*HGetResponse)(nil),      // 11: cache.HGetResponse
-	(*HDelRequest)(nil),       // 12: cache.HDelRequest
-	(*HDelResponse)(nil),      // 13: cache.HDelResponse
-	(*HMSetRequest)(nil),      // 14: cache.HMSetRequest
-	(*HMSetResponse)(nil),     // 15: cache.HMSetResponse
-	(*HMGetRequest)(nil),      // 16: cache.HMGetRequest
-	(*HMGetResponse)(nil),     // 17: cache.HMGetResponse
-	(*HLenRequest)(nil),       // 18: cache.HLenRequest
-	(*HLenResponse)(nil),      // 19: cache.HLenResponse
-	(*HGetAllRequest)(nil),    // 20: cache.HGetAllRequest
-	(*HGetAllResponse)(nil),   // 21: cache.HGetAllResponse
-	(*HExistsRequest)(nil),    // 22: cache.HExistsRequest
-	(*HExistsResponse)(nil),   // 23: cache.HExistsResponse
-	(*SAddRequest)(nil),       // 24: cache.SAddRequest
-	(*SAddResponse)(nil),      // 25: cache.SAddResponse
-	(*SMembersRequest)(nil),   // 26: cache.SMembersRequest
-	(*SMembersResponse)(nil),  // 27: cache.SMembersResponse
-	(*SRemRequest)(nil),       // 28: cache.SRemRequest
-	(*SRemResponse)(nil),      // 29: cache.SRemResponse
-	(*SIsMemberRequest)(nil),  // 30: cache.SIsMemberRequest
-	(*SIsMemberResponse)(nil), // 31: cache.SIsMemberResponse
-	(*SCardRequest)(nil),      // 32: cache.SCardRequest
-	(*SCardResponse)(nil),     // 33: cache.SCardResponse
-	(*LPushRequest)(nil),      // 34: cache.LPushRequest
-	(*LPushResponse)(nil),     // 35: cache.LPushResponse
-	(*LRangeRequest)(nil),     // 36: cache.LRangeRequest
-	(*LRangeResponse)(nil),    // 37: cache.LRangeResponse
-	(*LRemRequest)(nil),       // 38: cache.LRemRequest
-	(*LRemResponse)(nil),      // 39: cache.LRemResponse
-	(*LPopRequest)(nil),       // 40: cache.LPopRequest
-	(*LPopResponse)(nil),      // 41: cache.LPopResponse
-	(*RPushRequest)(nil),      // 42: cache.RPushRequest
-	(*RPushResponse)(nil),     // 43: cache.RPushResponse
-	(*RPopRequest)(nil),       // 44: cache.RPopRequest
-	(*RPopResponse)(nil),      // 45: cache.RPopResponse
-	(*LLenRequest)(nil),       // 46: cache.LLenRequest
-	(*LLenResponse)(nil),      // 47: cache.LLenResponse
-	(*LIndexRequest)(nil),     // 48: cache.LIndexRequest
-	(*LIndexResponse)(nil),    // 49: cache.LIndexResponse
-	(*LSetRequest)(nil),       // 50: cache.LSetRequest
-	(*LSetResponse)(nil),      // 51: cache.LSetResponse
-	nil,                       // 52: cache.HMSetRequest.FieldsEntry
-	nil,                       // 53: cache.HMGetResponse.ValuesEntry
-	nil,                       // 54: cache.HGetAllResponse.FieldsEntry
+	(*KvSetRequest)(nil),        // 0: cache.KvSetRequest
+	(*KvSetResponse)(nil),       // 1: cache.KvSetResponse
+	(*KvGetRequest)(nil),        // 2: cache.KvGetRequest
+	(*KvGetResponse)(nil),       // 3: cache.KvGetResponse
+	(*KvDelRequest)(nil),        // 4: cache.KvDelRequest
+	(*KvDelResponse)(nil),       // 5: cache.KvDelResponse
+	(*KvExistsRequest)(nil),     // 6: cache.KvExistsRequest
+	(*KvExistsResponse)(nil),    // 7: cache.KvExistsResponse
+	(*HashSetRequest)(nil),      // 8: cache.HashSetRequest
+	(*HashSetResponse)(nil),     // 9: cache.HashSetResponse
+	(*HashGetRequest)(nil),      // 10: cache.HashGetRequest
+	(*HashGetResponse)(nil),     // 11: cache.HashGetResponse
+	(*HashDelRequest)(nil),      // 12: cache.HashDelRequest
+	(*HashDelResponse)(nil),     // 13: cache.HashDelResponse
+	(*HashExistsRequest)(nil),   // 14: cache.HashExistsRequest
+	(*HashExistsResponse)(nil),  // 15: cache.HashExistsResponse
+	(*HashLenRequest)(nil),      // 16: cache.HashLenRequest
+	(*HashLenResponse)(nil),     // 17: cache.HashLenResponse
+	(*HashSetMRequest)(nil),     // 18: cache.HashSetMRequest
+	(*HashSetMResponse)(nil),    // 19: cache.HashSetMResponse
+	(*HashGetMRequest)(nil),     // 20: cache.HashGetMRequest
+	(*HashGetMResponse)(nil),    // 21: cache.HashGetMResponse
+	(*HashDelMRequest)(nil),     // 22: cache.HashDelMRequest
+	(*HashDelMResponse)(nil),    // 23: cache.HashDelMResponse
+	(*HashExistsMRequest)(nil),  // 24: cache.HashExistsMRequest
+	(*HashExistsMResponse)(nil), // 25: cache.HashExistsMResponse
+	(*SetSetRequest)(nil),       // 26: cache.SetSetRequest
+	(*SetSetResponse)(nil),      // 27: cache.SetSetResponse
+	(*SetGetRequest)(nil),       // 28: cache.SetGetRequest
+	(*SetGetResponse)(nil),      // 29: cache.SetGetResponse
+	(*SetDelRequest)(nil),       // 30: cache.SetDelRequest
+	(*SetDelResponse)(nil),      // 31: cache.SetDelResponse
+	(*SetExistsRequest)(nil),    // 32: cache.SetExistsRequest
+	(*SetExistsResponse)(nil),   // 33: cache.SetExistsResponse
+	(*SetLenRequest)(nil),       // 34: cache.SetLenRequest
+	(*SetLenResponse)(nil),      // 35: cache.SetLenResponse
+	(*SetAddMRequest)(nil),      // 36: cache.SetAddMRequest
+	(*SetAddMResponse)(nil),     // 37: cache.SetAddMResponse
+	(*SetExistsMRequest)(nil),   // 38: cache.SetExistsMRequest
+	(*SetExistsMResponse)(nil),  // 39: cache.SetExistsMResponse
+	(*SetDelMRequest)(nil),      // 40: cache.SetDelMRequest
+	(*SetDelMResponse)(nil),     // 41: cache.SetDelMResponse
+	(*SetGetMRequest)(nil),      // 42: cache.SetGetMRequest
+	(*SetGetMResponse)(nil),     // 43: cache.SetGetMResponse
+	(*LPushRequest)(nil),        // 44: cache.LPushRequest
+	(*LPushResponse)(nil),       // 45: cache.LPushResponse
+	(*LRangeRequest)(nil),       // 46: cache.LRangeRequest
+	(*LRangeResponse)(nil),      // 47: cache.LRangeResponse
+	(*LRemRequest)(nil),         // 48: cache.LRemRequest
+	(*LRemResponse)(nil),        // 49: cache.LRemResponse
+	(*LPopRequest)(nil),         // 50: cache.LPopRequest
+	(*LPopResponse)(nil),        // 51: cache.LPopResponse
+	(*RPushRequest)(nil),        // 52: cache.RPushRequest
+	(*RPushResponse)(nil),       // 53: cache.RPushResponse
+	(*RPopRequest)(nil),         // 54: cache.RPopRequest
+	(*RPopResponse)(nil),        // 55: cache.RPopResponse
+	(*LLenRequest)(nil),         // 56: cache.LLenRequest
+	(*LLenResponse)(nil),        // 57: cache.LLenResponse
+	(*LIndexRequest)(nil),       // 58: cache.LIndexRequest
+	(*LIndexResponse)(nil),      // 59: cache.LIndexResponse
+	(*LSetRequest)(nil),         // 60: cache.LSetRequest
+	(*LSetResponse)(nil),        // 61: cache.LSetResponse
+	nil,                         // 62: cache.HashSetRequest.FieldsEntry
+	nil,                         // 63: cache.HashGetResponse.FieldsEntry
 }
 var file_cache_proto_depIdxs = []int32{
-	52, // 0: cache.HMSetRequest.fields:type_name -> cache.HMSetRequest.FieldsEntry
-	53, // 1: cache.HMGetResponse.values:type_name -> cache.HMGetResponse.ValuesEntry
-	54, // 2: cache.HGetAllResponse.fields:type_name -> cache.HGetAllResponse.FieldsEntry
-	0,  // 3: cache.CacheService.Set:input_type -> cache.SetRequest
-	2,  // 4: cache.CacheService.Get:input_type -> cache.GetRequest
-	4,  // 5: cache.CacheService.Del:input_type -> cache.DelRequest
-	6,  // 6: cache.CacheService.Exists:input_type -> cache.ExistsRequest
-	8,  // 7: cache.CacheService.HSet:input_type -> cache.HSetRequest
-	10, // 8: cache.CacheService.HGet:input_type -> cache.HGetRequest
-	12, // 9: cache.CacheService.HDel:input_type -> cache.HDelRequest
-	14, // 10: cache.CacheService.HMSet:input_type -> cache.HMSetRequest
-	16, // 11: cache.CacheService.HMGet:input_type -> cache.HMGetRequest
-	18, // 12: cache.CacheService.HLen:input_type -> cache.HLenRequest
-	20, // 13: cache.CacheService.HGetAll:input_type -> cache.HGetAllRequest
-	22, // 14: cache.CacheService.HExists:input_type -> cache.HExistsRequest
-	24, // 15: cache.CacheService.SAdd:input_type -> cache.SAddRequest
-	26, // 16: cache.CacheService.SMembers:input_type -> cache.SMembersRequest
-	28, // 17: cache.CacheService.SRem:input_type -> cache.SRemRequest
-	30, // 18: cache.CacheService.SIsMember:input_type -> cache.SIsMemberRequest
-	32, // 19: cache.CacheService.SCard:input_type -> cache.SCardRequest
-	34, // 20: cache.CacheService.LPush:input_type -> cache.LPushRequest
-	36, // 21: cache.CacheService.LRange:input_type -> cache.LRangeRequest
-	38, // 22: cache.CacheService.LRem:input_type -> cache.LRemRequest
-	40, // 23: cache.CacheService.LPop:input_type -> cache.LPopRequest
-	42, // 24: cache.CacheService.RPush:input_type -> cache.RPushRequest
-	44, // 25: cache.CacheService.RPop:input_type -> cache.RPopRequest
-	46, // 26: cache.CacheService.LLen:input_type -> cache.LLenRequest
-	48, // 27: cache.CacheService.LIndex:input_type -> cache.LIndexRequest
-	50, // 28: cache.CacheService.LSet:input_type -> cache.LSetRequest
-	1,  // 29: cache.CacheService.Set:output_type -> cache.SetResponse
-	3,  // 30: cache.CacheService.Get:output_type -> cache.GetResponse
-	5,  // 31: cache.CacheService.Del:output_type -> cache.DelResponse
-	7,  // 32: cache.CacheService.Exists:output_type -> cache.ExistsResponse
-	9,  // 33: cache.CacheService.HSet:output_type -> cache.HSetResponse
-	11, // 34: cache.CacheService.HGet:output_type -> cache.HGetResponse
-	13, // 35: cache.CacheService.HDel:output_type -> cache.HDelResponse
-	15, // 36: cache.CacheService.HMSet:output_type -> cache.HMSetResponse
-	17, // 37: cache.CacheService.HMGet:output_type -> cache.HMGetResponse
-	19, // 38: cache.CacheService.HLen:output_type -> cache.HLenResponse
-	21, // 39: cache.CacheService.HGetAll:output_type -> cache.HGetAllResponse
-	23, // 40: cache.CacheService.HExists:output_type -> cache.HExistsResponse
-	25, // 41: cache.CacheService.SAdd:output_type -> cache.SAddResponse
-	27, // 42: cache.CacheService.SMembers:output_type -> cache.SMembersResponse
-	29, // 43: cache.CacheService.SRem:output_type -> cache.SRemResponse
-	31, // 44: cache.CacheService.SIsMember:output_type -> cache.SIsMemberResponse
-	33, // 45: cache.CacheService.SCard:output_type -> cache.SCardResponse
-	35, // 46: cache.CacheService.LPush:output_type -> cache.LPushResponse
-	37, // 47: cache.CacheService.LRange:output_type -> cache.LRangeResponse
-	39, // 48: cache.CacheService.LRem:output_type -> cache.LRemResponse
-	41, // 49: cache.CacheService.LPop:output_type -> cache.LPopResponse
-	43, // 50: cache.CacheService.RPush:output_type -> cache.RPushResponse
-	45, // 51: cache.CacheService.RPop:output_type -> cache.RPopResponse
-	47, // 52: cache.CacheService.LLen:output_type -> cache.LLenResponse
-	49, // 53: cache.CacheService.LIndex:output_type -> cache.LIndexResponse
-	51, // 54: cache.CacheService.LSet:output_type -> cache.LSetResponse
-	29, // [29:55] is the sub-list for method output_type
-	3,  // [3:29] is the sub-list for method input_type
-	3,  // [3:3] is the sub-list for extension type_name
-	3,  // [3:3] is the sub-list for extension extendee
-	0,  // [0:3] is the sub-list for field type_name
+	62, // 0: cache.HashSetRequest.fields:type_name -> cache.HashSetRequest.FieldsEntry
+	63, // 1: cache.HashGetResponse.fields:type_name -> cache.HashGetResponse.FieldsEntry
+	0,  // 2: cache.CacheService.KvSet:input_type -> cache.KvSetRequest
+	2,  // 3: cache.CacheService.KvGet:input_type -> cache.KvGetRequest
+	4,  // 4: cache.CacheService.KvDel:input_type -> cache.KvDelRequest
+	6,  // 5: cache.CacheService.KvExists:input_type -> cache.KvExistsRequest
+	8,  // 6: cache.CacheService.HashSet:input_type -> cache.HashSetRequest
+	10, // 7: cache.CacheService.HashGet:input_type -> cache.HashGetRequest
+	12, // 8: cache.CacheService.HashDel:input_type -> cache.HashDelRequest
+	14, // 9: cache.CacheService.HashExists:input_type -> cache.HashExistsRequest
+	16, // 10: cache.CacheService.HashLen:input_type -> cache.HashLenRequest
+	18, // 11: cache.CacheService.HashSetM:input_type -> cache.HashSetMRequest
+	20, // 12: cache.CacheService.HashGetM:input_type -> cache.HashGetMRequest
+	22, // 13: cache.CacheService.HashDelM:input_type -> cache.HashDelMRequest
+	24, // 14: cache.CacheService.HashExistsM:input_type -> cache.HashExistsMRequest
+	26, // 15: cache.CacheService.SetSet:input_type -> cache.SetSetRequest
+	28, // 16: cache.CacheService.SetGet:input_type -> cache.SetGetRequest
+	30, // 17: cache.CacheService.SetDel:input_type -> cache.SetDelRequest
+	32, // 18: cache.CacheService.SetExists:input_type -> cache.SetExistsRequest
+	34, // 19: cache.CacheService.SetLen:input_type -> cache.SetLenRequest
+	36, // 20: cache.CacheService.SetAddM:input_type -> cache.SetAddMRequest
+	38, // 21: cache.CacheService.SetExistsM:input_type -> cache.SetExistsMRequest
+	40, // 22: cache.CacheService.SetDelM:input_type -> cache.SetDelMRequest
+	42, // 23: cache.CacheService.SetGetM:input_type -> cache.SetGetMRequest
+	0,  // 24: cache.CacheService.Set:input_type -> cache.KvSetRequest
+	2,  // 25: cache.CacheService.Get:input_type -> cache.KvGetRequest
+	4,  // 26: cache.CacheService.Del:input_type -> cache.KvDelRequest
+	6,  // 27: cache.CacheService.Exists:input_type -> cache.KvExistsRequest
+	18, // 28: cache.CacheService.HMSet:input_type -> cache.HashSetMRequest
+	20, // 29: cache.CacheService.HMGet:input_type -> cache.HashGetMRequest
+	16, // 30: cache.CacheService.HLen:input_type -> cache.HashLenRequest
+	10, // 31: cache.CacheService.HGetAll:input_type -> cache.HashGetRequest
+	12, // 32: cache.CacheService.HDel:input_type -> cache.HashDelRequest
+	24, // 33: cache.CacheService.HExists:input_type -> cache.HashExistsMRequest
+	36, // 34: cache.CacheService.SAdd:input_type -> cache.SetAddMRequest
+	38, // 35: cache.CacheService.SIsMember:input_type -> cache.SetExistsMRequest
+	34, // 36: cache.CacheService.SCard:input_type -> cache.SetLenRequest
+	28, // 37: cache.CacheService.SMembers:input_type -> cache.SetGetRequest
+	40, // 38: cache.CacheService.SRem:input_type -> cache.SetDelMRequest
+	44, // 39: cache.CacheService.LPush:input_type -> cache.LPushRequest
+	46, // 40: cache.CacheService.LRange:input_type -> cache.LRangeRequest
+	48, // 41: cache.CacheService.LRem:input_type -> cache.LRemRequest
+	50, // 42: cache.CacheService.LPop:input_type -> cache.LPopRequest
+	52, // 43: cache.CacheService.RPush:input_type -> cache.RPushRequest
+	54, // 44: cache.CacheService.RPop:input_type -> cache.RPopRequest
+	56, // 45: cache.CacheService.LLen:input_type -> cache.LLenRequest
+	58, // 46: cache.CacheService.LIndex:input_type -> cache.LIndexRequest
+	60, // 47: cache.CacheService.LSet:input_type -> cache.LSetRequest
+	1,  // 48: cache.CacheService.KvSet:output_type -> cache.KvSetResponse
+	3,  // 49: cache.CacheService.KvGet:output_type -> cache.KvGetResponse
+	5,  // 50: cache.CacheService.KvDel:output_type -> cache.KvDelResponse
+	7,  // 51: cache.CacheService.KvExists:output_type -> cache.KvExistsResponse
+	9,  // 52: cache.CacheService.HashSet:output_type -> cache.HashSetResponse
+	11, // 53: cache.CacheService.HashGet:output_type -> cache.HashGetResponse
+	13, // 54: cache.CacheService.HashDel:output_type -> cache.HashDelResponse
+	15, // 55: cache.CacheService.HashExists:output_type -> cache.HashExistsResponse
+	17, // 56: cache.CacheService.HashLen:output_type -> cache.HashLenResponse
+	19, // 57: cache.CacheService.HashSetM:output_type -> cache.HashSetMResponse
+	21, // 58: cache.CacheService.HashGetM:output_type -> cache.HashGetMResponse
+	23, // 59: cache.CacheService.HashDelM:output_type -> cache.HashDelMResponse
+	25, // 60: cache.CacheService.HashExistsM:output_type -> cache.HashExistsMResponse
+	27, // 61: cache.CacheService.SetSet:output_type -> cache.SetSetResponse
+	29, // 62: cache.CacheService.SetGet:output_type -> cache.SetGetResponse
+	31, // 63: cache.CacheService.SetDel:output_type -> cache.SetDelResponse
+	33, // 64: cache.CacheService.SetExists:output_type -> cache.SetExistsResponse
+	35, // 65: cache.CacheService.SetLen:output_type -> cache.SetLenResponse
+	37, // 66: cache.CacheService.SetAddM:output_type -> cache.SetAddMResponse
+	39, // 67: cache.CacheService.SetExistsM:output_type -> cache.SetExistsMResponse
+	41, // 68: cache.CacheService.SetDelM:output_type -> cache.SetDelMResponse
+	43, // 69: cache.CacheService.SetGetM:output_type -> cache.SetGetMResponse
+	1,  // 70: cache.CacheService.Set:output_type -> cache.KvSetResponse
+	3,  // 71: cache.CacheService.Get:output_type -> cache.KvGetResponse
+	5,  // 72: cache.CacheService.Del:output_type -> cache.KvDelResponse
+	7,  // 73: cache.CacheService.Exists:output_type -> cache.KvExistsResponse
+	19, // 74: cache.CacheService.HMSet:output_type -> cache.HashSetMResponse
+	21, // 75: cache.CacheService.HMGet:output_type -> cache.HashGetMResponse
+	17, // 76: cache.CacheService.HLen:output_type -> cache.HashLenResponse
+	11, // 77: cache.CacheService.HGetAll:output_type -> cache.HashGetResponse
+	13, // 78: cache.CacheService.HDel:output_type -> cache.HashDelResponse
+	25, // 79: cache.CacheService.HExists:output_type -> cache.HashExistsMResponse
+	37, // 80: cache.CacheService.SAdd:output_type -> cache.SetAddMResponse
+	39, // 81: cache.CacheService.SIsMember:output_type -> cache.SetExistsMResponse
+	35, // 82: cache.CacheService.SCard:output_type -> cache.SetLenResponse
+	29, // 83: cache.CacheService.SMembers:output_type -> cache.SetGetResponse
+	41, // 84: cache.CacheService.SRem:output_type -> cache.SetDelMResponse
+	45, // 85: cache.CacheService.LPush:output_type -> cache.LPushResponse
+	47, // 86: cache.CacheService.LRange:output_type -> cache.LRangeResponse
+	49, // 87: cache.CacheService.LRem:output_type -> cache.LRemResponse
+	51, // 88: cache.CacheService.LPop:output_type -> cache.LPopResponse
+	53, // 89: cache.CacheService.RPush:output_type -> cache.RPushResponse
+	55, // 90: cache.CacheService.RPop:output_type -> cache.RPopResponse
+	57, // 91: cache.CacheService.LLen:output_type -> cache.LLenResponse
+	59, // 92: cache.CacheService.LIndex:output_type -> cache.LIndexResponse
+	61, // 93: cache.CacheService.LSet:output_type -> cache.LSetResponse
+	48, // [48:94] is the sub-list for method output_type
+	2,  // [2:48] is the sub-list for method input_type
+	2,  // [2:2] is the sub-list for extension type_name
+	2,  // [2:2] is the sub-list for extension extendee
+	0,  // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_cache_proto_init() }
@@ -2914,7 +3487,7 @@ func file_cache_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_cache_proto_rawDesc), len(file_cache_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   55,
+			NumMessages:   64,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
