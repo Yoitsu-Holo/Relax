@@ -30,7 +30,7 @@ func TestConcurrentKVOperations(t *testing.T) {
 				value := fmt.Sprintf("value-%d-%d", goroutineID, i)
 
 				ctx := testutil.TestContext()
-				_, err := tc.GetClient().Set(ctx, &pb.SetRequest{
+				_, err := tc.GetClient().Set(ctx, &pb.KvSetRequest{
 					Key:   key,
 					Value: value,
 				})
@@ -63,7 +63,7 @@ func TestConcurrentKVOperations(t *testing.T) {
 			expectedValue := fmt.Sprintf("value-%d-%d", g, i)
 
 			ctx := testutil.TestContext()
-			getResp, err := tc.GetClient().Get(ctx, &pb.GetRequest{Key: key})
+			getResp, err := tc.GetClient().Get(ctx, &pb.KvGetRequest{Key: key})
 			if err != nil {
 				t.Errorf("Verification Get(%v) error: %v", key, err)
 				continue
@@ -102,7 +102,7 @@ func TestConcurrentHashOperations(t *testing.T) {
 				key := fmt.Sprintf("hash-%d-%d", goroutineID, i)
 
 				ctx := testutil.TestContext()
-				_, err := tc.GetClient().HMSet(ctx, &pb.HMSetRequest{
+				_, err := tc.GetClient().HashSet(ctx, &pb.HashSetRequest{
 					Key: key,
 					Fields: map[string]string{
 						"field1": "value1",
@@ -138,7 +138,7 @@ func TestConcurrentHashOperations(t *testing.T) {
 			key := fmt.Sprintf("hash-%d-%d", g, i)
 
 			ctx := testutil.TestContext()
-			lenResp, err := tc.GetClient().HLen(ctx, &pb.HLenRequest{Key: key})
+			lenResp, err := tc.GetClient().HLen(ctx, &pb.HashLenRequest{Key: key})
 			if err != nil {
 				t.Errorf("Verification HLen(%v) error: %v", key, err)
 				continue
@@ -170,7 +170,7 @@ func TestConcurrentMixedOperations(t *testing.T) {
 		for i := 0; i < numOps; i++ {
 			key := fmt.Sprintf("kv-key-%d", i)
 			ctx := testutil.TestContext()
-			_, err := tc.GetClient().Set(ctx, &pb.SetRequest{
+			_, err := tc.GetClient().Set(ctx, &pb.KvSetRequest{
 				Key:   key,
 				Value: "value",
 			})
@@ -187,7 +187,7 @@ func TestConcurrentMixedOperations(t *testing.T) {
 		for i := 0; i < numOps; i++ {
 			key := fmt.Sprintf("hash-key-%d", i)
 			ctx := testutil.TestContext()
-			_, err := tc.GetClient().HSet(ctx, &pb.HSetRequest{
+			_, err := tc.GetClient().HMSet(ctx, &pb.HashSetMRequest{
 				Key:   key,
 				Field: "field",
 				Value: "value",
@@ -205,7 +205,7 @@ func TestConcurrentMixedOperations(t *testing.T) {
 		for i := 0; i < numOps; i++ {
 			key := fmt.Sprintf("set-key-%d", i)
 			ctx := testutil.TestContext()
-			_, err := tc.GetClient().SAdd(ctx, &pb.SAddRequest{
+			_, err := tc.GetClient().SAdd(ctx, &pb.SetAddMRequest{
 				Key:    key,
 				Member: "member",
 			})
@@ -270,7 +270,7 @@ func TestConcurrentSameKey(t *testing.T) {
 				value := fmt.Sprintf("value-%d-%d", goroutineID, i)
 
 				ctx := testutil.TestContext()
-				_, err := tc.GetClient().Set(ctx, &pb.SetRequest{
+				_, err := tc.GetClient().Set(ctx, &pb.KvSetRequest{
 					Key:   key,
 					Value: value,
 				})
@@ -280,7 +280,7 @@ func TestConcurrentSameKey(t *testing.T) {
 				}
 
 				// Also read the key
-				_, err = tc.GetClient().Get(ctx, &pb.GetRequest{Key: key})
+				_, err = tc.GetClient().Get(ctx, &pb.KvGetRequest{Key: key})
 				if err != nil {
 					errors <- fmt.Errorf("goroutine %d, op %d: Get error: %v", goroutineID, i, err)
 					return
@@ -305,7 +305,7 @@ func TestConcurrentSameKey(t *testing.T) {
 
 	// Verify the key still exists and has a valid value
 	ctx := testutil.TestContext()
-	getResp, err := tc.GetClient().Get(ctx, &pb.GetRequest{Key: key})
+	getResp, err := tc.GetClient().Get(ctx, &pb.KvGetRequest{Key: key})
 	if err != nil {
 		t.Fatalf("Final Get error: %v", err)
 	}
@@ -335,7 +335,7 @@ func TestConcurrentReadWrite(t *testing.T) {
 	ctx := testutil.TestContext()
 	for i := 0; i < numOpsPerGoroutine; i++ {
 		key := fmt.Sprintf("%s-%d", keyPrefix, i)
-		_, err := tc.GetClient().Set(ctx, &pb.SetRequest{
+		_, err := tc.GetClient().Set(ctx, &pb.KvSetRequest{
 			Key:   key,
 			Value: fmt.Sprintf("initial-value-%d", i),
 		})
@@ -354,7 +354,7 @@ func TestConcurrentReadWrite(t *testing.T) {
 				value := fmt.Sprintf("writer-%d-value-%d", writerID, i)
 
 				ctx := testutil.TestContext()
-				_, err := tc.GetClient().Set(ctx, &pb.SetRequest{
+				_, err := tc.GetClient().Set(ctx, &pb.KvSetRequest{
 					Key:   key,
 					Value: value,
 				})
@@ -375,7 +375,7 @@ func TestConcurrentReadWrite(t *testing.T) {
 				key := fmt.Sprintf("%s-%d", keyPrefix, i%numOpsPerGoroutine)
 
 				ctx := testutil.TestContext()
-				getResp, err := tc.GetClient().Get(ctx, &pb.GetRequest{Key: key})
+				getResp, err := tc.GetClient().Get(ctx, &pb.KvGetRequest{Key: key})
 				if err != nil {
 					errors <- fmt.Errorf("reader %d, op %d: Get error: %v", readerID, i, err)
 					return

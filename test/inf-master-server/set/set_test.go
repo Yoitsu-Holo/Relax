@@ -19,7 +19,7 @@ func TestSetBasicSAddSMembers(t *testing.T) {
 	// Add members
 	members := []string{"member1", "member2", "member3"}
 	for _, member := range members {
-		addResp, err := tc.GetClient().SAdd(ctx, &pb.SAddRequest{
+		addResp, err := tc.GetClient().SAdd(ctx, &pb.SetAddMRequest{
 			Key:    key,
 			Member: member,
 		})
@@ -33,7 +33,7 @@ func TestSetBasicSAddSMembers(t *testing.T) {
 	}
 
 	// Get members
-	membersResp, err := tc.GetClient().SMembers(ctx, &pb.SMembersRequest{
+	membersResp, err := tc.GetClient().SMembers(ctx, &pb.SetGetRequest{
 		Key: key,
 	})
 	if err != nil {
@@ -62,7 +62,7 @@ func TestSetSAddDuplicate(t *testing.T) {
 	member := "member1"
 
 	// Add member first time
-	addResp, err := tc.GetClient().SAdd(ctx, &pb.SAddRequest{
+	addResp, err := tc.GetClient().SAdd(ctx, &pb.SetAddMRequest{
 		Key:    key,
 		Member: member,
 	})
@@ -71,7 +71,7 @@ func TestSetSAddDuplicate(t *testing.T) {
 	}
 
 	// Add same member again
-	addResp, err = tc.GetClient().SAdd(ctx, &pb.SAddRequest{
+	addResp, err = tc.GetClient().SAdd(ctx, &pb.SetAddMRequest{
 		Key:    key,
 		Member: member,
 	})
@@ -83,7 +83,7 @@ func TestSetSAddDuplicate(t *testing.T) {
 	}
 
 	// Verify only one member exists
-	membersResp, err := tc.GetClient().SMembers(ctx, &pb.SMembersRequest{Key: key})
+	membersResp, err := tc.GetClient().SMembers(ctx, &pb.SetGetRequest{Key: key})
 	if err != nil {
 		t.Errorf("SMembers() error = %v", err)
 	}
@@ -103,7 +103,7 @@ func TestSetSRem(t *testing.T) {
 	// Add members
 	members := []string{"member1", "member2", "member3"}
 	for _, member := range members {
-		_, err := tc.GetClient().SAdd(ctx, &pb.SAddRequest{
+		_, err := tc.GetClient().SAdd(ctx, &pb.SetAddMRequest{
 			Key:    key,
 			Member: member,
 		})
@@ -113,7 +113,7 @@ func TestSetSRem(t *testing.T) {
 	}
 
 	// Remove a member
-	remResp, err := tc.GetClient().SRem(ctx, &pb.SRemRequest{
+	remResp, err := tc.GetClient().SRem(ctx, &pb.SetDelMRequest{
 		Key:    key,
 		Member: "member2",
 	})
@@ -125,7 +125,7 @@ func TestSetSRem(t *testing.T) {
 	}
 
 	// Verify member is removed
-	membersResp, err := tc.GetClient().SMembers(ctx, &pb.SMembersRequest{Key: key})
+	membersResp, err := tc.GetClient().SMembers(ctx, &pb.SetGetRequest{Key: key})
 	if err != nil {
 		t.Errorf("SMembers() after SRem error = %v", err)
 	}
@@ -141,7 +141,7 @@ func TestSetSRem(t *testing.T) {
 	}
 
 	// Remove non-existent member
-	remResp, err = tc.GetClient().SRem(ctx, &pb.SRemRequest{
+	remResp, err = tc.GetClient().SRem(ctx, &pb.SetDelMRequest{
 		Key:    key,
 		Member: "non-existent",
 	})
@@ -162,7 +162,7 @@ func TestSetSIsMember(t *testing.T) {
 	key := "set-key"
 
 	// Check non-existent set
-	isMemberResp, err := tc.GetClient().SIsMember(ctx, &pb.SIsMemberRequest{
+	isMemberResp, err := tc.GetClient().SIsMember(ctx, &pb.SetExistsMRequest{
 		Key:    key,
 		Member: "member",
 	})
@@ -174,7 +174,7 @@ func TestSetSIsMember(t *testing.T) {
 	}
 
 	// Add a member
-	_, err = tc.GetClient().SAdd(ctx, &pb.SAddRequest{
+	_, err = tc.GetClient().SAdd(ctx, &pb.SetAddMRequest{
 		Key:    key,
 		Member: "member1",
 	})
@@ -183,7 +183,7 @@ func TestSetSIsMember(t *testing.T) {
 	}
 
 	// Check existing member
-	isMemberResp, err = tc.GetClient().SIsMember(ctx, &pb.SIsMemberRequest{
+	isMemberResp, err = tc.GetClient().SIsMember(ctx, &pb.SetExistsMRequest{
 		Key:    key,
 		Member: "member1",
 	})
@@ -195,7 +195,7 @@ func TestSetSIsMember(t *testing.T) {
 	}
 
 	// Check non-existent member
-	isMemberResp, err = tc.GetClient().SIsMember(ctx, &pb.SIsMemberRequest{
+	isMemberResp, err = tc.GetClient().SIsMember(ctx, &pb.SetExistsMRequest{
 		Key:    key,
 		Member: "non-existent",
 	})
@@ -216,18 +216,18 @@ func TestSetSCard(t *testing.T) {
 	key := "set-key"
 
 	// Check cardinality of non-existent set
-	cardResp, err := tc.GetClient().SCard(ctx, &pb.SCardRequest{Key: key})
+	cardResp, err := tc.GetClient().SCard(ctx, &pb.SetLenRequest{Key: key})
 	if err != nil {
 		t.Errorf("SCard() non-existent set error = %v", err)
 	}
-	if cardResp.Cardinality != 0 {
-		t.Errorf("SCard() non-existent set = %v, want 0", cardResp.Cardinality)
+	if cardResp.Length != 0 {
+		t.Errorf("SCard() non-existent set = %v, want 0", cardResp.Length)
 	}
 
 	// Add members one by one
 	for i := 1; i <= 5; i++ {
 		member := "member" + string(rune('0'+i))
-		_, err := tc.GetClient().SAdd(ctx, &pb.SAddRequest{
+		_, err := tc.GetClient().SAdd(ctx, &pb.SetAddMRequest{
 			Key:    key,
 			Member: member,
 		})
@@ -235,12 +235,12 @@ func TestSetSCard(t *testing.T) {
 			t.Fatalf("SAdd() iteration %v error = %v", i, err)
 		}
 
-		cardResp, err := tc.GetClient().SCard(ctx, &pb.SCardRequest{Key: key})
+		cardResp, err := tc.GetClient().SCard(ctx, &pb.SetLenRequest{Key: key})
 		if err != nil {
 			t.Errorf("SCard() iteration %v error = %v", i, err)
 		}
-		if cardResp.Cardinality != int32(i) {
-			t.Errorf("SCard() iteration %v = %v, want %v", i, cardResp.Cardinality, i)
+		if cardResp.Length != int32(i) {
+			t.Errorf("SCard() iteration %v = %v, want %v", i, cardResp.Length, i)
 		}
 	}
 }
@@ -260,7 +260,7 @@ func TestSetMultipleSets(t *testing.T) {
 		// Add members to each set
 		for i := 1; i <= 3; i++ {
 			member := "member" + string(rune('0'+i))
-			_, err := tc.GetClient().SAdd(ctx, &pb.SAddRequest{
+			_, err := tc.GetClient().SAdd(ctx, &pb.SetAddMRequest{
 				Key:    key,
 				Member: member,
 			})
@@ -281,12 +281,12 @@ func TestSetMultipleSets(t *testing.T) {
 
 	// Verify all sets
 	for _, key := range setKeys {
-		cardResp, err := tc.GetClient().SCard(ctx, &pb.SCardRequest{Key: key})
+		cardResp, err := tc.GetClient().SCard(ctx, &pb.SetLenRequest{Key: key})
 		if err != nil {
 			t.Errorf("SCard(%v) error = %v", key, err)
 		}
-		if cardResp.Cardinality != 3 {
-			t.Errorf("SCard(%v) = %v, want 3", key, cardResp.Cardinality)
+		if cardResp.Length != 3 {
+			t.Errorf("SCard(%v) = %v, want 3", key, cardResp.Length)
 		}
 	}
 }

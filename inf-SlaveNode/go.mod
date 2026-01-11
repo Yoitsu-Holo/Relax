@@ -2,7 +2,7 @@ module github.com/yoitsuholo/relax/inf-SlaveNode
 
 go 1.25.5
 
-replace github.com/yoitsuholo/relax/proto => ../../proto
+replace github.com/yoitsuholo/relax/proto => ../proto
 
 require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.4

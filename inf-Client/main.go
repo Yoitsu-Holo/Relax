@@ -51,7 +51,7 @@ func testKVOperations(ctx context.Context, client pb.CacheServiceClient) {
 	fmt.Println("--- Testing KV Operations ---")
 
 	// Set
-	setResp, err := client.Set(ctx, &pb.SetRequest{
+	setResp, err := client.Set(ctx, &pb.KvSetRequest{
 		Key:   "name",
 		Value: "Alice",
 	})
@@ -61,21 +61,21 @@ func testKVOperations(ctx context.Context, client pb.CacheServiceClient) {
 	fmt.Printf("Set name=Alice: success=%v\n", setResp.Success)
 
 	// Get
-	getResp, err := client.Get(ctx, &pb.GetRequest{Key: "name"})
+	getResp, err := client.Get(ctx, &pb.KvGetRequest{Key: "name"})
 	if err != nil {
 		log.Fatalf("Get failed: %v", err)
 	}
 	fmt.Printf("Get name: value=%s, exists=%v\n", getResp.Value, getResp.Exists)
 
 	// Del
-	delResp, err := client.Del(ctx, &pb.DelRequest{Key: "name"})
+	delResp, err := client.Del(ctx, &pb.KvDelRequest{Key: "name"})
 	if err != nil {
 		log.Fatalf("Del failed: %v", err)
 	}
 	fmt.Printf("Del name: success=%v, deleted=%d\n", delResp.Success, delResp.DeletedCount)
 
 	// Get non-existent key
-	getResp2, err := client.Get(ctx, &pb.GetRequest{Key: "name"})
+	getResp2, err := client.Get(ctx, &pb.KvGetRequest{Key: "name"})
 	if err != nil {
 		log.Fatalf("Get failed: %v", err)
 	}
@@ -85,53 +85,52 @@ func testKVOperations(ctx context.Context, client pb.CacheServiceClient) {
 func testHashOperations(ctx context.Context, client pb.CacheServiceClient) {
 	fmt.Println("--- Testing Hash Operations ---")
 
-	// HSet
-	hsetResp, err := client.HSet(ctx, &pb.HSetRequest{
+	// HMSet (set single field)
+	hmsetResp, err := client.HMSet(ctx, &pb.HashSetMRequest{
 		Key:   "user:1",
 		Field: "name",
 		Value: "Bob",
 	})
 	if err != nil {
-		log.Fatalf("HSet failed: %v", err)
+		log.Fatalf("HMSet failed: %v", err)
 	}
-	fmt.Printf("HSet user:1 name=Bob: success=%v, created=%v\n", hsetResp.Success, hsetResp.Created)
+	fmt.Printf("HMSet user:1 name=Bob: success=%v, created=%v\n", hmsetResp.Success, hmsetResp.Created)
 
-	hsetResp2, err := client.HSet(ctx, &pb.HSetRequest{
+	hmsetResp2, err := client.HMSet(ctx, &pb.HashSetMRequest{
 		Key:   "user:1",
 		Field: "age",
 		Value: "30",
 	})
 	if err != nil {
-		log.Fatalf("HSet failed: %v", err)
+		log.Fatalf("HMSet failed: %v", err)
 	}
-	fmt.Printf("HSet user:1 age=30: success=%v, created=%v\n", hsetResp2.Success, hsetResp2.Created)
+	fmt.Printf("HMSet user:1 age=30: success=%v, created=%v\n", hmsetResp2.Success, hmsetResp2.Created)
 
-	// HGet
-	hgetResp, err := client.HGet(ctx, &pb.HGetRequest{
+	// HMGet (get single field)
+	hmgetResp, err := client.HMGet(ctx, &pb.HashGetMRequest{
 		Key:   "user:1",
 		Field: "name",
 	})
 	if err != nil {
-		log.Fatalf("HGet failed: %v", err)
+		log.Fatalf("HMGet failed: %v", err)
 	}
-	fmt.Printf("HGet user:1 name: value=%s, exists=%v\n", hgetResp.Value, hgetResp.Exists)
+	fmt.Printf("HMGet user:1 name: value=%s, exists=%v\n", hmgetResp.Value, hmgetResp.Exists)
 
-	// HDel
-	hdelResp, err := client.HDel(ctx, &pb.HDelRequest{
-		Key:   "user:1",
-		Field: "age",
+	// HDel (delete entire hash)
+	hdelResp, err := client.HDel(ctx, &pb.HashDelRequest{
+		Key: "user:1",
 	})
 	if err != nil {
 		log.Fatalf("HDel failed: %v", err)
 	}
-	fmt.Printf("HDel user:1 age: success=%v, deleted=%d\n\n", hdelResp.Success, hdelResp.DeletedCount)
+	fmt.Printf("HDel user:1: success=%v, deleted=%d\n\n", hdelResp.Success, hdelResp.DeletedCount)
 }
 
 func testSetOperations(ctx context.Context, client pb.CacheServiceClient) {
 	fmt.Println("--- Testing Set Operations ---")
 
 	// SAdd
-	saddResp1, err := client.SAdd(ctx, &pb.SAddRequest{
+	saddResp1, err := client.SAdd(ctx, &pb.SetAddMRequest{
 		Key:    "tags",
 		Member: "golang",
 	})
@@ -140,7 +139,7 @@ func testSetOperations(ctx context.Context, client pb.CacheServiceClient) {
 	}
 	fmt.Printf("SAdd tags golang: success=%v, added=%v\n", saddResp1.Success, saddResp1.Added)
 
-	saddResp2, err := client.SAdd(ctx, &pb.SAddRequest{
+	saddResp2, err := client.SAdd(ctx, &pb.SetAddMRequest{
 		Key:    "tags",
 		Member: "grpc",
 	})
@@ -149,7 +148,7 @@ func testSetOperations(ctx context.Context, client pb.CacheServiceClient) {
 	}
 	fmt.Printf("SAdd tags grpc: success=%v, added=%v\n", saddResp2.Success, saddResp2.Added)
 
-	saddResp3, err := client.SAdd(ctx, &pb.SAddRequest{
+	saddResp3, err := client.SAdd(ctx, &pb.SetAddMRequest{
 		Key:    "tags",
 		Member: "cache",
 	})
@@ -159,14 +158,14 @@ func testSetOperations(ctx context.Context, client pb.CacheServiceClient) {
 	fmt.Printf("SAdd tags cache: success=%v, added=%v\n", saddResp3.Success, saddResp3.Added)
 
 	// SMembers
-	smembersResp, err := client.SMembers(ctx, &pb.SMembersRequest{Key: "tags"})
+	smembersResp, err := client.SMembers(ctx, &pb.SetGetRequest{Key: "tags"})
 	if err != nil {
 		log.Fatalf("SMembers failed: %v", err)
 	}
 	fmt.Printf("SMembers tags: %v\n", smembersResp.Members)
 
 	// SRem
-	sremResp, err := client.SRem(ctx, &pb.SRemRequest{
+	sremResp, err := client.SRem(ctx, &pb.SetDelMRequest{
 		Key:    "tags",
 		Member: "golang",
 	})
@@ -176,7 +175,7 @@ func testSetOperations(ctx context.Context, client pb.CacheServiceClient) {
 	fmt.Printf("SRem tags golang: success=%v, deleted=%d\n", sremResp.Success, sremResp.DeletedCount)
 
 	// SMembers again
-	smembersResp2, err := client.SMembers(ctx, &pb.SMembersRequest{Key: "tags"})
+	smembersResp2, err := client.SMembers(ctx, &pb.SetGetRequest{Key: "tags"})
 	if err != nil {
 		log.Fatalf("SMembers failed: %v", err)
 	}

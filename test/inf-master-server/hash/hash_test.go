@@ -19,7 +19,7 @@ func TestHashBasicHSetHGet(t *testing.T) {
 	value := "value1"
 
 	// Test HSet (new field)
-	setResp, err := tc.GetClient().HSet(ctx, &pb.HSetRequest{
+	setResp, err := tc.GetClient().HMSet(ctx, &pb.HashSetMRequest{
 		Key:   key,
 		Field: field,
 		Value: value,
@@ -33,7 +33,7 @@ func TestHashBasicHSetHGet(t *testing.T) {
 	}
 
 	// Test HGet
-	getResp, err := tc.GetClient().HGet(ctx, &pb.HGetRequest{
+	getResp, err := tc.GetClient().HMGet(ctx, &pb.HashGetMRequest{
 		Key:   key,
 		Field: field,
 	})
@@ -62,7 +62,7 @@ func TestHashHSetOverwrite(t *testing.T) {
 	field := "field1"
 
 	// Set initial value
-	setResp, err := tc.GetClient().HSet(ctx, &pb.HSetRequest{
+	setResp, err := tc.GetClient().HMSet(ctx, &pb.HashSetMRequest{
 		Key:   key,
 		Field: field,
 		Value: "value1",
@@ -72,7 +72,7 @@ func TestHashHSetOverwrite(t *testing.T) {
 	}
 
 	// Overwrite with new value
-	setResp, err = tc.GetClient().HSet(ctx, &pb.HSetRequest{
+	setResp, err = tc.GetClient().HMSet(ctx, &pb.HashSetMRequest{
 		Key:   key,
 		Field: field,
 		Value: "value2",
@@ -85,7 +85,7 @@ func TestHashHSetOverwrite(t *testing.T) {
 	}
 
 	// Verify new value
-	getResp, err := tc.GetClient().HGet(ctx, &pb.HGetRequest{
+	getResp, err := tc.GetClient().HMGet(ctx, &pb.HashGetMRequest{
 		Key:   key,
 		Field: field,
 	})
@@ -109,7 +109,7 @@ func TestHashHDel(t *testing.T) {
 	key := "hash-key"
 
 	// Set some fields
-	_, err := tc.GetClient().HSet(ctx, &pb.HSetRequest{
+	_, err := tc.GetClient().HMSet(ctx, &pb.HashSetMRequest{
 		Key:   key,
 		Field: "field1",
 		Value: "value1",
@@ -117,7 +117,7 @@ func TestHashHDel(t *testing.T) {
 	if err != nil {
 		t.Fatalf("HSet() field1 error = %v", err)
 	}
-	_, err = tc.GetClient().HSet(ctx, &pb.HSetRequest{
+	_, err = tc.GetClient().HMSet(ctx, &pb.HashSetMRequest{
 		Key:   key,
 		Field: "field2",
 		Value: "value2",
@@ -127,7 +127,7 @@ func TestHashHDel(t *testing.T) {
 	}
 
 	// Delete existing field
-	delResp, err := tc.GetClient().HDel(ctx, &pb.HDelRequest{
+	delResp, err := tc.GetClient().HashDelM(ctx, &pb.HashDelMRequest{
 		Key:   key,
 		Field: "field1",
 	})
@@ -139,7 +139,7 @@ func TestHashHDel(t *testing.T) {
 	}
 
 	// Verify field is deleted
-	getResp, err := tc.GetClient().HGet(ctx, &pb.HGetRequest{
+	getResp, err := tc.GetClient().HMGet(ctx, &pb.HashGetMRequest{
 		Key:   key,
 		Field: "field1",
 	})
@@ -151,7 +151,7 @@ func TestHashHDel(t *testing.T) {
 	}
 
 	// Verify other field still exists
-	getResp, err = tc.GetClient().HGet(ctx, &pb.HGetRequest{
+	getResp, err = tc.GetClient().HMGet(ctx, &pb.HashGetMRequest{
 		Key:   key,
 		Field: "field2",
 	})
@@ -179,40 +179,38 @@ func TestHashHMSetHMGet(t *testing.T) {
 		"field3": "value3",
 	}
 
-	// Set multiple fields
-	setResp, err := tc.GetClient().HMSet(ctx, &pb.HMSetRequest{
+	// Set multiple fields using HashSet (batch operation)
+	setResp, err := tc.GetClient().HashSet(ctx, &pb.HashSetRequest{
 		Key:    key,
 		Fields: fields,
 	})
 	if err != nil {
-		t.Fatalf("HMSet() error = %v", err)
+		t.Fatalf("HashSet() error = %v", err)
 	}
 	if setResp.Count != int32(len(fields)) {
-		t.Errorf("HMSet() count = %v, want %v", setResp.Count, len(fields))
+		t.Errorf("HashSet() count = %v, want %v", setResp.Count, len(fields))
 	}
 
-	// Get multiple fields (including non-existent)
-	requestFields := []string{"field1", "field2", "non-existent"}
-	getResp, err := tc.GetClient().HMGet(ctx, &pb.HMGetRequest{
-		Key:    key,
-		Fields: requestFields,
+	// Get all fields using HGetAll
+	getResp, err := tc.GetClient().HGetAll(ctx, &pb.HashGetRequest{
+		Key: key,
 	})
 	if err != nil {
-		t.Fatalf("HMGet() error = %v", err)
+		t.Fatalf("HGetAll() error = %v", err)
 	}
 
-	// Verify results
-	if len(getResp.Values) != 2 {
-		t.Errorf("HMGet() result length = %v, want 2", len(getResp.Values))
+	// Verify results - should have all 3 fields
+	if len(getResp.Fields) != 3 {
+		t.Errorf("HGetAll() result length = %v, want 3", len(getResp.Fields))
 	}
-	if getResp.Values["field1"] != "value1" {
-		t.Errorf("HMGet() field1 = %v, want value1", getResp.Values["field1"])
+	if getResp.Fields["field1"] != "value1" {
+		t.Errorf("HGetAll() field1 = %v, want value1", getResp.Fields["field1"])
 	}
-	if getResp.Values["field2"] != "value2" {
-		t.Errorf("HMGet() field2 = %v, want value2", getResp.Values["field2"])
+	if getResp.Fields["field2"] != "value2" {
+		t.Errorf("HGetAll() field2 = %v, want value2", getResp.Fields["field2"])
 	}
-	if _, exists := getResp.Values["non-existent"]; exists {
-		t.Errorf("HMGet() non-existent field should not exist")
+	if getResp.Fields["field3"] != "value3" {
+		t.Errorf("HGetAll() field3 = %v, want value3", getResp.Fields["field3"])
 	}
 }
 
@@ -225,7 +223,7 @@ func TestHashHLen(t *testing.T) {
 	key := "hash-key"
 
 	// Check length of non-existent key
-	lenResp, err := tc.GetClient().HLen(ctx, &pb.HLenRequest{Key: key})
+	lenResp, err := tc.GetClient().HLen(ctx, &pb.HashLenRequest{Key: key})
 	if err != nil {
 		t.Errorf("HLen() non-existent key error = %v", err)
 	}
@@ -236,7 +234,7 @@ func TestHashHLen(t *testing.T) {
 	// Add fields one by one
 	for i := 1; i <= 5; i++ {
 		field := "field" + string(rune('0'+i))
-		_, err := tc.GetClient().HSet(ctx, &pb.HSetRequest{
+		_, err := tc.GetClient().HMSet(ctx, &pb.HashSetMRequest{
 			Key:   key,
 			Field: field,
 			Value: "value",
@@ -245,7 +243,7 @@ func TestHashHLen(t *testing.T) {
 			t.Fatalf("HSet() iteration %v error = %v", i, err)
 		}
 
-		lenResp, err := tc.GetClient().HLen(ctx, &pb.HLenRequest{Key: key})
+		lenResp, err := tc.GetClient().HLen(ctx, &pb.HashLenRequest{Key: key})
 		if err != nil {
 			t.Errorf("HLen() iteration %v error = %v", i, err)
 		}
@@ -264,7 +262,7 @@ func TestHashHGetAll(t *testing.T) {
 	key := "hash-key"
 
 	// Get all from non-existent key
-	getAllResp, err := tc.GetClient().HGetAll(ctx, &pb.HGetAllRequest{Key: key})
+	getAllResp, err := tc.GetClient().HGetAll(ctx, &pb.HashGetRequest{Key: key})
 	if err != nil {
 		t.Errorf("HGetAll() non-existent key error = %v", err)
 	}
@@ -278,7 +276,7 @@ func TestHashHGetAll(t *testing.T) {
 		"field2": "value2",
 		"field3": "value3",
 	}
-	_, err = tc.GetClient().HMSet(ctx, &pb.HMSetRequest{
+	_, err = tc.GetClient().HashSet(ctx, &pb.HashSetRequest{
 		Key:    key,
 		Fields: expected,
 	})
@@ -287,7 +285,7 @@ func TestHashHGetAll(t *testing.T) {
 	}
 
 	// Get all fields
-	getAllResp, err = tc.GetClient().HGetAll(ctx, &pb.HGetAllRequest{Key: key})
+	getAllResp, err = tc.GetClient().HGetAll(ctx, &pb.HashGetRequest{Key: key})
 	if err != nil {
 		t.Errorf("HGetAll() error = %v", err)
 	}
@@ -306,7 +304,7 @@ func TestHashHExists(t *testing.T) {
 	key := "hash-key"
 
 	// Check non-existent key
-	existsResp, err := tc.GetClient().HExists(ctx, &pb.HExistsRequest{
+	existsResp, err := tc.GetClient().HExists(ctx, &pb.HashExistsMRequest{
 		Key:   key,
 		Field: "field",
 	})
@@ -318,7 +316,7 @@ func TestHashHExists(t *testing.T) {
 	}
 
 	// Set a field
-	_, err = tc.GetClient().HSet(ctx, &pb.HSetRequest{
+	_, err = tc.GetClient().HMSet(ctx, &pb.HashSetMRequest{
 		Key:   key,
 		Field: "field1",
 		Value: "value1",
@@ -328,7 +326,7 @@ func TestHashHExists(t *testing.T) {
 	}
 
 	// Check existing field
-	existsResp, err = tc.GetClient().HExists(ctx, &pb.HExistsRequest{
+	existsResp, err = tc.GetClient().HExists(ctx, &pb.HashExistsMRequest{
 		Key:   key,
 		Field: "field1",
 	})
@@ -340,7 +338,7 @@ func TestHashHExists(t *testing.T) {
 	}
 
 	// Check non-existent field
-	existsResp, err = tc.GetClient().HExists(ctx, &pb.HExistsRequest{
+	existsResp, err = tc.GetClient().HExists(ctx, &pb.HashExistsMRequest{
 		Key:   key,
 		Field: "non-existent",
 	})
@@ -365,7 +363,7 @@ func TestHashMultipleHashes(t *testing.T) {
 
 	for _, key := range hashKeys {
 		// Set multiple fields in each hash
-		_, err := tc.GetClient().HMSet(ctx, &pb.HMSetRequest{
+		_, err := tc.GetClient().HashSet(ctx, &pb.HashSetRequest{
 			Key: key,
 			Fields: map[string]string{
 				"field1": "value1",
@@ -389,7 +387,7 @@ func TestHashMultipleHashes(t *testing.T) {
 
 	// Verify all hashes
 	for _, key := range hashKeys {
-		lenResp, err := tc.GetClient().HLen(ctx, &pb.HLenRequest{Key: key})
+		lenResp, err := tc.GetClient().HLen(ctx, &pb.HashLenRequest{Key: key})
 		if err != nil {
 			t.Errorf("HLen(%v) error = %v", key, err)
 		}

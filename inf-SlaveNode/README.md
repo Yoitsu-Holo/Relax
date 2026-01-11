@@ -27,83 +27,104 @@ go run main.go
 - gRPC: `:50051`
 - HTTP: `:8080`
 
+## 重要提示
+
+如果你的环境设置了 HTTP 代理（`http_proxy` 或 `https_proxy` 环境变量），curl 请求本地服务时可能会失败。有两种解决方案：
+
+**方案 1：在 curl 命令中添加 `--noproxy "*"` 参数**
+```bash
+curl --noproxy "*" -X POST http://localhost:8080/v1/kv/set -d '{"key":"test","value":"value"}'
+```
+
+**方案 2：设置 no_proxy 环境变量**
+```bash
+export no_proxy=localhost,127.0.0.1
+```
+
 ## 测试接口
 
 ### KV 操作
 
 ```bash
 # Set
-curl -X POST http://localhost:8080/v1/kv/set \
+curl --noproxy "*" -X POST http://localhost:8080/v1/kv/set \
+  -H "Content-Type: application/json" \
   -d '{"key":"user:1001","value":"Alice"}'
 
 # Get
-curl http://localhost:8080/v1/kv/get/user:1001
+curl --noproxy "*" http://localhost:8080/v1/kv/get/user:1001
 
 # Delete
-curl -X DELETE http://localhost:8080/v1/kv/del/user:1001
+curl --noproxy "*" -X DELETE http://localhost:8080/v1/kv/del/user:1001
 
 # Exists
-curl http://localhost:8080/v1/kv/exists/user:1001
+curl --noproxy "*" http://localhost:8080/v1/kv/exists/user:1001
 ```
 
 ### Hash 操作
 
 ```bash
 # HSet
-curl -X POST http://localhost:8080/v1/hash/set \
+curl --noproxy "*" -X POST http://localhost:8080/v1/hash/set \
+  -H "Content-Type: application/json" \
   -d '{"key":"profile:1001","field":"name","value":"Alice"}'
 
 # HGet
-curl http://localhost:8080/v1/hash/get/profile:1001/name
+curl --noproxy "*" http://localhost:8080/v1/hash/get/profile:1001/name
 
 # HMSet (批量设置)
-curl -X POST http://localhost:8080/v1/hash/mset \
+curl --noproxy "*" -X POST http://localhost:8080/v1/hash/mset \
+  -H "Content-Type: application/json" \
   -d '{"key":"profile:1001","fields":{"name":"Alice","age":"25"}}'
 
 # HGetAll
-curl http://localhost:8080/v1/hash/getall/profile:1001
+curl --noproxy "*" http://localhost:8080/v1/hash/getall/profile:1001
 
 # HLen
-curl http://localhost:8080/v1/hash/len/profile:1001
+curl --noproxy "*" http://localhost:8080/v1/hash/len/profile:1001
 ```
 
 ### Set 操作
 
 ```bash
 # SAdd
-curl -X POST http://localhost:8080/v1/set/add \
+curl --noproxy "*" -X POST http://localhost:8080/v1/set/add \
+  -H "Content-Type: application/json" \
   -d '{"key":"tags:golang","member":"backend"}'
 
 # SMembers
-curl http://localhost:8080/v1/set/members/tags:golang
+curl --noproxy "*" http://localhost:8080/v1/set/members/tags:golang
 
 # SIsMember
-curl http://localhost:8080/v1/set/ismember/tags:golang/backend
+curl --noproxy "*" http://localhost:8080/v1/set/ismember/tags:golang/backend
 
 # SCard
-curl http://localhost:8080/v1/set/card/tags:golang
+curl --noproxy "*" http://localhost:8080/v1/set/card/tags:golang
 ```
 
 ### List 操作
 
 ```bash
 # LPush (左侧插入)
-curl -X POST http://localhost:8080/v1/list/push \
+curl --noproxy "*" -X POST http://localhost:8080/v1/list/push \
+  -H "Content-Type: application/json" \
   -d '{"key":"queue:tasks","value":"task1"}'
 
 # RPush (右侧插入)
-curl -X POST http://localhost:8080/v1/list/rpush \
+curl --noproxy "*" -X POST http://localhost:8080/v1/list/rpush \
+  -H "Content-Type: application/json" \
   -d '{"key":"queue:tasks","value":"task2"}'
 
 # LRange
-curl "http://localhost:8080/v1/list/range/queue:tasks?start=0&stop=-1"
+curl --noproxy "*" "http://localhost:8080/v1/list/range/queue:tasks?start=0&stop=-1"
 
 # LPop
-curl -X POST http://localhost:8080/v1/list/lpop \
+curl --noproxy "*" -X POST http://localhost:8080/v1/list/lpop \
+  -H "Content-Type: application/json" \
   -d '{"key":"queue:tasks"}'
 
 # LLen
-curl http://localhost:8080/v1/list/len/queue:tasks
+curl --noproxy "*" http://localhost:8080/v1/list/len/queue:tasks
 ```
 
 ## 目录结构

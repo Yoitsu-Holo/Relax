@@ -115,7 +115,7 @@ func (n *Node) HealthCheck(ctx context.Context) error {
 	ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
 	defer cancel()
 
-	_, err := client.Get(ctx, &pb.GetRequest{Key: "__health_check__"})
+	_, err := client.Get(ctx, &pb.KvGetRequest{Key: "__health_check__"})
 	if err != nil {
 		n.SetHealthy(false)
 		return err

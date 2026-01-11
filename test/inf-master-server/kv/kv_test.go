@@ -29,7 +29,7 @@ func TestKVBasicSetGet(t *testing.T) {
 			ctx := testutil.TestContext()
 
 			// Test Set
-			setResp, err := tc.GetClient().Set(ctx, &pb.SetRequest{
+			setResp, err := tc.GetClient().Set(ctx, &pb.KvSetRequest{
 				Key:   tt.key,
 				Value: tt.value,
 			})
@@ -43,7 +43,7 @@ func TestKVBasicSetGet(t *testing.T) {
 			}
 
 			// Test Get
-			getResp, err := tc.GetClient().Get(ctx, &pb.GetRequest{
+			getResp, err := tc.GetClient().Get(ctx, &pb.KvGetRequest{
 				Key: tt.key,
 			})
 			if err != nil {
@@ -72,7 +72,7 @@ func TestKVGetNonExistent(t *testing.T) {
 
 	ctx := testutil.TestContext()
 
-	getResp, err := tc.GetClient().Get(ctx, &pb.GetRequest{
+	getResp, err := tc.GetClient().Get(ctx, &pb.KvGetRequest{
 		Key: "non-existent-key",
 	})
 	if err != nil {
@@ -95,7 +95,7 @@ func TestKVSetOverwrite(t *testing.T) {
 	key := "overwrite-key"
 
 	// Set initial value
-	_, err := tc.GetClient().Set(ctx, &pb.SetRequest{
+	_, err := tc.GetClient().Set(ctx, &pb.KvSetRequest{
 		Key:   key,
 		Value: "value1",
 	})
@@ -104,14 +104,14 @@ func TestKVSetOverwrite(t *testing.T) {
 	}
 
 	// Verify initial value
-	getResp, err := tc.GetClient().Get(ctx, &pb.GetRequest{Key: key})
+	getResp, err := tc.GetClient().Get(ctx, &pb.KvGetRequest{Key: key})
 	if err != nil || !getResp.Exists || getResp.Value != "value1" {
 		t.Fatalf("Get() after first Set failed: value=%v, exists=%v, err=%v",
 			getResp.Value, getResp.Exists, err)
 	}
 
 	// Overwrite with new value
-	_, err = tc.GetClient().Set(ctx, &pb.SetRequest{
+	_, err = tc.GetClient().Set(ctx, &pb.KvSetRequest{
 		Key:   key,
 		Value: "value2",
 	})
@@ -120,7 +120,7 @@ func TestKVSetOverwrite(t *testing.T) {
 	}
 
 	// Verify new value
-	getResp, err = tc.GetClient().Get(ctx, &pb.GetRequest{Key: key})
+	getResp, err = tc.GetClient().Get(ctx, &pb.KvGetRequest{Key: key})
 	if err != nil {
 		t.Errorf("Get() after overwrite error = %v", err)
 	}
@@ -141,7 +141,7 @@ func TestKVDel(t *testing.T) {
 	key := "delete-key"
 
 	// Delete non-existent key
-	delResp, err := tc.GetClient().Del(ctx, &pb.DelRequest{Key: key})
+	delResp, err := tc.GetClient().Del(ctx, &pb.KvDelRequest{Key: key})
 	if err != nil {
 		t.Errorf("Del() non-existent key error = %v", err)
 	}
@@ -150,7 +150,7 @@ func TestKVDel(t *testing.T) {
 	}
 
 	// Set a value
-	_, err = tc.GetClient().Set(ctx, &pb.SetRequest{
+	_, err = tc.GetClient().Set(ctx, &pb.KvSetRequest{
 		Key:   key,
 		Value: "value",
 	})
@@ -159,7 +159,7 @@ func TestKVDel(t *testing.T) {
 	}
 
 	// Delete existing key
-	delResp, err = tc.GetClient().Del(ctx, &pb.DelRequest{Key: key})
+	delResp, err = tc.GetClient().Del(ctx, &pb.KvDelRequest{Key: key})
 	if err != nil {
 		t.Errorf("Del() existing key error = %v", err)
 	}
@@ -168,7 +168,7 @@ func TestKVDel(t *testing.T) {
 	}
 
 	// Verify key is deleted
-	getResp, err := tc.GetClient().Get(ctx, &pb.GetRequest{Key: key})
+	getResp, err := tc.GetClient().Get(ctx, &pb.KvGetRequest{Key: key})
 	if err != nil {
 		t.Errorf("Get() after Del error = %v", err)
 	}
@@ -186,7 +186,7 @@ func TestKVExists(t *testing.T) {
 	key := "exists-key"
 
 	// Check non-existent key
-	existsResp, err := tc.GetClient().Exists(ctx, &pb.ExistsRequest{Key: key})
+	existsResp, err := tc.GetClient().Exists(ctx, &pb.KvExistsRequest{Key: key})
 	if err != nil {
 		t.Errorf("Exists() non-existent key error = %v", err)
 	}
@@ -195,7 +195,7 @@ func TestKVExists(t *testing.T) {
 	}
 
 	// Set a value
-	_, err = tc.GetClient().Set(ctx, &pb.SetRequest{
+	_, err = tc.GetClient().Set(ctx, &pb.KvSetRequest{
 		Key:   key,
 		Value: "value",
 	})
@@ -204,7 +204,7 @@ func TestKVExists(t *testing.T) {
 	}
 
 	// Check existing key
-	existsResp, err = tc.GetClient().Exists(ctx, &pb.ExistsRequest{Key: key})
+	existsResp, err = tc.GetClient().Exists(ctx, &pb.KvExistsRequest{Key: key})
 	if err != nil {
 		t.Errorf("Exists() existing key error = %v", err)
 	}
@@ -213,12 +213,12 @@ func TestKVExists(t *testing.T) {
 	}
 
 	// Delete and check again
-	_, err = tc.GetClient().Del(ctx, &pb.DelRequest{Key: key})
+	_, err = tc.GetClient().Del(ctx, &pb.KvDelRequest{Key: key})
 	if err != nil {
 		t.Fatalf("Del() error = %v", err)
 	}
 
-	existsResp, err = tc.GetClient().Exists(ctx, &pb.ExistsRequest{Key: key})
+	existsResp, err = tc.GetClient().Exists(ctx, &pb.KvExistsRequest{Key: key})
 	if err != nil {
 		t.Errorf("Exists() after Del error = %v", err)
 	}
@@ -239,7 +239,7 @@ func TestKVMultipleKeys(t *testing.T) {
 	nodeDistribution := make(map[int]int) // Track distribution across nodes
 
 	for i, key := range keys {
-		_, err := tc.GetClient().Set(ctx, &pb.SetRequest{
+		_, err := tc.GetClient().Set(ctx, &pb.KvSetRequest{
 			Key:   key,
 			Value: key + "-value",
 		})
@@ -265,7 +265,7 @@ func TestKVMultipleKeys(t *testing.T) {
 
 	// Get all keys
 	for i, key := range keys {
-		getResp, err := tc.GetClient().Get(ctx, &pb.GetRequest{Key: key})
+		getResp, err := tc.GetClient().Get(ctx, &pb.KvGetRequest{Key: key})
 		if err != nil {
 			t.Errorf("Get(%v) error = %v", i, err)
 		}
@@ -279,7 +279,7 @@ func TestKVMultipleKeys(t *testing.T) {
 
 	// Delete some keys
 	for i := 0; i < 5; i++ {
-		delResp, err := tc.GetClient().Del(ctx, &pb.DelRequest{Key: keys[i]})
+		delResp, err := tc.GetClient().Del(ctx, &pb.KvDelRequest{Key: keys[i]})
 		if err != nil {
 			t.Errorf("Del(%v) error = %v", i, err)
 		}
@@ -290,7 +290,7 @@ func TestKVMultipleKeys(t *testing.T) {
 
 	// Verify deleted keys
 	for i := 0; i < 5; i++ {
-		existsResp, err := tc.GetClient().Exists(ctx, &pb.ExistsRequest{Key: keys[i]})
+		existsResp, err := tc.GetClient().Exists(ctx, &pb.KvExistsRequest{Key: keys[i]})
 		if err != nil {
 			t.Errorf("Exists(%v) after Del error = %v", i, err)
 		}
@@ -301,7 +301,7 @@ func TestKVMultipleKeys(t *testing.T) {
 
 	// Verify remaining keys
 	for i := 5; i < len(keys); i++ {
-		existsResp, err := tc.GetClient().Exists(ctx, &pb.ExistsRequest{Key: keys[i]})
+		existsResp, err := tc.GetClient().Exists(ctx, &pb.KvExistsRequest{Key: keys[i]})
 		if err != nil {
 			t.Errorf("Exists(%v) remaining key error = %v", i, err)
 		}
@@ -319,7 +319,7 @@ func TestKVSingleNode(t *testing.T) {
 	ctx := testutil.TestContext()
 
 	// Set and get a value
-	_, err := tc.GetClient().Set(ctx, &pb.SetRequest{
+	_, err := tc.GetClient().Set(ctx, &pb.KvSetRequest{
 		Key:   "test-key",
 		Value: "test-value",
 	})
@@ -327,7 +327,7 @@ func TestKVSingleNode(t *testing.T) {
 		t.Fatalf("Set() error = %v", err)
 	}
 
-	getResp, err := tc.GetClient().Get(ctx, &pb.GetRequest{Key: "test-key"})
+	getResp, err := tc.GetClient().Get(ctx, &pb.KvGetRequest{Key: "test-key"})
 	if err != nil {
 		t.Errorf("Get() error = %v", err)
 	}
@@ -352,7 +352,7 @@ func TestKVManyNodes(t *testing.T) {
 
 	for i := 0; i < numKeys; i++ {
 		key := "test-key-" + string(rune('0'+i))
-		_, err := tc.GetClient().Set(ctx, &pb.SetRequest{
+		_, err := tc.GetClient().Set(ctx, &pb.KvSetRequest{
 			Key:   key,
 			Value: "value",
 		})

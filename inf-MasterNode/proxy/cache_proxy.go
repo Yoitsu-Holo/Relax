@@ -22,10 +22,504 @@ func NewCacheProxy(clusterMgr *cluster.Manager) *CacheProxy {
 	}
 }
 
-// ========== KV Operations ==========
+// ========== KV Native Operations ==========
 
-// Set implements the Set RPC
-func (p *CacheProxy) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetResponse, error) {
+// KvSet implements the KvSet RPC
+func (p *CacheProxy) KvSet(ctx context.Context, req *pb.KvSetRequest) (*pb.KvSetResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.KvSet(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding KvSet request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("KvSet: key=%s, node=%s", req.Key, node.ID)
+	return resp, nil
+}
+
+// KvGet implements the KvGet RPC
+func (p *CacheProxy) KvGet(ctx context.Context, req *pb.KvGetRequest) (*pb.KvGetResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.KvGet(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding KvGet request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("KvGet: key=%s, node=%s, exists=%v", req.Key, node.ID, resp.Exists)
+	return resp, nil
+}
+
+// KvDel implements the KvDel RPC
+func (p *CacheProxy) KvDel(ctx context.Context, req *pb.KvDelRequest) (*pb.KvDelResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.KvDel(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding KvDel request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("KvDel: key=%s, node=%s", req.Key, node.ID)
+	return resp, nil
+}
+
+// KvExists implements the KvExists RPC
+func (p *CacheProxy) KvExists(ctx context.Context, req *pb.KvExistsRequest) (*pb.KvExistsResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.KvExists(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding KvExists request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("KvExists: key=%s, node=%s, exists=%v", req.Key, node.ID, resp.Exists)
+	return resp, nil
+}
+
+// ========== Hash Native Operations - Batch/Whole Hash ==========
+
+// HashSet implements the HashSet RPC (batch set multiple fields)
+func (p *CacheProxy) HashSet(ctx context.Context, req *pb.HashSetRequest) (*pb.HashSetResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.HashSet(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding HashSet request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("HashSet: key=%s, fields=%d, node=%s", req.Key, len(req.Fields), node.ID)
+	return resp, nil
+}
+
+// HashGet implements the HashGet RPC (get all fields)
+func (p *CacheProxy) HashGet(ctx context.Context, req *pb.HashGetRequest) (*pb.HashGetResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.HashGet(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding HashGet request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("HashGet: key=%s, node=%s, fields=%d", req.Key, node.ID, len(resp.Fields))
+	return resp, nil
+}
+
+// HashDel implements the HashDel RPC (delete entire hash)
+func (p *CacheProxy) HashDel(ctx context.Context, req *pb.HashDelRequest) (*pb.HashDelResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.HashDel(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding HashDel request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("HashDel: key=%s, node=%s", req.Key, node.ID)
+	return resp, nil
+}
+
+// HashExists implements the HashExists RPC (check if hash key exists)
+func (p *CacheProxy) HashExists(ctx context.Context, req *pb.HashExistsRequest) (*pb.HashExistsResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.HashExists(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding HashExists request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("HashExists: key=%s, node=%s, exists=%v", req.Key, node.ID, resp.Exists)
+	return resp, nil
+}
+
+// HashLen implements the HashLen RPC (get number of fields)
+func (p *CacheProxy) HashLen(ctx context.Context, req *pb.HashLenRequest) (*pb.HashLenResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.HashLen(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding HashLen request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("HashLen: key=%s, node=%s, length=%d", req.Key, node.ID, resp.Length)
+	return resp, nil
+}
+
+// ========== Hash Native Operations - Single Field ==========
+
+// HashSetM implements the HashSetM RPC (set single field)
+func (p *CacheProxy) HashSetM(ctx context.Context, req *pb.HashSetMRequest) (*pb.HashSetMResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.HashSetM(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding HashSetM request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("HashSetM: key=%s, field=%s, node=%s", req.Key, req.Field, node.ID)
+	return resp, nil
+}
+
+// HashGetM implements the HashGetM RPC (get single field)
+func (p *CacheProxy) HashGetM(ctx context.Context, req *pb.HashGetMRequest) (*pb.HashGetMResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.HashGetM(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding HashGetM request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("HashGetM: key=%s, field=%s, node=%s, exists=%v", req.Key, req.Field, node.ID, resp.Exists)
+	return resp, nil
+}
+
+// HashDelM implements the HashDelM RPC (delete single field)
+func (p *CacheProxy) HashDelM(ctx context.Context, req *pb.HashDelMRequest) (*pb.HashDelMResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.HashDelM(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding HashDelM request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("HashDelM: key=%s, field=%s, node=%s", req.Key, req.Field, node.ID)
+	return resp, nil
+}
+
+// HashExistsM implements the HashExistsM RPC (check if field exists)
+func (p *CacheProxy) HashExistsM(ctx context.Context, req *pb.HashExistsMRequest) (*pb.HashExistsMResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.HashExistsM(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding HashExistsM request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("HashExistsM: key=%s, field=%s, node=%s, exists=%v", req.Key, req.Field, node.ID, resp.Exists)
+	return resp, nil
+}
+
+// ========== Set Native Operations - Batch/Whole Set ==========
+
+// SetSet implements the SetSet RPC (batch add multiple members)
+func (p *CacheProxy) SetSet(ctx context.Context, req *pb.SetSetRequest) (*pb.SetSetResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.SetSet(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding SetSet request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("SetSet: key=%s, members=%d, node=%s", req.Key, len(req.Members), node.ID)
+	return resp, nil
+}
+
+// SetGet implements the SetGet RPC (get all members)
+func (p *CacheProxy) SetGet(ctx context.Context, req *pb.SetGetRequest) (*pb.SetGetResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.SetGet(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding SetGet request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("SetGet: key=%s, node=%s, count=%d", req.Key, node.ID, len(resp.Members))
+	return resp, nil
+}
+
+// SetDel implements the SetDel RPC (delete entire set)
+func (p *CacheProxy) SetDel(ctx context.Context, req *pb.SetDelRequest) (*pb.SetDelResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.SetDel(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding SetDel request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("SetDel: key=%s, node=%s", req.Key, node.ID)
+	return resp, nil
+}
+
+// SetExists implements the SetExists RPC (check if set key exists)
+func (p *CacheProxy) SetExists(ctx context.Context, req *pb.SetExistsRequest) (*pb.SetExistsResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.SetExists(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding SetExists request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("SetExists: key=%s, node=%s, exists=%v", req.Key, node.ID, resp.Exists)
+	return resp, nil
+}
+
+// SetLen implements the SetLen RPC (get number of members)
+func (p *CacheProxy) SetLen(ctx context.Context, req *pb.SetLenRequest) (*pb.SetLenResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.SetLen(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding SetLen request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("SetLen: key=%s, node=%s, length=%d", req.Key, node.ID, resp.Length)
+	return resp, nil
+}
+
+// ========== Set Native Operations - Single Member ==========
+
+// SetAddM implements the SetAddM RPC (add single member)
+func (p *CacheProxy) SetAddM(ctx context.Context, req *pb.SetAddMRequest) (*pb.SetAddMResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.SetAddM(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding SetAddM request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("SetAddM: key=%s, member=%s, node=%s", req.Key, req.Member, node.ID)
+	return resp, nil
+}
+
+// SetExistsM implements the SetExistsM RPC (check if member exists)
+func (p *CacheProxy) SetExistsM(ctx context.Context, req *pb.SetExistsMRequest) (*pb.SetExistsMResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.SetExistsM(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding SetExistsM request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("SetExistsM: key=%s, member=%s, node=%s, is_member=%v", req.Key, req.Member, node.ID, resp.IsMember)
+	return resp, nil
+}
+
+// SetDelM implements the SetDelM RPC (delete single member)
+func (p *CacheProxy) SetDelM(ctx context.Context, req *pb.SetDelMRequest) (*pb.SetDelMResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.SetDelM(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding SetDelM request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("SetDelM: key=%s, member=%s, node=%s", req.Key, req.Member, node.ID)
+	return resp, nil
+}
+
+// SetGetM implements the SetGetM RPC (get single member data for verification)
+func (p *CacheProxy) SetGetM(ctx context.Context, req *pb.SetGetMRequest) (*pb.SetGetMResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.SetGetM(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding SetGetM request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("SetGetM: key=%s, member=%s, node=%s, exists=%v", req.Key, req.Member, node.ID, resp.Exists)
+	return resp, nil
+}
+
+// ========== KV Redis Aliases ==========
+
+// Set implements the Set RPC (forwards to KvSet)
+func (p *CacheProxy) Set(ctx context.Context, req *pb.KvSetRequest) (*pb.KvSetResponse, error) {
 	node, err := p.clusterMgr.GetNodeForKey(req.Key)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
@@ -46,8 +540,8 @@ func (p *CacheProxy) Set(ctx context.Context, req *pb.SetRequest) (*pb.SetRespon
 	return resp, nil
 }
 
-// Get implements the Get RPC
-func (p *CacheProxy) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
+// Get implements the Get RPC (forwards to KvGet)
+func (p *CacheProxy) Get(ctx context.Context, req *pb.KvGetRequest) (*pb.KvGetResponse, error) {
 	node, err := p.clusterMgr.GetNodeForKey(req.Key)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
@@ -68,8 +562,8 @@ func (p *CacheProxy) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetRespon
 	return resp, nil
 }
 
-// Del implements the Del RPC
-func (p *CacheProxy) Del(ctx context.Context, req *pb.DelRequest) (*pb.DelResponse, error) {
+// Del implements the Del RPC (forwards to KvDel)
+func (p *CacheProxy) Del(ctx context.Context, req *pb.KvDelRequest) (*pb.KvDelResponse, error) {
 	node, err := p.clusterMgr.GetNodeForKey(req.Key)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
@@ -90,8 +584,8 @@ func (p *CacheProxy) Del(ctx context.Context, req *pb.DelRequest) (*pb.DelRespon
 	return resp, nil
 }
 
-// Exists implements the Exists RPC
-func (p *CacheProxy) Exists(ctx context.Context, req *pb.ExistsRequest) (*pb.ExistsResponse, error) {
+// Exists implements the Exists RPC (forwards to KvExists)
+func (p *CacheProxy) Exists(ctx context.Context, req *pb.KvExistsRequest) (*pb.KvExistsResponse, error) {
 	node, err := p.clusterMgr.GetNodeForKey(req.Key)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
@@ -112,76 +606,10 @@ func (p *CacheProxy) Exists(ctx context.Context, req *pb.ExistsRequest) (*pb.Exi
 	return resp, nil
 }
 
-// ========== Hash Operations ==========
+// ========== Hash Redis Aliases ==========
 
-// HSet implements the HSet RPC
-func (p *CacheProxy) HSet(ctx context.Context, req *pb.HSetRequest) (*pb.HSetResponse, error) {
-	node, err := p.clusterMgr.GetNodeForKey(req.Key)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
-	}
-
-	if !node.IsHealthy() {
-		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
-	}
-
-	client := node.GetClient()
-	resp, err := client.HSet(ctx, req)
-	if err != nil {
-		log.Printf("Error forwarding HSet request to node %s: %v", node.ID, err)
-		return nil, err
-	}
-
-	log.Printf("HSet: key=%s, field=%s, node=%s", req.Key, req.Field, node.ID)
-	return resp, nil
-}
-
-// HGet implements the HGet RPC
-func (p *CacheProxy) HGet(ctx context.Context, req *pb.HGetRequest) (*pb.HGetResponse, error) {
-	node, err := p.clusterMgr.GetNodeForKey(req.Key)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
-	}
-
-	if !node.IsHealthy() {
-		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
-	}
-
-	client := node.GetClient()
-	resp, err := client.HGet(ctx, req)
-	if err != nil {
-		log.Printf("Error forwarding HGet request to node %s: %v", node.ID, err)
-		return nil, err
-	}
-
-	log.Printf("HGet: key=%s, field=%s, node=%s, exists=%v", req.Key, req.Field, node.ID, resp.Exists)
-	return resp, nil
-}
-
-// HDel implements the HDel RPC
-func (p *CacheProxy) HDel(ctx context.Context, req *pb.HDelRequest) (*pb.HDelResponse, error) {
-	node, err := p.clusterMgr.GetNodeForKey(req.Key)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
-	}
-
-	if !node.IsHealthy() {
-		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
-	}
-
-	client := node.GetClient()
-	resp, err := client.HDel(ctx, req)
-	if err != nil {
-		log.Printf("Error forwarding HDel request to node %s: %v", node.ID, err)
-		return nil, err
-	}
-
-	log.Printf("HDel: key=%s, field=%s, node=%s", req.Key, req.Field, node.ID)
-	return resp, nil
-}
-
-// HMSet implements the HMSet RPC
-func (p *CacheProxy) HMSet(ctx context.Context, req *pb.HMSetRequest) (*pb.HMSetResponse, error) {
+// HMSet implements the HMSet RPC (forwards to HashSetM)
+func (p *CacheProxy) HMSet(ctx context.Context, req *pb.HashSetMRequest) (*pb.HashSetMResponse, error) {
 	node, err := p.clusterMgr.GetNodeForKey(req.Key)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
@@ -198,12 +626,12 @@ func (p *CacheProxy) HMSet(ctx context.Context, req *pb.HMSetRequest) (*pb.HMSet
 		return nil, err
 	}
 
-	log.Printf("HMSet: key=%s, fields=%d, node=%s", req.Key, len(req.Fields), node.ID)
+	log.Printf("HMSet: key=%s, field=%s, node=%s", req.Key, req.Field, node.ID)
 	return resp, nil
 }
 
-// HMGet implements the HMGet RPC
-func (p *CacheProxy) HMGet(ctx context.Context, req *pb.HMGetRequest) (*pb.HMGetResponse, error) {
+// HMGet implements the HMGet RPC (forwards to HashGetM)
+func (p *CacheProxy) HMGet(ctx context.Context, req *pb.HashGetMRequest) (*pb.HashGetMResponse, error) {
 	node, err := p.clusterMgr.GetNodeForKey(req.Key)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
@@ -220,12 +648,12 @@ func (p *CacheProxy) HMGet(ctx context.Context, req *pb.HMGetRequest) (*pb.HMGet
 		return nil, err
 	}
 
-	log.Printf("HMGet: key=%s, fields=%d, node=%s", req.Key, len(req.Fields), node.ID)
+	log.Printf("HMGet: key=%s, field=%s, node=%s", req.Key, req.Field, node.ID)
 	return resp, nil
 }
 
-// HLen implements the HLen RPC
-func (p *CacheProxy) HLen(ctx context.Context, req *pb.HLenRequest) (*pb.HLenResponse, error) {
+// HLen implements the HLen RPC (forwards to HashLen)
+func (p *CacheProxy) HLen(ctx context.Context, req *pb.HashLenRequest) (*pb.HashLenResponse, error) {
 	node, err := p.clusterMgr.GetNodeForKey(req.Key)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
@@ -246,8 +674,8 @@ func (p *CacheProxy) HLen(ctx context.Context, req *pb.HLenRequest) (*pb.HLenRes
 	return resp, nil
 }
 
-// HGetAll implements the HGetAll RPC
-func (p *CacheProxy) HGetAll(ctx context.Context, req *pb.HGetAllRequest) (*pb.HGetAllResponse, error) {
+// HGetAll implements the HGetAll RPC (forwards to HashGet)
+func (p *CacheProxy) HGetAll(ctx context.Context, req *pb.HashGetRequest) (*pb.HashGetResponse, error) {
 	node, err := p.clusterMgr.GetNodeForKey(req.Key)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
@@ -268,8 +696,30 @@ func (p *CacheProxy) HGetAll(ctx context.Context, req *pb.HGetAllRequest) (*pb.H
 	return resp, nil
 }
 
-// HExists implements the HExists RPC
-func (p *CacheProxy) HExists(ctx context.Context, req *pb.HExistsRequest) (*pb.HExistsResponse, error) {
+// HDel implements the HDel RPC (forwards to HashDel)
+func (p *CacheProxy) HDel(ctx context.Context, req *pb.HashDelRequest) (*pb.HashDelResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.HDel(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding HDel request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("HDel: key=%s, node=%s", req.Key, node.ID)
+	return resp, nil
+}
+
+// HExists implements the HExists RPC (forwards to HashExistsM)
+func (p *CacheProxy) HExists(ctx context.Context, req *pb.HashExistsMRequest) (*pb.HashExistsMResponse, error) {
 	node, err := p.clusterMgr.GetNodeForKey(req.Key)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
@@ -290,10 +740,10 @@ func (p *CacheProxy) HExists(ctx context.Context, req *pb.HExistsRequest) (*pb.H
 	return resp, nil
 }
 
-// ========== Set Operations ==========
+// ========== Set Redis Aliases ==========
 
-// SAdd implements the SAdd RPC
-func (p *CacheProxy) SAdd(ctx context.Context, req *pb.SAddRequest) (*pb.SAddResponse, error) {
+// SAdd implements the SAdd RPC (forwards to SetAddM)
+func (p *CacheProxy) SAdd(ctx context.Context, req *pb.SetAddMRequest) (*pb.SetAddMResponse, error) {
 	node, err := p.clusterMgr.GetNodeForKey(req.Key)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
@@ -314,52 +764,8 @@ func (p *CacheProxy) SAdd(ctx context.Context, req *pb.SAddRequest) (*pb.SAddRes
 	return resp, nil
 }
 
-// SMembers implements the SMembers RPC
-func (p *CacheProxy) SMembers(ctx context.Context, req *pb.SMembersRequest) (*pb.SMembersResponse, error) {
-	node, err := p.clusterMgr.GetNodeForKey(req.Key)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
-	}
-
-	if !node.IsHealthy() {
-		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
-	}
-
-	client := node.GetClient()
-	resp, err := client.SMembers(ctx, req)
-	if err != nil {
-		log.Printf("Error forwarding SMembers request to node %s: %v", node.ID, err)
-		return nil, err
-	}
-
-	log.Printf("SMembers: key=%s, node=%s, count=%d", req.Key, node.ID, len(resp.Members))
-	return resp, nil
-}
-
-// SRem implements the SRem RPC
-func (p *CacheProxy) SRem(ctx context.Context, req *pb.SRemRequest) (*pb.SRemResponse, error) {
-	node, err := p.clusterMgr.GetNodeForKey(req.Key)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
-	}
-
-	if !node.IsHealthy() {
-		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
-	}
-
-	client := node.GetClient()
-	resp, err := client.SRem(ctx, req)
-	if err != nil {
-		log.Printf("Error forwarding SRem request to node %s: %v", node.ID, err)
-		return nil, err
-	}
-
-	log.Printf("SRem: key=%s, member=%s, node=%s", req.Key, req.Member, node.ID)
-	return resp, nil
-}
-
-// SIsMember implements the SIsMember RPC
-func (p *CacheProxy) SIsMember(ctx context.Context, req *pb.SIsMemberRequest) (*pb.SIsMemberResponse, error) {
+// SIsMember implements the SIsMember RPC (forwards to SetExistsM)
+func (p *CacheProxy) SIsMember(ctx context.Context, req *pb.SetExistsMRequest) (*pb.SetExistsMResponse, error) {
 	node, err := p.clusterMgr.GetNodeForKey(req.Key)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
@@ -380,8 +786,8 @@ func (p *CacheProxy) SIsMember(ctx context.Context, req *pb.SIsMemberRequest) (*
 	return resp, nil
 }
 
-// SCard implements the SCard RPC
-func (p *CacheProxy) SCard(ctx context.Context, req *pb.SCardRequest) (*pb.SCardResponse, error) {
+// SCard implements the SCard RPC (forwards to SetLen)
+func (p *CacheProxy) SCard(ctx context.Context, req *pb.SetLenRequest) (*pb.SetLenResponse, error) {
 	node, err := p.clusterMgr.GetNodeForKey(req.Key)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
@@ -398,7 +804,51 @@ func (p *CacheProxy) SCard(ctx context.Context, req *pb.SCardRequest) (*pb.SCard
 		return nil, err
 	}
 
-	log.Printf("SCard: key=%s, node=%s, cardinality=%d", req.Key, node.ID, resp.Cardinality)
+	log.Printf("SCard: key=%s, node=%s, cardinality=%d", req.Key, node.ID, resp.Length)
+	return resp, nil
+}
+
+// SMembers implements the SMembers RPC (forwards to SetGet)
+func (p *CacheProxy) SMembers(ctx context.Context, req *pb.SetGetRequest) (*pb.SetGetResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.SMembers(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding SMembers request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("SMembers: key=%s, node=%s, count=%d", req.Key, node.ID, len(resp.Members))
+	return resp, nil
+}
+
+// SRem implements the SRem RPC (forwards to SetDelM)
+func (p *CacheProxy) SRem(ctx context.Context, req *pb.SetDelMRequest) (*pb.SetDelMResponse, error) {
+	node, err := p.clusterMgr.GetNodeForKey(req.Key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get node for key %s: %w", req.Key, err)
+	}
+
+	if !node.IsHealthy() {
+		return nil, fmt.Errorf("node %s is unhealthy", node.ID)
+	}
+
+	client := node.GetClient()
+	resp, err := client.SRem(ctx, req)
+	if err != nil {
+		log.Printf("Error forwarding SRem request to node %s: %v", node.ID, err)
+		return nil, err
+	}
+
+	log.Printf("SRem: key=%s, member=%s, node=%s", req.Key, req.Member, node.ID)
 	return resp, nil
 }
 
