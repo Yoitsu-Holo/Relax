@@ -5,7 +5,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/yoitsuholo/relax/inf-SingleNode/server/cache/simpleCache"
+	"github.com/yoitsuholo/relax/inf-SlaveNode/cache/simpleCache"
 )
 
 // TestHashBasicHSetHGet tests basic HSet and HGet operations

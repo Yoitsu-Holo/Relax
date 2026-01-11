@@ -4,7 +4,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/yoitsuholo/relax/inf-SingleNode/server/cache/simpleCache"
+	"github.com/yoitsuholo/relax/inf-SlaveNode/cache/simpleCache"
 )
 
 // TestSetBasicSAdd tests basic SAdd operation

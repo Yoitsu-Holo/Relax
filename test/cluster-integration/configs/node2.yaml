@@ -1,0 +1,3 @@
+server:
+  grpc_port: ":25002"
+  http_port: ":28092"

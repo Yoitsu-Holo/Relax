@@ -15,43 +15,45 @@ NC='\033[0m' # No Color
 
 echo -e "${YELLOW}=== 停止集群服务 ===${NC}"
 
-# 停止集群代理
-if [ -f "$LOGS_DIR/cluster.pid" ]; then
-    CLUSTER_PID=$(cat "$LOGS_DIR/cluster.pid")
-    if ps -p $CLUSTER_PID > /dev/null 2>&1; then
-        echo -e "  停止集群代理 (PID: $CLUSTER_PID)..."
-        kill $CLUSTER_PID 2>/dev/null || true
+# 停止 Master 节点（集群代理）
+if [ -f "$LOGS_DIR/master.pid" ]; then
+    MASTER_PID=$(cat "$LOGS_DIR/master.pid")
+    if ps -p $MASTER_PID > /dev/null 2>&1; then
+        echo -e "  停止 master 节点 (PID: $MASTER_PID)..."
+        kill $MASTER_PID 2>/dev/null || true
         sleep 1
-        if ps -p $CLUSTER_PID > /dev/null 2>&1; then
-            kill -9 $CLUSTER_PID 2>/dev/null || true
+        if ps -p $MASTER_PID > /dev/null 2>&1; then
+            kill -9 $MASTER_PID 2>/dev/null || true
         fi
-        echo -e "  ${GREEN}✓${NC} 集群代理已停止"
+        echo -e "  ${GREEN}✓${NC} master 节点已停止"
     else
-        echo -e "  ${YELLOW}!${NC} 集群代理未运行"
+        echo -e "  ${YELLOW}!${NC} master 节点未运行"
     fi
-    rm -f "$LOGS_DIR/cluster.pid"
+    rm -f "$LOGS_DIR/master.pid"
 else
-    echo -e "  ${YELLOW}!${NC} 未找到集群代理 PID 文件"
+    echo -e "  ${YELLOW}!${NC} 未找到 master 节点 PID 文件"
 fi
 
-# 停止后端节点
-if [ -f "$LOGS_DIR/node1.pid" ]; then
-    NODE1_PID=$(cat "$LOGS_DIR/node1.pid")
-    if ps -p $NODE1_PID > /dev/null 2>&1; then
-        echo -e "  停止 node-1 (PID: $NODE1_PID)..."
-        kill $NODE1_PID 2>/dev/null || true
-        sleep 1
-        if ps -p $NODE1_PID > /dev/null 2>&1; then
-            kill -9 $NODE1_PID 2>/dev/null || true
+# 停止 Slave 节点
+for i in {1..3}; do
+    if [ -f "$LOGS_DIR/node$i.pid" ]; then
+        NODE_PID=$(cat "$LOGS_DIR/node$i.pid")
+        if ps -p $NODE_PID > /dev/null 2>&1; then
+            echo -e "  停止 slave node-$i (PID: $NODE_PID)..."
+            kill $NODE_PID 2>/dev/null || true
+            sleep 1
+            if ps -p $NODE_PID > /dev/null 2>&1; then
+                kill -9 $NODE_PID 2>/dev/null || true
+            fi
+            echo -e "  ${GREEN}✓${NC} slave node-$i 已停止"
+        else
+            echo -e "  ${YELLOW}!${NC} slave node-$i 未运行"
         fi
-        echo -e "  ${GREEN}✓${NC} node-1 已停止"
+        rm -f "$LOGS_DIR/node$i.pid"
     else
-        echo -e "  ${YELLOW}!${NC} node-1 未运行"
+        echo -e "  ${YELLOW}!${NC} 未找到 slave node-$i PID 文件"
     fi
-    rm -f "$LOGS_DIR/node1.pid"
-else
-    echo -e "  ${YELLOW}!${NC} 未找到 node-1 PID 文件"
-fi
+done
 
 echo -e "\n${GREEN}所有服务已停止${NC}"
 

@@ -3,8 +3,11 @@
 
 set -e
 
+# 禁用代理以确保 curl 直接连接到 localhost
+unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BASE_URL="http://localhost:8081"
+BASE_URL="http://localhost:28080"
 
 # 颜色定义
 RED='\033[0;31m'

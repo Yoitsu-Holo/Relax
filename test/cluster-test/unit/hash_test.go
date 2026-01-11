@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/yoitsuholo/relax/inf-ClusterNode/cluster"
+	"github.com/yoitsuholo/relax/inf-MasterNode/cluster"
 )
 
 // TestHashKeyConsistency tests that hashing is deterministic
@@ -144,7 +144,7 @@ func TestLoadConfigFromYAML(t *testing.T) {
 	}
 
 	// Test loading actual config file
-	config, err := cluster.LoadConfig("../../inf-ClusterNode/config.yaml")
+	config, err := cluster.LoadConfig("../../inf-MasterNode/config.yaml")
 	if err != nil {
 		t.Logf("Could not load config.yaml: %v (this is OK if file doesn't exist)", err)
 		return

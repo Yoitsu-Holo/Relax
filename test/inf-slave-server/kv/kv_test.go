@@ -3,7 +3,7 @@ package kv_test
 import (
 	"testing"
 
-	"github.com/yoitsuholo/relax/inf-SingleNode/server/cache/simpleCache"
+	"github.com/yoitsuholo/relax/inf-SlaveNode/cache/simpleCache"
 )
 
 // TestKVBasicSetGet tests basic Set and Get operations

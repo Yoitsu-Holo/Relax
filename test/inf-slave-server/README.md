@@ -1,6 +1,6 @@
 # inf-slave-server 缓存测试套件
 
-这是为 inf-SingleNode 内部缓存设计的完善测试套件，采用标准 Go test 方式。
+这是为 inf-SlaveNode 内部缓存设计的完善测试套件，采用标准 Go test 方式。
 
 ## 目录结构
 

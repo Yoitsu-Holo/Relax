@@ -6,7 +6,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/yoitsuholo/relax/inf-SingleNode/server/cache/simpleCache"
+	"github.com/yoitsuholo/relax/inf-SlaveNode/cache/simpleCache"
 )
 
 // TestConcurrentKVOperations tests concurrent KV operations

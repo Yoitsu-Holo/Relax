@@ -26,8 +26,8 @@ bash scripts/start.sh
 ```
 
 这将自动：
-- 启动后端节点（SingleNode）
-- 启动集群代理（ClusterNode）
+- 启动 3 个 Slave 后端节点（node-1, node-2, node-3）
+- 启动 1 个 Master 集群代理节点
 - 执行健康检查
 - 显示服务信息
 
@@ -56,10 +56,15 @@ bash scripts/stop.sh
 
 启动后的服务端口：
 
-- **后端节点**: `localhost:50051`
-- **集群代理 gRPC**: `localhost:50052`
-- **集群代理 HTTP**: `localhost:8081`
-- **健康检查**: `http://localhost:8081/health`
+**Slave 节点（后端缓存节点）**:
+- **node-1**: gRPC `localhost:25001`, HTTP `localhost:28091`
+- **node-2**: gRPC `localhost:25002`, HTTP `localhost:28092`
+- **node-3**: gRPC `localhost:25003`, HTTP `localhost:28093`
+
+**Master 节点（集群代理）**:
+- **gRPC**: `localhost:25000`
+- **HTTP**: `localhost:28080`
+- **健康检查**: `http://localhost:28080/health`
 
 ## 配置说明
 
@@ -106,28 +111,32 @@ tail -f logs/cluster.log
 
 ```bash
 # 健康检查
-curl http://localhost:8081/health
+curl http://localhost:28080/health
 
 # KV 操作
-curl -X POST http://localhost:8081/v1/kv/set \
+curl -X POST http://localhost:28080/v1/kv/set \
   -H "Content-Type: application/json" \
   -d '{"key":"test","value":"hello"}'
 
-curl http://localhost:8081/v1/kv/get/test
+curl http://localhost:28080/v1/kv/get/test
 
 # Hash 操作
-curl -X POST http://localhost:8081/v1/hash/set \
+curl -X POST http://localhost:28080/v1/hash/set \
   -H "Content-Type: application/json" \
   -d '{"key":"user:1","field":"name","value":"Alice"}'
 
-curl http://localhost:8081/v1/hash/get/user:1/name
+curl http://localhost:28080/v1/hash/get/user:1/name
 ```
 
 ## 注意事项
 
-1. **端口占用**: 确保端口 50051, 50052, 8081 未被占用
-2. **单节点限制**: 当前 SingleNode 不支持同时运行多个实例，因此只启动一个后端节点
-3. **多节点测试**: 如需测试多节点集群，需要手动启动额外的 SingleNode 实例
+1. **端口占用**: 确保以下端口未被占用：
+   - Slave 节点: 25001, 25002, 25003 (gRPC), 28091, 28092, 28093 (HTTP)
+   - Master 节点: 25000 (gRPC), 28080 (HTTP)
+2. **架构说明**:
+   - Slave 节点使用 inf-SlaveNode，通过 YAML 配置文件指定端口
+   - Master 节点使用 inf-MasterNode，负责路由和负载均衡
+   - 所有节点支持 YAML 配置化
 
 ## 故障排查
 
@@ -135,22 +144,29 @@ curl http://localhost:8081/v1/hash/get/user:1/name
 
 1. 检查端口是否被占用：
    ```bash
-   lsof -i :50051
-   lsof -i :50052
-   lsof -i :8081
+   lsof -i :25001
+   lsof -i :25002
+   lsof -i :25003
+   lsof -i :25000
+   lsof -i :28091
+   lsof -i :28092
+   lsof -i :28093
+   lsof -i :28080
    ```
 
 2. 查看日志：
    ```bash
    tail -f logs/node1.log
-   tail -f logs/cluster.log
+   tail -f logs/node2.log
+   tail -f logs/node3.log
+   tail -f logs/master.log
    ```
 
 ### 测试失败
 
 1. 确认服务正在运行：
    ```bash
-   curl http://localhost:8081/health
+   curl http://localhost:28080/health
    ```
 
 2. 检查配置文件是否正确：

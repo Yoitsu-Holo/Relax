@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/yoitsuholo/relax/inf-ClusterNode/cluster"
+	"github.com/yoitsuholo/relax/inf-MasterNode/cluster"
 )
 
 // TestManagerCreation tests basic manager creation

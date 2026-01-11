@@ -7,7 +7,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 TEST_DIR="$SCRIPT_DIR/.."
 LOGS_DIR="$TEST_DIR/logs"
-CONFIG_FILE="$TEST_DIR/configs/cluster.yaml"
+CONFIG_DIR="$TEST_DIR/configs"
+CLUSTER_CONFIG="$CONFIG_DIR/cluster.yaml"
 
 # 颜色定义
 RED='\033[0;31m'
@@ -24,55 +25,65 @@ mkdir -p "$LOGS_DIR"
 rm -f "$LOGS_DIR"/*.log "$LOGS_DIR"/*.pid
 
 # 检查配置文件
-if [ ! -f "$CONFIG_FILE" ]; then
-    echo -e "${RED}错误: 配置文件不存在: $CONFIG_FILE${NC}"
+if [ ! -f "$CLUSTER_CONFIG" ]; then
+    echo -e "${RED}错误: 集群配置文件不存在: $CLUSTER_CONFIG${NC}"
     exit 1
 fi
 
-echo -e "${YELLOW}配置文件: $CONFIG_FILE${NC}"
+echo -e "${YELLOW}配置文件: $CLUSTER_CONFIG${NC}"
 
-# 启动单节点服务器
-echo -e "\n${YELLOW}1. 启动后端节点...${NC}"
+# 启动多个 Slave 节点
+echo -e "\n${YELLOW}1. 启动 Slave 节点 (后端缓存节点)...${NC}"
 
-SINGLE_NODE_DIR="$PROJECT_ROOT/inf-SingleNode/server"
+SINGLE_NODE_DIR="$PROJECT_ROOT/inf-SlaveNode"
 
 if [ ! -d "$SINGLE_NODE_DIR" ]; then
     echo -e "${RED}错误: SingleNode 目录不存在: $SINGLE_NODE_DIR${NC}"
     exit 1
 fi
 
-# 启动 node-1 (端口 50051)
-echo -e "  启动 node-1 (localhost:50051)..."
 cd "$SINGLE_NODE_DIR"
-PORT=50051 go run main.go > "$LOGS_DIR/node1.log" 2>&1 &
+
+# 启动 node-1 (端口 25001:28091)
+echo -e "  启动 slave node-1 (gRPC: localhost:25001, HTTP: localhost:28091)..."
+go run main.go -config="$CONFIG_DIR/node1.yaml" > "$LOGS_DIR/node1.log" 2>&1 &
 NODE1_PID=$!
 echo $NODE1_PID > "$LOGS_DIR/node1.pid"
-echo -e "  ${GREEN}✓${NC} node-1 启动 (PID: $NODE1_PID)"
+echo -e "  ${GREEN}✓${NC} slave node-1 启动 (PID: $NODE1_PID)"
+
+# 启动 node-2 (端口 25002:28092)
+echo -e "  启动 slave node-2 (gRPC: localhost:25002, HTTP: localhost:28092)..."
+go run main.go -config="$CONFIG_DIR/node2.yaml" > "$LOGS_DIR/node2.log" 2>&1 &
+NODE2_PID=$!
+echo $NODE2_PID > "$LOGS_DIR/node2.pid"
+echo -e "  ${GREEN}✓${NC} slave node-2 启动 (PID: $NODE2_PID)"
+
+# 启动 node-3 (端口 25003:28093)
+echo -e "  启动 slave node-3 (gRPC: localhost:25003, HTTP: localhost:28093)..."
+go run main.go -config="$CONFIG_DIR/node3.yaml" > "$LOGS_DIR/node3.log" 2>&1 &
+NODE3_PID=$!
+echo $NODE3_PID > "$LOGS_DIR/node3.pid"
+echo -e "  ${GREEN}✓${NC} slave node-3 启动 (PID: $NODE3_PID)"
 
 # 等待节点启动
-sleep 2
+sleep 3
 
-# 启动 node-2 (端口 50053) - 需要修改 SingleNode 支持端口配置
-# 暂时说明：SingleNode 需要支持 PORT 环境变量或命令行参数
-echo -e "  ${YELLOW}注意: 当前 SingleNode 不支持多实例，仅启动 node-1${NC}"
-echo -e "  ${YELLOW}如需测试多节点，请手动启动额外的 SingleNode 实例${NC}"
+# 启动 Master 节点（集群代理）
+echo -e "\n${YELLOW}2. 启动 Master 节点 (集群代理)...${NC}"
 
-# 启动集群代理
-echo -e "\n${YELLOW}2. 启动集群代理...${NC}"
-
-CLUSTER_NODE_DIR="$PROJECT_ROOT/inf-ClusterNode"
+CLUSTER_NODE_DIR="$PROJECT_ROOT/inf-MasterNode"
 
 if [ ! -d "$CLUSTER_NODE_DIR" ]; then
     echo -e "${RED}错误: ClusterNode 目录不存在: $CLUSTER_NODE_DIR${NC}"
-    kill $NODE1_PID 2>/dev/null || true
+    kill $NODE1_PID $NODE2_PID $NODE3_PID 2>/dev/null || true
     exit 1
 fi
 
 cd "$CLUSTER_NODE_DIR"
-go run main.go -config="$CONFIG_FILE" > "$LOGS_DIR/cluster.log" 2>&1 &
-CLUSTER_PID=$!
-echo $CLUSTER_PID > "$LOGS_DIR/cluster.pid"
-echo -e "  ${GREEN}✓${NC} 集群代理启动 (PID: $CLUSTER_PID)"
+go run main.go -config="$CLUSTER_CONFIG" > "$LOGS_DIR/master.log" 2>&1 &
+MASTER_PID=$!
+echo $MASTER_PID > "$LOGS_DIR/master.pid"
+echo -e "  ${GREEN}✓${NC} master 节点启动 (PID: $MASTER_PID)"
 
 # 等待服务启动
 echo -e "\n${YELLOW}等待服务启动...${NC}"
@@ -84,7 +95,7 @@ MAX_RETRIES=10
 RETRY_COUNT=0
 
 while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-    if curl -s http://localhost:8081/health > /dev/null 2>&1; then
+    if curl -s http://localhost:28080/health > /dev/null 2>&1; then
         echo -e "  ${GREEN}✓${NC} 集群代理健康检查通过"
         break
     fi
@@ -102,18 +113,25 @@ done
 # 显示运行信息
 echo -e "\n${GREEN}=== 集群启动成功 ===${NC}"
 echo -e "\n${YELLOW}服务信息:${NC}"
-echo -e "  - 后端节点: localhost:50051 (PID: $NODE1_PID)"
-echo -e "  - 集群代理 gRPC: localhost:50052 (PID: $CLUSTER_PID)"
-echo -e "  - 集群代理 HTTP: localhost:8081"
-echo -e "  - 健康检查: http://localhost:8081/health"
+echo -e "  ${GREEN}Slave 节点 (后端缓存):${NC}"
+echo -e "    - slave node-1: gRPC localhost:25001, HTTP localhost:28091 (PID: $NODE1_PID)"
+echo -e "    - slave node-2: gRPC localhost:25002, HTTP localhost:28092 (PID: $NODE2_PID)"
+echo -e "    - slave node-3: gRPC localhost:25003, HTTP localhost:28093 (PID: $NODE3_PID)"
+echo -e "  ${GREEN}Master 节点 (集群代理):${NC}"
+echo -e "    - master: gRPC localhost:25000, HTTP localhost:28080 (PID: $MASTER_PID)"
+echo -e "    - 健康检查: http://localhost:28080/health"
 
 echo -e "\n${YELLOW}日志位置:${NC}"
-echo -e "  - node-1: $LOGS_DIR/node1.log"
-echo -e "  - cluster: $LOGS_DIR/cluster.log"
+echo -e "  - slave node-1: $LOGS_DIR/node1.log"
+echo -e "  - slave node-2: $LOGS_DIR/node2.log"
+echo -e "  - slave node-3: $LOGS_DIR/node3.log"
+echo -e "  - master: $LOGS_DIR/master.log"
 
 echo -e "\n${YELLOW}PID 文件:${NC}"
 echo -e "  - $LOGS_DIR/node1.pid"
-echo -e "  - $LOGS_DIR/cluster.pid"
+echo -e "  - $LOGS_DIR/node2.pid"
+echo -e "  - $LOGS_DIR/node3.pid"
+echo -e "  - $LOGS_DIR/master.pid"
 
 echo -e "\n${YELLOW}停止服务:${NC}"
 echo -e "  bash $SCRIPT_DIR/stop.sh"

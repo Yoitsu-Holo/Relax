@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/yoitsuholo/relax/inf-ClusterNode/cluster"
+	"github.com/yoitsuholo/relax/inf-MasterNode/cluster"
 )
 
 // TestKeyDistribution tests how keys are distributed across nodes
