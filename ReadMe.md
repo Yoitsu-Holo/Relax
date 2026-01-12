@@ -1,5 +1,5 @@
 # RElaX cache
 
-Relax Like Analog to Redis(X)
+Relax Like/Lightweight Analog to Redis(X)
 
 Like Redis, Just Relax
