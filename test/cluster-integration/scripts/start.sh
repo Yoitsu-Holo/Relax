@@ -10,6 +10,9 @@ LOGS_DIR="$TEST_DIR/logs"
 CONFIG_DIR="$TEST_DIR/configs"
 CLUSTER_CONFIG="$CONFIG_DIR/cluster.yaml"
 
+# 设置库路径
+export LD_LIBRARY_PATH="$PROJECT_ROOT/build/cache-Interface:$LD_LIBRARY_PATH"
+
 # 颜色定义
 RED='\033[0;31m'
 GREEN='\033[0;32m'

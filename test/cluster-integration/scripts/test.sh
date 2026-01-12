@@ -78,9 +78,9 @@ test_api "DELETE" "/v1/kv/del/test:key1" "" 200 "Delete key1"
 
 # 3. Hash 操作测试
 echo -e "\n${YELLOW}=== 3. Hash 操作测试 ===${NC}"
-test_api "POST" "/v1/hash/set" '{"key":"user:1001","field":"name","value":"Alice"}' 200 "HSet name"
-test_api "GET" "/v1/hash/get/user:1001/name" "" 200 "HGet name"
-test_api "POST" "/v1/hash/mset" '{"key":"user:1001","fields":{"age":"25","city":"Beijing"}}' 200 "HMSet multiple fields"
+test_api "POST" "/v1/hash/mset" '{"key":"user:1001","field":"name","value":"Alice"}' 200 "HMSet name"
+test_api "GET" "/v1/hash/mget/user:1001/name" "" 200 "HMGet name"
+test_api "POST" "/v1/hash/mset" '{"key":"user:1001","field":"age","value":"25"}' 200 "HMSet age"
 test_api "GET" "/v1/hash/getall/user:1001" "" 200 "HGetAll"
 test_api "GET" "/v1/hash/len/user:1001" "" 200 "HLen"
 
